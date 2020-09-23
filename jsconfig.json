@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "app/components/*": ["components/*.js"],
+      "app/queries": ["operations/index.js"],
+      "app/apollo": ["apollo/index.js"]
+    }
+  }
+}

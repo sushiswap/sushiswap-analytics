@@ -11,10 +11,37 @@ import {
   tokenTimeTravelQuery,
   tokensQuery,
   tokensTimeTravelQuery,
+  userQuery,
 } from "../operations";
 import { startOfMinute, subDays, subWeeks } from "date-fns";
 
 import { getApollo } from "../apollo";
+
+export async function getUser(id, client = getApollo()) {
+  const { data: { user } } = await client.query({
+    query: userQuery,
+    variables: {
+      id,
+    },
+  });
+
+  await client.cache.writeQuery({
+    query: userQuery,
+    variables: {
+      id,
+    },
+    data: {
+      user: {
+        ...user,
+      },
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: userQuery,
+    variables: { id },
+  });
+}
 
 // Blocks
 async function getLatestBlock() {

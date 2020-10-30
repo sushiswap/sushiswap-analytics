@@ -10,20 +10,54 @@ import gql from "graphql-tag";
 //   }
 // `;
 
+// # xSushi
+// # pools(where: amount_gt: 0) {
+// #   pool {
+// #     id
+// #   }
+// # }
+// # barStaked
+// # barPending
+// # barHarvested
+// # barYeild
+
+
+export const userIdsQuery = gql`
+  query userIdsQuery($first: Int! = 1000, $skip: Int! = 0) {
+    users(first: $first, skip: $skip) {
+      id
+    }
+  }
+`
 export const userQuery = gql`
   query userQuery($id: String!) {
     user(id: $id) {
       id
-      # xSushi
-      # pools(where: amount_gt: 0) {
+      bar {
+        totalSupply
+        stakedSushi
+      }
+      xSushi
+      barStaked
+      barHarvested
+      liquidityPositions {
+        id
+        liquidityTokenBalance
+        historicalSnapshots {
+          id
+          reserve0
+          reserve1
+          block
+          timestamp
+          liquidityTokenBalance
+          liquidityTokenTotalSupply
+        }
+      }
+      # pools(where: { amount_gt: 0 }) {
       #   pool {
       #     id
       #   }
       # }
-      # barStaked
-      # barPending
-      # barHarvested
-      # barYeild
     }
   }
 `;

@@ -161,8 +161,16 @@ function PairPage(props) {
     pollInterval: 60000,
   });
 
-  const volume = pair?.volumeUSD - pair?.oneDay?.volumeUSD;
-  const volumeYesterday = pair?.oneDay?.volumeUSD - pair?.twoDay?.volumeUSD;
+
+  const volumeUSD = pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD
+  const oneDayVolumeUSD = pair?.oneDay?.volumeUSD === "0" ? pair?.oneDay?.untrackedVolumeUSD : pair?.oneDay?.volumeUSD
+  const twoDayVolumeUSD = pair?.twoDay?.volumeUSD === "0" ? pair?.twoDay?.untrackedVolumeUSD : pair?.twoDay?.volumeUSD
+
+
+  console.log(pair)
+
+  const volume = volumeUSD - oneDayVolumeUSD;
+  const volumeYesterday = oneDayVolumeUSD - twoDayVolumeUSD;
   const volumeChange = ((volume - volumeYesterday) / volumeYesterday) * 100;
 
   const fees = volume * 0.003;
@@ -174,14 +182,21 @@ function PairPage(props) {
       (previousValue, currentValue) => {
         const time = new Date(currentValue.date * 1e3)
           .toISOString()
-          .slice(0, 10);
+          .slice(0, 10)
+
+        const untrackedVolumeUSD = (currentValue?.token0.derivedETH * currentValue?.volumeToken0) + (currentValue?.token1.derivedETH * currentValue?.volumeToken1) * bundles[0].ethPrice
+
+        // console.log("untrackedVolumeUSD", untrackedVolumeUSD)
+
+        const volumeUSD = currentValue?.volumeUSD === "0" ? untrackedVolumeUSD : currentValue?.volumeUSD;
+
         previousValue["liquidity"].push({
           time,
           value: parseFloat(currentValue.reserveUSD),
         });
         previousValue["volume"].push({
           time,
-          value: parseFloat(currentValue.volumeUSD),
+          value: parseFloat(volumeUSD),
         });
         previousValue["transactions"].push({
           time,
@@ -333,7 +348,7 @@ function PairPage(props) {
                 <Box display="flex">
                   <Typography variant="body2">
                     {currencyFormatter.format(
-                      pair?.volumeUSD - pair?.oneDay?.volumeUSD || 0
+                      volume || 0
                     )}
                   </Typography>
                   <Percent marginLeft={1} percent={volumeChange} />

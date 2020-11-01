@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     
   },
+  title: {
+    fontSize: 14
+  },
   avatar: {
     marginRight: theme.spacing(1),
   },
@@ -28,7 +31,7 @@ function UserPage() {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <Layout>Generating user portfolio...</Layout>
+    return <Layout>Generating portfolio...</Layout>
   }
 
   const classes = useStyles();
@@ -72,11 +75,21 @@ function UserPage() {
 
   const sushiPrice = parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
-  const xSushi = data?.user?.xSushi
+  const xSushi = Number(data?.user?.xSushi)
 
-  const barPending = data?.user?.xSushi * data?.user?.bar?.stakedSushi / data?.user?.bar?.totalSupply
+  const barPending = (data?.user?.xSushi * data?.user?.bar?.stakedSushi / data?.user?.bar?.totalSupply)
   
   const barStaked = data?.user?.barStaked - data?.user?.barHarvested
+
+  const farmingStaked = data?.user?.pools.reduce((previousValue, currentValue) => {
+    const pair = pairs.find(pair => pair.id == currentValue.pool.lpToken)
+    const share = (currentValue.amount / currentValue.pool.totalSupply)
+    return previousValue + pair.reserveUSD * share
+  }, 0)
+
+  const farmingPending = data?.user?.pools?.reduce((previousValue, currentValue) => {
+    return previousValue + (((currentValue.amount * currentValue.pool.accSushiPerShare) / 1e12) - currentValue.rewardDebt) / 1e18
+  }, 0) * sushiPrice
 
   return (
     <Layout>
@@ -85,23 +98,47 @@ function UserPage() {
       </Head>
 
       <Box marginBottom={4}>
-        <Typography variant="h5" component="h1" gutterBottom noWrap>
+        {/* <Typography variant="h5" component="h1" gutterBottom noWrap>
           Portfolio
-        </Typography>
+        </Typography> */}
         <Typography gutterBottom noWrap>
           Address {id}
         </Typography>
       </Box>
 
-
-
       {/* <pre>{JSON.stringify(data?.user, null, 2)}</pre> */}
 
+      <Box marginBottom={4}>
+        <Grid container spacing={2} >
+          <Grid item xs>
+            <Typography className={classes.title} color="textSecondary" gutterBottom>
+              Investments
+            </Typography>
+            <Typography variant="h5" component="h2">
+              { currencyFormatter.format(farmingStaked + (barPending * sushiPrice )+ farmingPending) }
+            </Typography>
+          </Grid>
+          <Grid item xs>
+            <Typography className={classes.title} color="textSecondary" gutterBottom>
+              Original Investments
+            </Typography>
+          </Grid>
+          <Grid item xs>
+            <Typography className={classes.title} color="textSecondary" gutterBottom>
+              Profit/Loss
+            </Typography>
+          </Grid>
+        </Grid>
+      </Box>
 
-      <Grid container direction="column" spacing={2}>
+
+
+
+
+      <Grid container direction="column" spacing={4}>
         <Grid item>
-          <Typography variant="h6" component="h2" gutterBottom>
-            Farming
+          <Typography variant="h6" component="h2" color="textSecondary" gutterBottom>
+            Pools
           </Typography>
 
           {!data.user.pools.length ?  <Typography>Address isn't farming...</Typography> : (
@@ -172,16 +209,16 @@ function UserPage() {
                       
                     </TableCell>
                     <TableCell align="right">
-                      {slp.toFixed(2)} SLP
+                      {Number(slp.toFixed(2)).toLocaleString()} SLP
                     </TableCell>
                     <TableCell align="right">
-                      {token0.toFixed(2)} {pair.token0.symbol} + {token1.toFixed(2)} {pair.token1.symbol} 
+                      {Number(token0.toFixed(2)).toLocaleString()} {pair.token0.symbol} + {Number(token1.toFixed(2)).toLocaleString()} {pair.token1.symbol} 
                     </TableCell>
                     <TableCell align="right">
                       {currencyFormatter.format(pair.reserveUSD * share)}
                     </TableCell>
                     <TableCell align="right">
-                    {pendingSushi.toFixed(2)}({currencyFormatter.format(pendingSushi * sushiPrice)})
+                      {Number(pendingSushi.toFixed(2)).toLocaleString()} ({currencyFormatter.format(pendingSushi * sushiPrice)})
                     </TableCell>
                     {/* <TableCell align="right">
                     23.76%
@@ -195,7 +232,7 @@ function UserPage() {
         )}
         </Grid>
         <Grid item>
-          <Typography variant="h6" component="h2" gutterBottom>
+          <Typography variant="h6" component="h2" color="textSecondary" gutterBottom>
             Bar
           </Typography>
           {!data.user.bar ?  <Typography>Address isn't in the bar...</Typography> : (
@@ -206,11 +243,13 @@ function UserPage() {
                   <TableCell key="token">Token</TableCell>
                   <TableCell key="staked" align="right">Staked</TableCell>
                   <TableCell key="xSushi" align="right">xSushi</TableCell>
-                  <TableCell key="balance" align="right">Balance</TableCell>
-                  <TableCell key="value" align="right">Value</TableCell>
-                  {/* <TableCell key="apy" align="right">
-                    APY
-                  </TableCell> */}
+                  <TableCell key="balance" align="right">Pending Sushi</TableCell>
+                  <TableCell key="apy" align="right">
+                    ROI (Sushi)
+                  </TableCell>
+                  <TableCell key="apy" align="right">
+                    ROI (USD)
+                  </TableCell>  
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -228,24 +267,27 @@ function UserPage() {
                       <Link href={`/token/0x6b3595068778dd592e39a122f4f5a5cf09c90fe2`} variant="body2" noWrap>
                         SUSHI
                       </Link>
+                      {/* <Link href={`/tokens/0x8798249c2e607446efb7ad49ec89dd1865ff4272`} variant="body2" noWrap>
+                        xSUSHI
+                      </Link> */}
                     </Box>
                     
                   </TableCell>
                   <TableCell align="right">
-                  { barStaked.toFixed(2) } SUSHI
+                  {Number(barStaked.toFixed(2)).toLocaleString() } SUSHI
                   </TableCell>
                   <TableCell align="right">
-                  { Number(xSushi).toFixed(2) } XSUSHI
+                  { Number(xSushi.toFixed(2)).toLocaleString() } XSUSHI
                   </TableCell>
                   <TableCell align="right">
-                  { barPending.toFixed(2) } SUSHI
+                  { Number(barPending.toFixed(2)).toLocaleString() } ({ currencyFormatter.format(sushiPrice * barPending) })
                   </TableCell>
                   <TableCell align="right">
-                    { currencyFormatter.format(sushiPrice * barPending) }
+                    { Number(barPending - barStaked).toFixed(2) } ({ currencyFormatter.format(Number(barPending - barStaked) * sushiPrice)})
                   </TableCell>
-                  {/* <TableCell align="right">
-                    21.04%
-                  </TableCell> */}
+                  <TableCell align="right">
+                      ...
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>

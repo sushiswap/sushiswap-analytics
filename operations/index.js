@@ -65,15 +65,15 @@ export const userQuery = gql`
       liquidityPositions {
         id
         liquidityTokenBalance
-        # historicalSnapshots {
-        #   id
-        #   reserve0
-        #   reserve1
-        #   block
-        #   timestamp
-        #   liquidityTokenBalance
-        #   liquidityTokenTotalSupply
-        # }
+        historicalSnapshots {
+          id
+          reserve0
+          reserve1
+          block
+          timestamp
+          liquidityTokenBalance
+          liquidityTokenTotalSupply
+        }
       }
       pools(where: {amount_gt: 0}) {
         pool {
@@ -148,6 +148,7 @@ const pairFieldsQuery = gql`
     id
     reserveUSD
     volumeUSD
+    untrackedVolumeUSD
     token0 {
       ...pairTokenFields
     }
@@ -210,6 +211,12 @@ export const pairDayDatasQuery = gql`
       date
       pair {
         id
+      }
+      token0 {
+        derivedETH        
+      }
+      token1 {
+        derivedETH        
       }
       # dailyVolumeToken0
       # dailyVolumeToken1

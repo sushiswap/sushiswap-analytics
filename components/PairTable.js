@@ -116,10 +116,22 @@ export default function PairTable({ pairs }) {
       return !PAIR_DENY.includes(row.id);
     })
     .map((pair) => {
-      const oneDayVolume = pair?.volumeUSD - pair?.oneDay?.volumeUSD;
+
+      // const volumeUSD = pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD
+      // const oneDayVolumeUSD = pair?.oneDay?.volumeUSD === "0" ? pair?.oneDay?.untrackedVolumeUSD : pair?.oneDay?.volumeUSD
+      // const twoDayVolumeUSD = pair?.twoDay?.volumeUSD === "0" ? pair?.twoDay?.untrackedVolumeUSD : pair?.twoDay?.volumeUSD
+    
+
+      const volumeUSD = pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD
+      const oneDayVolumeUSD = pair?.oneDay?.volumeUSD === "0" ? pair?.oneDay?.untrackedVolumeUSD : pair?.oneDay?.volumeUSD
+      const sevenDayVolumeUSD = pair?.sevenDay?.volumeUSD === "0" ? pair?.sevenDay?.untrackedVolumeUSD : pair?.sevenDay?.volumeUSD
+
+
+      const oneDayVolume = volumeUSD - oneDayVolumeUSD;
       const oneDayFees = oneDayVolume * 0.003;
       const oneYearFees = (oneDayVolume * 0.003 * 365 * 100) / pair.reserveUSD;
-      const sevenDayVolume = pair?.volumeUSD - pair?.sevenDay?.volumeUSD;
+      const sevenDayVolume = volumeUSD - sevenDayVolumeUSD;
+      
       return {
         ...pair,
         displayName: `${pair.token0.symbol.replace(

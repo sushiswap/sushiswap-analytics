@@ -35,16 +35,16 @@ export async function getUser(id, client = getApollo()) {
     },
   });
 
-  const { data: { uniswapUser } } = await client.query({
-    query: uniswapUserQuery,
-    variables: {
-      id,
-    },
-    fetchPolicy: 'no-cache',
-    context: {
-      clientName: "uniswap",
-    },
-  });
+  // const { data: { uniswapUser } } = await client.query({
+  //   query: uniswapUserQuery,
+  //   variables: {
+  //     id,
+  //   },
+  //   fetchPolicy: 'no-cache',
+  //   context: {
+  //     clientName: "uniswap",
+  //   },
+  // });
 
   // const { data: { liquidityPositionSnapshots } } = await client.query({
   //   query: liquidityPositionSnapshotsQuery,
@@ -348,10 +348,12 @@ export async function getPair(id, client = getApollo()) {
       pair: {
         ...pair,
         oneDay: {
+          untrackedVolumeUSD: String(oneDayPair?.untrackedVolumeUSD),
           volumeUSD: String(oneDayPair?.volumeUSD),
           reserveUSD: String(oneDayPair?.reserveUSD),
         },
         twoDay: {
+          untrackedVolumeUSD: String(twoDayPair?.untrackedVolumeUSD),
           volumeUSD: String(twoDayPair?.volumeUSD),
           reserveUSD: String(twoDayPair?.reserveUSD),
         },
@@ -412,10 +414,12 @@ export async function getPairs(client = getApollo()) {
         return {
           ...pair,
           oneDay: {
+            untrackedVolumeUSD: String(oneDayPair?.untrackedVolumeUSD),
             volumeUSD: String(oneDayPair?.volumeUSD),
             reserveUSD: String(oneDayPair?.reserveUSD),
           },
           sevenDay: {
+            untrackedVolumeUSD: String(sevenDayPair?.untrackedVolumeUSD),
             volumeUSD: String(sevenDayPair?.volumeUSD),
             reserveUSD: String(sevenDayPair?.reserveUSD),
           },

@@ -166,9 +166,6 @@ function PairPage(props) {
   const oneDayVolumeUSD = pair?.oneDay?.volumeUSD === "0" ? pair?.oneDay?.untrackedVolumeUSD : pair?.oneDay?.volumeUSD
   const twoDayVolumeUSD = pair?.twoDay?.volumeUSD === "0" ? pair?.twoDay?.untrackedVolumeUSD : pair?.twoDay?.volumeUSD
 
-
-  console.log(pair)
-
   const volume = volumeUSD - oneDayVolumeUSD;
   const volumeYesterday = oneDayVolumeUSD - twoDayVolumeUSD;
   const volumeChange = ((volume - volumeYesterday) / volumeYesterday) * 100;

@@ -15,6 +15,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import { darkModeVar } from "../apollo/variables";
 import { makeStyles } from "@material-ui/core/styles";
+import { useRouter } from 'next/router'
 
 // import useDarkMode from "../hooks/useDarkMode.js.bk";
 
@@ -42,7 +43,7 @@ export default function ButtonAppBar() {
   const classes = useStyles();
 
   const darkMode = useReactiveVar(darkModeVar);
-
+  const router = useRouter()
   function toggleDarkMode() {
     // console.log("toggleDarkMode");
     const value = !darkModeVar();
@@ -74,6 +75,7 @@ export default function ButtonAppBar() {
               className={classes.menuButton}
               color="inherit"
               aria-label="menu"
+              onClick={() => router.push("/")}
             >
               <Sushi />
             </IconButton>

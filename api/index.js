@@ -11,11 +11,21 @@ import {
   tokenTimeTravelQuery,
   tokensQuery,
   tokensTimeTravelQuery,
+  uniswapUserQuery,
   userQuery,
 } from "../operations";
 import { startOfMinute, subDays, subWeeks } from "date-fns";
 
 import { getApollo } from "../apollo";
+
+export async function getLiquidityPositionSnapshots(user, client = getApollo()) {
+  const { data: { liquidityPositionSnapshots } } = await client.query({
+    query: liquidityPositionSnapshotsQuery,
+    variables: {
+      user,
+    },
+  });
+}
 
 export async function getUser(id, client = getApollo()) {
   const { data: { user } } = await client.query({
@@ -25,6 +35,28 @@ export async function getUser(id, client = getApollo()) {
     },
   });
 
+  const { data: { uniswapUser } } = await client.query({
+    query: uniswapUserQuery,
+    variables: {
+      id,
+    },
+    fetchPolicy: 'no-cache',
+    context: {
+      clientName: "uniswap",
+    },
+  });
+
+  // const { data: { liquidityPositionSnapshots } } = await client.query({
+  //   query: liquidityPositionSnapshotsQuery,
+  //   variables: {
+  //     user,
+  //   },
+  //   fetchPolicy: 'no-cache',
+  //   context: {
+  //     clientName: "uniswap",
+  //   },
+  // });
+
   await client.cache.writeQuery({
     query: userQuery,
     variables: {
@@ -33,6 +65,10 @@ export async function getUser(id, client = getApollo()) {
     data: {
       user: {
         ...user,
+        // liquidityPositions: [
+        //   ...uniswapUser.liquidityPositions,
+        //   ...user.liquidityPositions
+        // ]
       },
     },
   });

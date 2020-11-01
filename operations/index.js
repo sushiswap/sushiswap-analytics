@@ -29,6 +29,28 @@ export const userIdsQuery = gql`
     }
   }
 `
+
+export const uniswapUserQuery = gql`
+  query uniswapUserQuery($id: String!) {
+    uniswapUser: user(id: $id) {
+      id
+      liquidityPositions {
+        id
+        liquidityTokenBalance
+        # historicalSnapshots {
+        #   id
+        #   reserve0
+        #   reserve1
+        #   block
+        #   timestamp
+        #   liquidityTokenBalance
+        #   liquidityTokenTotalSupply
+        # }
+      }
+    }
+  }
+`
+
 export const userQuery = gql`
   query userQuery($id: String!) {
     user(id: $id) {
@@ -43,21 +65,26 @@ export const userQuery = gql`
       liquidityPositions {
         id
         liquidityTokenBalance
-        historicalSnapshots {
-          id
-          reserve0
-          reserve1
-          block
-          timestamp
-          liquidityTokenBalance
-          liquidityTokenTotalSupply
-        }
+        # historicalSnapshots {
+        #   id
+        #   reserve0
+        #   reserve1
+        #   block
+        #   timestamp
+        #   liquidityTokenBalance
+        #   liquidityTokenTotalSupply
+        # }
       }
-      # pools(where: { amount_gt: 0 }) {
-      #   pool {
-      #     id
-      #   }
-      # }
+      pools(where: {amount_gt: 0}) {
+        pool {
+          lpToken
+          totalSupply
+          accSushiPerShare
+          lastRewardBlock
+        }
+        amount
+        rewardDebt
+      }
     }
   }
 `;

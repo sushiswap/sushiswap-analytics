@@ -10,15 +10,6 @@ export const uniswap = from([
   }),
 ]);
 
-// export const sushiswap = from([
-//   new RetryLink(),
-//   new HttpLink({
-//     uri:
-//       "https://api.thegraph.com/subgraphs/name/zippoxer/sushiswap-subgraph-fork",
-//     shouldBatch: true,
-//   }),
-// ]);
-
 export const sushiswap = from([
   new RetryLink(),
   new HttpLink({
@@ -28,13 +19,6 @@ export const sushiswap = from([
   }),
 ]);
 
-export const masterchef = from([
-  new RetryLink(),
-  new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/zippoxer/sushiswap",
-    shouldBatch: true,
-  }),
-]);
 
 export const blocklytics = from([
   new RetryLink(),
@@ -51,9 +35,9 @@ export default split(
   blocklytics,
   split(
     (operation) => {
-      return operation.getContext().clientName === "masterchef";
+      return operation.getContext().clientName === "uniswap";
     },
-    masterchef,
+    uniswap,
     sushiswap
   )
 );

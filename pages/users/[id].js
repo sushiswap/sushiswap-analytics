@@ -286,15 +286,15 @@ export async function getStaticProps({ params: { id } }) {
 export async function getStaticPaths() {
   const client = getApollo();
 
-  const { data } = await client.query({
-    query: userIdsQuery,
-  });
+  // const { data } = await client.query({
+  //   query: userIdsQuery,
+  // });
 
-  const paths = data.users.map(({ id }) => ({
-    params: { id },
-  }));
+  // const paths = data.users.map(({ id }) => ({
+  //   params: { id },
+  // }));
 
-  return { paths, fallback: true };
+  return { paths: [], fallback: true };
 }
 
 export default UserPage;

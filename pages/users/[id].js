@@ -27,13 +27,9 @@ const useStyles = makeStyles((theme) => ({
 function UserPage() {
   const router = useRouter();
 
-  console.log("Router is fallback", router.isFallback)
-
   if (router.isFallback) {
     return <Layout>Generating user portfolio...</Layout>
   }
-
-  console.log("Router not fallback", router.isFallback)
 
   const classes = useStyles();
   
@@ -71,8 +67,8 @@ function UserPage() {
   });
 
  
-  console.log("data", data)
-  console.log("error", error)
+  // console.log("data", data)
+  // console.log("error", error)
 
   const sushiPrice = parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
@@ -107,6 +103,9 @@ function UserPage() {
           <Typography variant="h6" component="h2" gutterBottom>
             Farming
           </Typography>
+
+          {!data.user.pools.length ?  <Typography>Address isn't farming...</Typography> : (
+
           <TableContainer component={Paper} variant="outlined">
             <Table aria-label="farming">
               <TableHead>
@@ -128,7 +127,7 @@ function UserPage() {
                   const pair = pairs.find(pair => pair.id == pool.pool.lpToken)
                   const slp = Number(pool.amount/1e18);
                   const share = (pool.amount / pool.pool.totalSupply)
-                  console.log(share, pair.reserveUSD * share)
+                  // console.log(share, pair.reserveUSD * share)
 
                   const token0 = pair.reserve0 * share
                   const token1 = pair.reserve1 * share
@@ -190,16 +189,17 @@ function UserPage() {
                   </TableRow>
                   )
                 })}
-                
               </TableBody>
             </Table>
           </TableContainer>
+        )}
         </Grid>
         <Grid item>
           <Typography variant="h6" component="h2" gutterBottom>
-            Staking
+            Bar
           </Typography>
-          <TableContainer component={Paper} variant="outlined">
+          {!data.user.bar ?  <Typography>Address isn't in the bar...</Typography> : (
+            <TableContainer component={Paper} variant="outlined">
             <Table aria-label="farming">
               <TableHead>
                 <TableRow>
@@ -250,6 +250,8 @@ function UserPage() {
               </TableBody>
             </Table>
           </TableContainer>
+          )}
+
         </Grid>
       </Grid>
 
@@ -260,8 +262,6 @@ function UserPage() {
 }
 
 export async function getStaticProps({ params: { id } }) {
-
-  console.log("server id", id)
 
   const client = getApollo();
 

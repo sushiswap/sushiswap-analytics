@@ -9,6 +9,7 @@ import {
 } from "../../operations";
 
 import Avatar from "../../components/Avatar";
+import formatAddress from "../../utils/formatAddress";
 import Chart from "../../components/Chart";
 import Head from "next/head";
 import Layout from "../../components/Layout";
@@ -217,7 +218,7 @@ function PairPage(props) {
       },
       { liquidity: [], volume: [], transactions: [] }
     );
-
+  console.log(formatAddress(pair.token0.id));
   return (
     <Layout>
       <Head>
@@ -451,12 +452,12 @@ function PairPage(props) {
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" noWrap>
-                    {pair.token0.id}
+                    {formatAddress(pair.token0.id)}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" noWrap>
-                    {pair.token1.id}
+                    {formatAddress(pair.token1.id)}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">

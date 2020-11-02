@@ -1,10 +1,11 @@
-import { Avatar, Box, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, makeStyles } from "@material-ui/core";
+import { Box, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, makeStyles } from "@material-ui/core";
 import { ethPriceQuery, pairsQuery, tokenQuery, userIdsQuery, userQuery } from "../../operations";
 import { getPairs, getToken, getUser } from '../../api'
 
 import { AvatarGroup } from "@material-ui/lab"
 import Head from "next/head";
 import Layout from "../../components/Layout";
+import Avatar from "../../components/Avatar";
 import Link from "../../components/Link";
 import { currencyFormatter } from '../../intl'
 import { getApollo } from "../../apollo";
@@ -14,7 +15,7 @@ import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    
+
   },
   title: {
     fontSize: 14
@@ -35,7 +36,7 @@ function UserPage() {
   }
 
   const classes = useStyles();
-  
+
   const { id } = router.query;
 
   const {
@@ -53,7 +54,7 @@ function UserPage() {
     },
     pollInterval: 60000,
   });
-  
+
   const {
     data: { token }
   } = useQuery(tokenQuery, {
@@ -69,7 +70,7 @@ function UserPage() {
     pollInterval: 60000,
   });
 
- 
+
   // console.log("data", data)
   // console.log("error", error)
 
@@ -78,7 +79,7 @@ function UserPage() {
   const xSushi = Number(data?.user?.xSushi)
 
   const barPending = (data?.user?.xSushi * data?.user?.bar?.stakedSushi / data?.user?.bar?.totalSupply)
-  
+
   const barStaked = data?.user?.barStaked - data?.user?.barHarvested
 
   const farmingStaked = data?.user?.pools.reduce((previousValue, currentValue) => {
@@ -188,31 +189,25 @@ function UserPage() {
                       <Box display="flex" alignItems="center">
                         <AvatarGroup className={classes.avatar}>
                           <Avatar
-                            imgProps={{ loading: "lazy" }}
                             alt="SUSHI"
-                            src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                              "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
-                            )}/logo.png`}
+                            address={"0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"}
                           />
                           <Avatar
-                            imgProps={{ loading: "lazy" }}
                             alt="WETH"
-                            src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                              "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
-                            )}/logo.png`}
+                            src={"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"}
                           />
                         </AvatarGroup>
                         <Link href={`/pairs/0x795065dcc9f64b5614c407a6efdc400da6221fb0`} variant="body2" noWrap>
                           {pair.token0.symbol} + {pair.token1.symbol}
                         </Link>
                       </Box>
-                      
+
                     </TableCell>
                     <TableCell align="right">
                       {Number(slp.toFixed(2)).toLocaleString()} SLP
                     </TableCell>
                     <TableCell align="right">
-                      {Number(token0.toFixed(2)).toLocaleString()} {pair.token0.symbol} + {Number(token1.toFixed(2)).toLocaleString()} {pair.token1.symbol} 
+                      {Number(token0.toFixed(2)).toLocaleString()} {pair.token0.symbol} + {Number(token1.toFixed(2)).toLocaleString()} {pair.token1.symbol}
                     </TableCell>
                     <TableCell align="right">
                       {currencyFormatter.format(pair.reserveUSD * share)}
@@ -249,7 +244,7 @@ function UserPage() {
                   </TableCell>
                   <TableCell key="apy" align="right">
                     ROI (USD)
-                  </TableCell>  
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -258,11 +253,8 @@ function UserPage() {
                     <Box display="flex" alignItems="center">
                       <Avatar
                         className={classes.avatar}
-                        imgProps={{ loading: "lazy" }}
                         alt="SUSHI"
-                        src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                          "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
-                        )}/logo.png`}
+                        address={"0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"}
                       />
                       <Link href={`/token/0x6b3595068778dd592e39a122f4f5a5cf09c90fe2`} variant="body2" noWrap>
                         SUSHI
@@ -271,7 +263,7 @@ function UserPage() {
                         xSUSHI
                       </Link> */}
                     </Box>
-                    
+
                   </TableCell>
                   <TableCell align="right">
                   {Number(barStaked.toFixed(2)).toLocaleString() } SUSHI

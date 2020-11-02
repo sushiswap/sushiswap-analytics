@@ -8,7 +8,7 @@ import {
   transactionsQuery,
 } from "../../operations";
 
-import Avatar from "@material-ui/core/Avatar";
+import Avatar from "../../components/Avatar";
 import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -221,16 +221,10 @@ function PairPage(props) {
           <Box display="flex" alignItems="center">
             <AvatarGroup className={classes.avatars}>
               <Avatar
-                imgProps={{ loading: "lazy" }}
-                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                  pair.token0.id
-                )}/logo.png`}
+                address={pair.token0.id}
               />
               <Avatar
-                imgProps={{ loading: "lazy" }}
-                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                  pair.token1.id
-                )}/logo.png`}
+                address={pair.token1.id}
               />
             </AvatarGroup>
             <Typography variant="h5" component="h1">
@@ -264,9 +258,7 @@ function PairPage(props) {
               <Avatar
                 style={{ backgroundColor: "transparent" }}
                 alt="USDC"
-                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                  pair.token0.id
-                )}/logo.png`}
+                address={pair.token0.id}
               />
             }
             clickable
@@ -288,9 +280,7 @@ function PairPage(props) {
               <Avatar
                 style={{ backgroundColor: "transparent" }}
                 alt="ETH"
-                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                  pair.token1.id
-                )}/logo.png`}
+                address={pair.token1.id}
               />
             }
             clickable
@@ -381,10 +371,7 @@ function PairPage(props) {
                 <Box display="flex" alignItems="center" mb={1}>
                   <Avatar
                     className={classes.avatar}
-                    imgProps={{ loading: "lazy" }}
-                    src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                      pair.token0.id
-                    )}/logo.png`}
+                    address={pair.token0.id}
                   />
                   <Typography variant="body2" noWrap>
                     {decimalFormatter.format(pair.reserve0)}{" "}
@@ -394,10 +381,7 @@ function PairPage(props) {
                 <Box display="flex" alignItems="center">
                   <Avatar
                     className={classes.avatar}
-                    imgProps={{ loading: "lazy" }}
-                    src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                      pair.token1.id
-                    )}/logo.png`}
+                    address={pair.token1.id}
                   />
                   <Typography variant="body2" noWrap>
                     {decimalFormatter.format(pair.reserve1)}{" "}

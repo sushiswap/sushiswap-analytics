@@ -15,7 +15,7 @@ import {
 } from "api";
 import { useEffect, useState } from "react";
 
-import Avatar from "@material-ui/core/Avatar";
+import Avatar from "../../components/Avatar";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Chart from "../../components/Chart";
@@ -226,10 +226,7 @@ function TokenPage() {
           <Box display="flex" alignItems="center">
             <Avatar
               className={classes.avatar}
-              imgProps={{ loading: "lazy" }}
-              src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                token.id
-              )}/logo.png`}
+              src={token.id}
             />
             <Typography variant="h5" component="h1" noWrap>
               {token.name} ({token.symbol})

@@ -1,7 +1,7 @@
 import { ethPriceQuery, oneDayEthPriceQuery, tokensQuery } from "../operations";
 import { getOneDayEthPrice, getTokens } from "../api";
 
-import Avatar from "@material-ui/core/Avatar";
+import Avatar from "./Avatar";
 import Box from "@material-ui/core/Box";
 import Link from "./Link";
 import Paper from "@material-ui/core/Paper";
@@ -214,12 +214,9 @@ export default function TokenTable({ tokens }) {
                       <Box display="flex" alignItems="center">
                         <span> {index + 1}. </span>
                         <Avatar
-                          imgProps={{ loading: "lazy" }}
                           className={classes.avatar}
                           alt={row.symbol}
-                          src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                            row.id
-                          )}/logo.png`}
+                          address={row.id}
                         />
                         <Link href={`/tokens/${row.id}`}>
                           <Typography variant="body2" noWrap>

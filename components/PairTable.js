@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import Avatar from "@material-ui/core/Avatar";
+import Avatar from "./Avatar";
 import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import Box from "@material-ui/core/Box";
 import Hidden from "@material-ui/core/Hidden";
@@ -120,7 +120,7 @@ export default function PairTable({ pairs }) {
       // const volumeUSD = pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD
       // const oneDayVolumeUSD = pair?.oneDay?.volumeUSD === "0" ? pair?.oneDay?.untrackedVolumeUSD : pair?.oneDay?.volumeUSD
       // const twoDayVolumeUSD = pair?.twoDay?.volumeUSD === "0" ? pair?.twoDay?.untrackedVolumeUSD : pair?.twoDay?.volumeUSD
-    
+
 
       const volumeUSD = pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD
       const oneDayVolumeUSD = pair?.oneDay?.volumeUSD === "0" ? pair?.oneDay?.untrackedVolumeUSD : pair?.oneDay?.volumeUSD
@@ -131,7 +131,7 @@ export default function PairTable({ pairs }) {
       const oneDayFees = oneDayVolume * 0.003;
       const oneYearFees = (oneDayVolume * 0.003 * 365 * 100) / pair.reserveUSD;
       const sevenDayVolume = volumeUSD - sevenDayVolumeUSD;
-      
+
       return {
         ...pair,
         displayName: `${pair.token0.symbol.replace(
@@ -207,18 +207,12 @@ export default function PairTable({ pairs }) {
                         {index + 1}.
                         <AvatarGroup className={classes.avatar}>
                           <Avatar
-                            imgProps={{ loading: "lazy" }}
                             alt={row.token0.symbol}
-                            src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                              row.token0.id
-                            )}/logo.png`}
+                            address={row.token0.id}
                           />
                           <Avatar
-                            imgProps={{ loading: "lazy" }}
                             alt={row.token1.symbol}
-                            src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                              row.token1.id
-                            )}/logo.png`}
+                            address={row.token1.id}
                           />
                         </AvatarGroup>
                         <Link href={`/pairs/${row.id}`} variant="body2" noWrap>

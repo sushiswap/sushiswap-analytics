@@ -9,32 +9,33 @@ import {
 } from "../../operations";
 
 import Avatar from "../../components/Avatar";
-import AvatarGroup from "@material-ui/lab/AvatarGroup";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 import Chart from "../../components/Chart";
-import Chip from "@material-ui/core/Chip";
-import Divider from "@material-ui/core/Divider";
-import Grid from "@material-ui/core/Grid";
 import Head from "next/head";
 import Layout from "../../components/Layout";
 import Link from "../../components/Link";
-import Paper from "@material-ui/core/Paper";
 import Percent from "../../components/Percent";
+import SingleGridItem from "../../components/SingleGridItem";
 import Router from "next/router";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import { ToggleButtonGroup, ToggleButton, AvatarGroup } from "@material-ui/lab";
 import Transactions from "../../components/Transactions";
-import Typography from "@material-ui/core/Typography";
 import { getApollo } from "../../apollo";
 import { getPair } from "../../api";
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  makeStyles,
+  Paper,
+  Button,
+  Box,
+  Chip,
+  Divider,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  Typography,
+  TableRow,
+} from "@material-ui/core";
 import { toChecksumAddress } from "web3-utils";
 import useInterval from "../../hooks/useInterval";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -161,10 +162,16 @@ function PairPage(props) {
     pollInterval: 60000,
   });
 
-
-  const volumeUSD = pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD
-  const oneDayVolumeUSD = pair?.oneDay?.volumeUSD === "0" ? pair?.oneDay?.untrackedVolumeUSD : pair?.oneDay?.volumeUSD
-  const twoDayVolumeUSD = pair?.twoDay?.volumeUSD === "0" ? pair?.twoDay?.untrackedVolumeUSD : pair?.twoDay?.volumeUSD
+  const volumeUSD =
+    pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD;
+  const oneDayVolumeUSD =
+    pair?.oneDay?.volumeUSD === "0"
+      ? pair?.oneDay?.untrackedVolumeUSD
+      : pair?.oneDay?.volumeUSD;
+  const twoDayVolumeUSD =
+    pair?.twoDay?.volumeUSD === "0"
+      ? pair?.twoDay?.untrackedVolumeUSD
+      : pair?.twoDay?.volumeUSD;
 
   const volume = volumeUSD - oneDayVolumeUSD;
   const volumeYesterday = oneDayVolumeUSD - twoDayVolumeUSD;
@@ -179,13 +186,20 @@ function PairPage(props) {
       (previousValue, currentValue) => {
         const time = new Date(currentValue.date * 1e3)
           .toISOString()
-          .slice(0, 10)
+          .slice(0, 10);
 
-        const untrackedVolumeUSD = (currentValue?.token0.derivedETH * currentValue?.volumeToken0) + (currentValue?.token1.derivedETH * currentValue?.volumeToken1) * bundles[0].ethPrice
+        const untrackedVolumeUSD =
+          currentValue?.token0.derivedETH * currentValue?.volumeToken0 +
+          currentValue?.token1.derivedETH *
+            currentValue?.volumeToken1 *
+            bundles[0].ethPrice;
 
         // console.log("untrackedVolumeUSD", untrackedVolumeUSD)
 
-        const volumeUSD = currentValue?.volumeUSD === "0" ? untrackedVolumeUSD : currentValue?.volumeUSD;
+        const volumeUSD =
+          currentValue?.volumeUSD === "0"
+            ? untrackedVolumeUSD
+            : currentValue?.volumeUSD;
 
         previousValue["liquidity"].push({
           time,
@@ -220,12 +234,8 @@ function PairPage(props) {
         <Grid item xs={12} sm="auto" className={classes.title}>
           <Box display="flex" alignItems="center">
             <AvatarGroup className={classes.avatars}>
-              <Avatar
-                address={pair.token0.id}
-              />
-              <Avatar
-                address={pair.token1.id}
-              />
+              <Avatar address={pair.token0.id} />
+              <Avatar address={pair.token1.id} />
             </AvatarGroup>
             <Typography variant="h5" component="h1">
               {pair.token0.symbol}-{pair.token1.symbol}
@@ -304,85 +314,42 @@ function PairPage(props) {
       <Grid container spacing={2} style={{ alignItems: "stretch" }}>
         <Grid item xs={12} sm={4}>
           <Grid container direction="column" spacing={2}>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Total Liquidity
-                </Typography>
-                <Typography variant="body2">
-                  <Box display="flex">
-                    <Typography variant="body2">
-                      {currencyFormatter.format(pair?.reserveUSD || 0)}
-                    </Typography>
-                    <Percent
-                      marginLeft={1}
-                      percent={(
-                        ((pair?.reserveUSD - pair?.oneDay?.reserveUSD) /
-                          pair?.oneDay?.reserveUSD) *
-                        100
-                      ).toFixed(2)}
-                    />
-                  </Box>
-                </Typography>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Volume (24h)
-                </Typography>
-
-                <Box display="flex">
-                  <Typography variant="body2">
-                    {currencyFormatter.format(
-                      volume || 0
-                    )}
-                  </Typography>
-                  <Percent marginLeft={1} percent={volumeChange} />
-                </Box>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Fees (24h)
-                </Typography>
-                <Typography variant="body2">
-                  <Box display="flex">
-                    <Typography variant="body2">
-                      {currencyFormatter.format(fees)}
-                    </Typography>
-                    <Percent
-                      marginLeft={1}
-                      percent={(
-                        ((fees - feesYesterday) / feesYesterday) *
-                        100
-                      ).toFixed(2)}
-                    />
-                  </Box>
-                </Typography>
-              </Paper>
-            </Grid>
+            <SingleGridItem
+              header="Total Liquidity"
+              data={Number(pair?.reserveUSD)}
+              percentage={(
+                ((pair?.reserveUSD - pair?.oneDay?.reserveUSD) /
+                  pair?.oneDay?.reserveUSD) *
+                100
+              ).toFixed(2)}
+            />
+            <SingleGridItem
+              header="Volume (24h)"
+              data={volume}
+              percentage={volumeChange}
+            />
+            <SingleGridItem
+              header="Fees (24h)"
+              data={fees}
+              percentage={(
+                ((fees - feesYesterday) / feesYesterday) *
+                100
+              ).toFixed(2)}
+            />
             <Grid item>
               <Paper variant="outlined" className={classes.paper}>
                 <Typography variant="body2" color="textSecondary" gutterBottom>
                   Pooled Tokens
                 </Typography>
                 <Box display="flex" alignItems="center" mb={1}>
-                  <Avatar
-                    className={classes.avatar}
-                    address={pair.token0.id}
-                  />
+                  <Avatar className={classes.avatar} address={pair.token0.id} />
                   <Typography variant="body2" noWrap>
                     {decimalFormatter.format(pair.reserve0)}{" "}
                     {pair.token0.symbol}
                   </Typography>
                 </Box>
                 <Box display="flex" alignItems="center">
-                  <Avatar
-                    className={classes.avatar}
-                    address={pair.token1.id}
-                  />
+                  <Avatar className={classes.avatar} address={pair.token1.id} />
                   <Typography variant="body2" noWrap>
                     {decimalFormatter.format(pair.reserve1)}{" "}
                     {pair.token1.symbol}

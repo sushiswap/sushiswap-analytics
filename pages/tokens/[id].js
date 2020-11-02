@@ -16,33 +16,34 @@ import {
 import { useEffect, useState } from "react";
 
 import Avatar from "../../components/Avatar";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 import Chart from "../../components/Chart";
-import Grid from "@material-ui/core/Grid";
 import Head from "next/head";
 import Layout from "../../components/Layout";
 import Link from "../../components/Link";
 import PairTable from "../../components/PairTable";
-import Paper from "@material-ui/core/Paper";
-import Percent from "../../components/Percent";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import Transactions from "app/components/Transactions";
-import Typography from "@material-ui/core/Typography";
+import {
+  makeStyles,
+  Box,
+  Grid,
+  Button,
+  Paper,
+  TableHead,
+  TableRow,
+  Typography,
+  TableContainer,
+  TableCell,
+  TableBody,
+  Table,
+} from "@material-ui/core";
 import { currencyFormatter } from "../../intl";
 import { getApollo } from "../../apollo";
-import { makeStyles } from "@material-ui/core/styles";
 import { toChecksumAddress } from "web3-utils";
 import useInterval from "../../hooks/useInterval";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import SingleGridItem from "../../components/SingleGridItem";
 
 const useStyles = makeStyles((theme) => ({
   top: {
@@ -206,7 +207,6 @@ function TokenPage() {
 
   const txCount = token?.txCount - token?.oneDay?.txCount;
   const txCountYesterday = token?.oneDay?.txCount - token?.twoDay?.txCount;
-
   return (
     <Layout>
       <Head>
@@ -224,10 +224,7 @@ function TokenPage() {
       >
         <Grid item xs={12} sm="auto" className={classes.title}>
           <Box display="flex" alignItems="center">
-            <Avatar
-              className={classes.avatar}
-              src={token.id}
-            />
+            <Avatar className={classes.avatar} src={token.id} />
             <Typography variant="h5" component="h1" noWrap>
               {token.name} ({token.symbol})
             </Typography>
@@ -258,80 +255,36 @@ function TokenPage() {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4}>
           <Grid container direction="column" spacing={2}>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Price
-                </Typography>
-                <Box display="flex">
-                  <Typography variant="body2">
-                    {currencyFormatter.format(price || 0)}
-                  </Typography>
-                  <Percent marginLeft={1} percent={priceChange} />
-                </Box>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Liquidity
-                </Typography>
-
-                <Box display="flex">
-                  <Typography variant="body2">
-                    {currencyFormatter.format(totalLiquidityUSD || 0)}
-                  </Typography>
-                  <Percent
-                    marginLeft={1}
-                    percent={(
-                      ((totalLiquidityUSD - totalLiquidityUSDYesterday) /
-                        totalLiquidityUSDYesterday) *
-                      100
-                    ).toFixed(2)}
-                  />
-                </Box>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Volume (24h)
-                </Typography>
-
-                <Box display="flex">
-                  <Typography variant="body2">
-                    {currencyFormatter.format(volume || 0)}
-                  </Typography>
-                  <Percent
-                    marginLeft={1}
-                    percent={(
-                      ((volume - volumeYesterday) / volumeYesterday) *
-                      100
-                    ).toFixed(2)}
-                  />
-                </Box>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Transactions (24h)
-                </Typography>
-
-                <Box display="flex">
-                  <Typography variant="body2">
-                    {txCount.toLocaleString() || 0}
-                  </Typography>
-                  <Percent
-                    marginLeft={1}
-                    percent={(
-                      ((txCount - txCountYesterday) / txCountYesterday) *
-                      100
-                    ).toFixed(2)}
-                  />
-                </Box>
-              </Paper>
-            </Grid>
+            <SingleGridItem
+              header="Price"
+              data={price}
+              percentage={priceChange}
+            />
+            <SingleGridItem
+              header="Liquidity"
+              data={totalLiquidityUSD}
+              percentage={(
+                ((totalLiquidityUSD - totalLiquidityUSDYesterday) /
+                  totalLiquidityUSDYesterday) *
+                100
+              ).toFixed(2)}
+            />
+            <SingleGridItem
+              header="Volume (24h)"
+              data={volume}
+              percentage={(
+                ((volume - volumeYesterday) / volumeYesterday) *
+                100
+              ).toFixed(2)}
+            />
+            <SingleGridItem
+              header="Transactions (24h)"
+              data={txCount.toLocaleString()}
+              percentage={(
+                ((txCount - txCountYesterday) / txCountYesterday) *
+                100
+              ).toFixed(2)}
+            />
           </Grid>
         </Grid>
         <Grid item xs={12} sm={8}>

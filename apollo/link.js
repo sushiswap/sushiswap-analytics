@@ -10,15 +10,22 @@ export const uniswap = from([
   }),
 ]);
 
-export const sushiswap = from([
+export const bar = from([
   new RetryLink(),
   new HttpLink({
     uri:
-      "https://api.thegraph.com/subgraphs/name/matthewlilley/sushiswap",
+      "https://api.thegraph.com/subgraphs/id/QmVHMNDx2qQ46vrTFkMTCndmSJfADSDcNutaejxHG8q1TB",
     shouldBatch: true,
   }),
 ]);
 
+export const sushiswap = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/sushiswap",
+    shouldBatch: true,
+  }),
+]);
 
 export const blocklytics = from([
   new RetryLink(),
@@ -35,9 +42,9 @@ export default split(
   blocklytics,
   split(
     (operation) => {
-      return operation.getContext().clientName === "uniswap";
+      return operation.getContext().clientName === "bar";
     },
-    uniswap,
+    bar,
     sushiswap
   )
 );

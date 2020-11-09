@@ -41,7 +41,7 @@ const Legend = React.forwardRef(function Legend({ title, price, date }, ref) {
   );
 });
 
-export default function DashboardChart({ data, type, title }) {
+export default function DashboardChart({ data, type, title, numeric }) {
   const classes = useStyles();
   const chart = useRef();
 
@@ -55,7 +55,9 @@ export default function DashboardChart({ data, type, title }) {
   });
 
   function setLegend(price, time) {
-    setLegendPrice(currencyFormatter.format(price));
+    setLegendPrice(
+      numeric ? price.toFixed(2) : currencyFormatter.format(price)
+    );
     setLegendDate(`${time.year}-${time.month}-${time.day}`);
   }
 

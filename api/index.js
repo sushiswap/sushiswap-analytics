@@ -1,4 +1,7 @@
 import {
+  barHistoriesQuery,
+  barQuery,
+  barUserQuery,
   blockQuery,
   ethPriceTimeTravelQuery,
   oneDayEthPriceQuery,
@@ -18,8 +21,13 @@ import { startOfMinute, subDays, subWeeks } from "date-fns";
 
 import { getApollo } from "../apollo";
 
-export async function getLiquidityPositionSnapshots(user, client = getApollo()) {
-  const { data: { liquidityPositionSnapshots } } = await client.query({
+export async function getLiquidityPositionSnapshots(
+  user,
+  client = getApollo()
+) {
+  const {
+    data: { liquidityPositionSnapshots },
+  } = await client.query({
     query: liquidityPositionSnapshotsQuery,
     variables: {
       user,
@@ -27,8 +35,60 @@ export async function getLiquidityPositionSnapshots(user, client = getApollo()) 
   });
 }
 
+export async function getBar(client = getApollo()) {
+  const { data } = await client.query({
+    query: barQuery,
+    context: {
+      clientName: "bar",
+    },
+  });
+
+  await client.cache.writeQuery({
+    query: barQuery,
+    data,
+  });
+
+  return await client.cache.readQuery({
+    query: barQuery,
+  });
+}
+
+export async function getBarHistories(client = getApollo()) {
+  const { data } = await client.query({
+    query: barHistoriesQuery,
+    context: {
+      clientName: "bar",
+    },
+  });
+
+  await client.cache.writeQuery({
+    query: barHistoriesQuery,
+    data,
+  });
+
+  return await client.cache.readQuery({
+    query: barHistoriesQuery,
+  });
+}
+
+export async function getBarUser(id, client = getApollo()) {
+  const { data } = await client.query({
+    query: barUserQuery,
+    variables: {
+      id,
+    },
+    fetchPolicy: "no-cache",
+    context: {
+      clientName: "bar",
+    },
+  });
+  return data;
+}
+
 export async function getUser(id, client = getApollo()) {
-  const { data: { user } } = await client.query({
+  const {
+    data: { user },
+  } = await client.query({
     query: userQuery,
     variables: {
       id,

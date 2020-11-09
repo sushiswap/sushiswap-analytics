@@ -21,14 +21,13 @@ import gql from "graphql-tag";
 // # barHarvested
 // # barYeild
 
-
 export const userIdsQuery = gql`
   query userIdsQuery($first: Int! = 1000, $skip: Int! = 0) {
     users(first: $first, skip: $skip) {
       id
     }
   }
-`
+`;
 
 export const uniswapUserQuery = gql`
   query uniswapUserQuery($id: String!) {
@@ -49,7 +48,83 @@ export const uniswapUserQuery = gql`
       }
     }
   }
-`
+`;
+
+export const barQuery = gql`
+  query barQuery($id: String! = "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {
+    bar(id: $id) {
+      id
+      totalSupply
+      ratio
+      xSushiMinted
+      xSushiBurned
+      sushiStaked
+      sushiStakedUSD
+      sushiHarvested
+      sushiHarvestedUSD
+      xSushiAge
+      xSushiAgeDestroyed
+      # histories(first: 1000) {
+      #   id
+      #   date
+      #   timeframe
+      #   sushiStaked
+      #   sushiStakedUSD
+      #   sushiHarvested
+      #   sushiHarvestedUSD
+      #   xSushiAge
+      #   xSushiAgeDestroyed
+      #   xSushiMinted
+      #   xSushiBurned
+      #   xSushiSupply
+      #   ratio
+      # }
+    }
+  }
+`;
+
+export const barHistoriesQuery = gql`
+  query barHistoriesQuery {
+    histories(first: 1000) {
+      id
+      date
+      timeframe
+      sushiStaked
+      sushiStakedUSD
+      sushiHarvested
+      sushiHarvestedUSD
+      xSushiAge
+      xSushiAgeDestroyed
+      xSushiMinted
+      xSushiBurned
+      xSushiSupply
+      ratio
+    }
+  }
+`;
+
+export const barUserQuery = gql`
+  query barUserQuery($id: String!) {
+    user(id: $id) {
+      id
+      bar {
+        totalSupply
+        staked
+      }
+      xSushi
+      staked
+      stakedUSD
+      harvested
+      harvestedUSD
+      xSushiIn
+      xSushiOut
+      sushiIn
+      sushiOut
+      usdIn
+      usdOut
+    }
+  }
+`;
 
 export const userQuery = gql`
   query userQuery($id: String!) {
@@ -75,7 +150,7 @@ export const userQuery = gql`
           liquidityTokenTotalSupply
         }
       }
-      pools(where: {amount_gt: 0}) {
+      pools(where: { amount_gt: 0 }) {
         pool {
           lpToken
           totalSupply
@@ -213,10 +288,10 @@ export const pairDayDatasQuery = gql`
         id
       }
       token0 {
-        derivedETH        
+        derivedETH
       }
       token1 {
-        derivedETH        
+        derivedETH
       }
       # dailyVolumeToken0
       # dailyVolumeToken1

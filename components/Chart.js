@@ -8,90 +8,87 @@ import { palette } from "../theme";
 import usePrevious from "../hooks/usePrevious";
 import { useReactiveVar } from "@apollo/client";
 
-function Chart(
-  {
-    data,
-    options = {
-      chart: {
-        localization: {
-          priceFormatter: (value) => "$" + millify(value, { precision: 2 }),
-        },
-        layout: {
-          backgroundColor: "rgba(255,255,255, 0)",
-        },
-        priceScale: {
-          autoScale: true,
-          mode: 0,
-          invertScale: false,
-          alignLabels: true,
-          borderVisible: false,
-          entireTextOnly: true,
-          position: "right",
-          visible: true,
-          drawTicks: true,
-          scaleMargins: {
-            bottom: 0,
-            top: 0.3,
-          },
-        },
-        overlayPriceScales: {
-          visible: true,
-        },
-        timeScale: {
-          autoScale: true,
-          borderVisible: false,
-          visible: true,
-          timeVisible: false,
-          secondsVisible: false,
-        },
-        crosshair: {
-          mode: 0,
-          horzLine: {
-            visible: false,
-            labelVisible: false,
-          },
-          vertLine: {
-            visible: false,
-            style: 0,
-            width: 3,
-            color: fade(palette.primary.main, 0.1),
-            labelVisible: false,
-          },
-        },
-        grid: {
-          horzLines: {
-            color: fade(palette.primary.main, 0.05),
-            visible: false,
-          },
-          vertLines: {
-            color: fade(palette.primary.main, 0.05),
-            visible: false,
-          },
-        },
-        handleScroll: false,
-        handleScale: false,
-      },
-      area: {
-        lastValueVisible: false,
-        autoscaleInfoProvider: (original) => {
-          const res = original();
-          if (res.priceRange !== null) {
-            res.priceRange.minValue = 0;
-          }
-          return res;
-        },
-        topColor: fade(palette.primary.main, 0.5),
-        bottomColor: fade(palette.primary.main, 0.01),
-        lineColor: palette.primary.main,
-      },
-      histogram: {
-        lastValueVisible: false,
-        color: palette.primary.main,
+export const defaultOptions = {
+  chart: {
+    localization: {
+      priceFormatter: (value) => "$" + millify(value, { precision: 2 }),
+    },
+    layout: {
+      backgroundColor: "rgba(255,255,255, 0)",
+    },
+    priceScale: {
+      autoScale: true,
+      mode: 0,
+      invertScale: false,
+      alignLabels: true,
+      borderVisible: false,
+      entireTextOnly: true,
+      position: "right",
+      visible: true,
+      drawTicks: true,
+      scaleMargins: {
+        bottom: 0,
+        top: 0.3,
       },
     },
-    type,
-    onCrosshairMove = undefined,
+    overlayPriceScales: {
+      visible: true,
+    },
+    timeScale: {
+      autoScale: true,
+      borderVisible: false,
+      visible: true,
+      timeVisible: false,
+      secondsVisible: false,
+    },
+    crosshair: {
+      mode: 0,
+      horzLine: {
+        visible: false,
+        labelVisible: false,
+      },
+      vertLine: {
+        visible: false,
+        style: 0,
+        width: 3,
+        color: fade(palette.primary.main, 0.1),
+        labelVisible: false,
+      },
+    },
+    grid: {
+      horzLines: {
+        color: fade(palette.primary.main, 0.05),
+        visible: false,
+      },
+      vertLines: {
+        color: fade(palette.primary.main, 0.05),
+        visible: false,
+      },
+    },
+    handleScroll: false,
+    handleScale: false,
   },
+  area: {
+    lastValueVisible: false,
+    autoscaleInfoProvider: (original) => {
+      const res = original();
+      if (res.priceRange !== null) {
+        res.priceRange.minValue = 0;
+      }
+      return res;
+    },
+    topColor: fade(palette.primary.main, 0.5),
+    bottomColor: fade(palette.primary.main, 0.01),
+    lineColor: palette.primary.main,
+  },
+  histogram: {
+    lastValueVisible: false,
+    color: palette.primary.main,
+  },
+};
+
+function Chart(
+  { data, options = defaultOptions, type, onCrosshairMove = undefined },
   forwardedRef
 ) {
   const darkMode = useReactiveVar(darkModeVar);

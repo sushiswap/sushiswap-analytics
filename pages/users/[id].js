@@ -95,7 +95,7 @@ function UserPage() {
   });
 
   // console.log("data", data);
-  console.log("bar data", barData);
+  // console.log("bar data", barData);
   // console.log("error", error)
 
   const sushiPrice =
@@ -104,27 +104,31 @@ function UserPage() {
   const xSushi = Number(barData?.user?.xSushi);
 
   const barPending =
-    (barData?.user?.xSushi * barData?.user?.bar?.staked) /
+    (xSushi * barData?.user?.bar?.sushiStaked) /
     barData?.user?.bar?.totalSupply;
 
   const xSushiTransfered = barData?.user?.xSushiOut - barData?.user?.xSushiIn;
 
-  console.log("xSushiTransfered", xSushiTransfered);
+  // console.log("xSushiTransfered", xSushiTransfered);
 
   const stakedTransferProportion =
-    (barData?.user?.staked / (xSushi + xSushiTransfered)) * xSushiTransfered;
+    (barData?.user?.sushiStaked / (xSushi + xSushiTransfered)) *
+    xSushiTransfered;
 
   const stakedUSDTransferProportion =
-    (barData?.user?.stakedUSD / (xSushi + xSushiTransfered)) * xSushiTransfered;
+    (barData?.user?.sushiStakedUSD / (xSushi + xSushiTransfered)) *
+    xSushiTransfered;
 
-  console.log("stakedTransferProportion", stakedTransferProportion);
+  // console.log("stakedTransferProportion", stakedTransferProportion);
 
   const barStaked =
-    barData?.user?.staked - barData?.user?.harvested - stakedTransferProportion;
+    barData?.user?.sushiStaked -
+    barData?.user?.sushiHarvested -
+    stakedTransferProportion;
 
   const barStakedUSD =
-    barData?.user?.stakedUSD -
-    barData?.user?.harvestedUSD -
+    barData?.user?.sushiStakedUSD -
+    barData?.user?.sushiHarvestedUSD -
     stakedUSDTransferProportion;
 
   //  - (barData?.user?.usdOut - barData?.user?.usdIn);
@@ -387,7 +391,7 @@ function UserPage() {
                     <TableCell align="right">
                       {currencyFormatter.format(
                         sushiPrice * barPending +
-                          barData?.user?.harvestedUSD -
+                          barData?.user?.sushiHarvestedUSD -
                           barStakedUSD
                       )}
                     </TableCell>

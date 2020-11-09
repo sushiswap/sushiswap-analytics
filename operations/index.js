@@ -109,13 +109,13 @@ export const barUserQuery = gql`
       id
       bar {
         totalSupply
-        staked
+        sushiStaked
       }
       xSushi
-      staked
-      stakedUSD
-      harvested
-      harvestedUSD
+      sushiStaked
+      sushiStakedUSD
+      sushiHarvested
+      sushiHarvestedUSD
       xSushiIn
       xSushiOut
       sushiIn

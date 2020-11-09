@@ -13,8 +13,7 @@ export const uniswap = from([
 export const bar = from([
   new RetryLink(),
   new HttpLink({
-    uri:
-      "https://api.thegraph.com/subgraphs/id/QmVHMNDx2qQ46vrTFkMTCndmSJfADSDcNutaejxHG8q1TB",
+    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/bar",
     shouldBatch: true,
   }),
 ]);

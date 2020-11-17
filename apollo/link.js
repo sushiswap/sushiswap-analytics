@@ -21,7 +21,8 @@ export const bar = from([
 export const sushiswap = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/sushiswap",
+    uri:
+      "https://api.thegraph.com/subgraphs/name/matthewlilley/sushiswap-skunk-works",
     shouldBatch: true,
   }),
 ]);

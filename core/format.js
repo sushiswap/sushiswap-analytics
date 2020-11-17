@@ -4,8 +4,6 @@ export const currencyFormatter = new Intl.NumberFormat(locales, {
   style: "currency",
   currency: "USD",
   minimumFractionDigits: 2,
-  // minimumFractionDigits: 0,
-  // maximumFractionDigits: 0,
 });
 
 export const decimalFormatter = new Intl.NumberFormat(locales, {
@@ -17,3 +15,15 @@ export const dateTimeFormatter = new Intl.DateTimeFormat(locales, {
   month: "long",
   day: "numeric",
 });
+
+export function formatCurrency(value) {
+  return currencyFormatter.format(value);
+}
+
+export function formatDecimal(value, decimals = 2) {
+  return value.toFixed(decimals);
+}
+
+export function formatAddress(value) {
+  return value;
+}

@@ -12,22 +12,28 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
+import { Layout, Link } from "app/components";
 import {
   barUserQuery,
+  currencyFormatter,
   ethPriceQuery,
+  getApollo,
+  getBarUser,
+  getEthPrice,
+  getPairs,
+  getPoolUser,
+  getToken,
+  getUser,
   pairsQuery,
+  poolUserQuery,
   tokenQuery,
+  useInterval,
   userIdsQuery,
   userQuery,
-} from "../../operations";
-import { getBarUser, getPairs, getToken, getUser } from "../../api";
+} from "app/core";
 
 import { AvatarGroup } from "@material-ui/lab";
 import Head from "next/head";
-import Layout from "../../components/Layout";
-import Link from "../../components/Link";
-import { currencyFormatter } from "../../intl";
-import { getApollo } from "../../apollo";
 import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -69,13 +75,21 @@ function UserPage() {
   //   pollInterval: 60000,
   // });
 
-  const { data: barData, error: barDataError } = useQuery(barUserQuery, {
+  const { data: barData } = useQuery(barUserQuery, {
     variables: {
       id: id.toLowerCase(),
     },
-    // fetchPolicy: "no-cache",
     context: {
       clientName: "bar",
+    },
+  });
+
+  const { data: poolData } = useQuery(poolUserQuery, {
+    variables: {
+      address: id.toLowerCase(),
+    },
+    context: {
+      clientName: "masterchef",
     },
   });
 
@@ -94,32 +108,42 @@ function UserPage() {
     pollInterval: 60000,
   });
 
-  // console.log("data", data);
-  // console.log("bar data", barData);
-  // console.log("error", error)
+  useInterval(
+    () =>
+      Promise.all([
+        getPoolUser(id.toLowerCase()),
+        getBarUser(id.toLocaleLowerCase()),
+        getEthPrice(),
+      ]),
+    60000
+  );
 
   const sushiPrice =
     parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
-  const xSushi = Number(barData?.user?.xSushi);
+  const xSushi = parseFloat(barData?.user?.xSushi);
 
   const barPending =
-    (xSushi * barData?.user?.bar?.sushiStaked) /
-    barData?.user?.bar?.totalSupply;
+    (xSushi * parseFloat(barData?.user?.bar?.sushiStaked)) /
+    parseFloat(barData?.user?.bar?.totalSupply);
 
-  const xSushiTransfered = barData?.user?.xSushiOut - barData?.user?.xSushiIn;
+  const xSushiTransfered =
+    parseFloat(barData?.user?.xSushiOut) - parseFloat(barData?.user?.xSushiIn);
+  // const xSushiTransfered = Math.max(
+  //   0,
+  //   parseFloat(barData?.user?.xSushiIn) - parseFloat(barData?.user?.xSushiOut),
+  //   parseFloat(barData?.user?.xSushiOut) - parseFloat(barData?.user?.xSushiIn)
+  // );
 
-  // console.log("xSushiTransfered", xSushiTransfered);
-
-  const stakedTransferProportion =
+  const stakedTransferProportion = parseFloat(
     (barData?.user?.sushiStaked / (xSushi + xSushiTransfered)) *
-    xSushiTransfered;
+      xSushiTransfered
+  );
 
-  const stakedUSDTransferProportion =
+  const stakedUSDTransferProportion = parseFloat(
     (barData?.user?.sushiStakedUSD / (xSushi + xSushiTransfered)) *
-    xSushiTransfered;
-
-  // console.log("stakedTransferProportion", stakedTransferProportion);
+      xSushiTransfered
+  );
 
   const barStaked =
     barData?.user?.sushiStaked -
@@ -131,26 +155,37 @@ function UserPage() {
     barData?.user?.sushiHarvestedUSD -
     stakedUSDTransferProportion;
 
-  //  - (barData?.user?.usdOut - barData?.user?.usdIn);
+  const farmingStaked = poolData?.users.reduce(
+    (previousValue, currentValue) => {
+      const pair = pairs.find((pair) => pair.id == currentValue.pool.pair);
+      const share = currentValue.amount / currentValue.pool.balance;
+      return previousValue + pair.reserveUSD * share;
+    },
+    0
+  );
 
-  // const farmingStaked = data?.user?.pools.reduce(
+  const farmingPending =
+    poolData?.users?.reduce((previousValue, currentValue) => {
+      return (
+        previousValue +
+        ((currentValue.amount * currentValue.pool.accSushiPerShare) / 1e12 -
+          currentValue.rewardDebt) /
+          1e18
+      );
+    }, 0) * sushiPrice;
+
+  // const poolInvestments = poolData?.users.reduce(
   //   (previousValue, currentValue) => {
-  //     const pair = pairs.find((pair) => pair.id == currentValue.pool.lpToken);
-  //     const share = currentValue.amount / currentValue.pool.totalSupply;
-  //     return previousValue + pair.reserveUSD * share;
+  //     return previousValue + currentValue.entryUSD;
   //   },
   //   0
   // );
 
-  // const farmingPending =
-  //   data?.user?.pools?.reduce((previousValue, currentValue) => {
-  //     return (
-  //       previousValue +
-  //       ((currentValue.amount * currentValue.pool.accSushiPerShare) / 1e12 -
-  //         currentValue.rewardDebt) /
-  //         1e18
-  //     );
-  //   }, 0) * sushiPrice;
+  // console.log("poolInvestments", poolInvestments);
+
+  // const originalInvestments = barData?.user?.sushiStakedUSD + poolInvestments;
+
+  const investments = farmingStaked + barPending * sushiPrice + farmingPending;
 
   return (
     <Layout>
@@ -169,7 +204,7 @@ function UserPage() {
 
       {/* <pre>{JSON.stringify(data?.user, null, 2)}</pre> */}
 
-      {/* <Box marginBottom={4}>
+      <Box marginBottom={4}>
         <Grid container spacing={2}>
           <Grid item xs>
             <Typography
@@ -180,18 +215,19 @@ function UserPage() {
               Investments
             </Typography>
             <Typography variant="h5" component="h2">
-              {currencyFormatter.format(
-                farmingStaked + barPending * sushiPrice + farmingPending
-              )}
+              {currencyFormatter.format(investments)}
             </Typography>
           </Grid>
-          <Grid item xs>
+          {/* <Grid item xs>
             <Typography
               className={classes.title}
               color="textSecondary"
               gutterBottom
             >
               Original Investments
+            </Typography>
+            <Typography variant="h5" component="h2">
+              {currencyFormatter.format(originalInvestments)}
             </Typography>
           </Grid>
           <Grid item xs>
@@ -202,12 +238,15 @@ function UserPage() {
             >
               Profit/Loss
             </Typography>
-          </Grid>
+            <Typography variant="h5" component="h2">
+              {currencyFormatter.format(investments - originalInvestments)}
+            </Typography>
+          </Grid> */}
         </Grid>
-      </Box> */}
+      </Box>
 
       <Grid container direction="column" spacing={4}>
-        {/* <Grid item>
+        <Grid item>
           <Typography
             variant="h6"
             component="h2"
@@ -217,7 +256,7 @@ function UserPage() {
             Pools
           </Typography>
 
-          {!data.user.pools.length ? (
+          {!poolData?.users.length ? (
             <Typography>Address isn't farming...</Typography>
           ) : (
             <TableContainer component={Paper} variant="outlined">
@@ -237,27 +276,28 @@ function UserPage() {
                     <TableCell key="pendingSushi" align="right">
                       Pending Sushi
                     </TableCell>
-                    <TableCell key="apy" align="right">
+                    {/* <TableCell key="apy" align="right">
                       APY
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.user.pools.map((pool) => {
+                  {poolData.users.map((user) => {
                     const pair = pairs.find(
-                      (pair) => pair.id == pool.pool.lpToken
+                      (pair) => pair.id == user.pool.pair
                     );
-                    const slp = Number(pool.amount / 1e18);
-                    const share = pool.amount / pool.pool.totalSupply;
+                    const slp = Number(user.amount / 1e18);
+
+                    const share = user.amount / user.pool.balance;
 
                     const token0 = pair.reserve0 * share;
                     const token1 = pair.reserve1 * share;
 
                     const pendingSushi =
-                      ((pool.amount * pool.pool.accSushiPerShare) / 1e12 -
-                        pool.rewardDebt) /
+                      ((user.amount * user.pool.accSushiPerShare) / 1e12 -
+                        user.rewardDebt) /
                       1e18;
-
+                    // user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
                     return (
                       <TableRow key="12">
                         <TableCell component="th" scope="row">
@@ -303,7 +343,7 @@ function UserPage() {
                           {Number(pendingSushi.toFixed(2)).toLocaleString()} (
                           {currencyFormatter.format(pendingSushi * sushiPrice)})
                         </TableCell>
-                        <TableCell align="right">23.76%</TableCell>
+                        {/* <TableCell align="right">23.76%</TableCell> */}
                       </TableRow>
                     );
                   })}
@@ -311,7 +351,7 @@ function UserPage() {
               </Table>
             </TableContainer>
           )}
-        </Grid> */}
+        </Grid>
         <Grid item>
           <Typography
             variant="h6"
@@ -421,9 +461,9 @@ export async function getStaticProps({ params: { id } }) {
 
   await getToken("0x6b3595068778dd592e39a122f4f5a5cf09c90fe2", client);
 
-  const { user: barUser } = await getBarUser(id.toLowerCase(), client);
+  await getBarUser(id.toLowerCase(), client);
 
-  // console.log("server bar user", barUser);
+  await getPoolUser(id.toLowerCase(), client);
 
   return {
     props: {
@@ -444,7 +484,10 @@ export async function getStaticPaths() {
   //   params: { id },
   // }));
 
-  return { paths: [], fallback: true };
+  return {
+    paths: [],
+    fallback: true,
+  };
 }
 
 export default UserPage;

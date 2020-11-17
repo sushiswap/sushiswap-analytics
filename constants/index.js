@@ -6,3 +6,7 @@ export const TOKEN_DENY = [
 ];
 
 export const PAIR_DENY = ["0xb6a741f37d6e455ebcc9f17e2c16d0586c3f57a5"];
+
+export const EXCHANGE_CREATED_TIMESTAMP = 1599214239;
+
+export const POOL_DENY = ["14", "29", "45", "30"];

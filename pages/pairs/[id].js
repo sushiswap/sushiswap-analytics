@@ -1,43 +1,50 @@
-import React, { useEffect, useState } from "react";
-import { currencyFormatter, decimalFormatter } from "../../intl";
 import {
+  AreaChart,
+  BarChart,
+  BasicTable,
+  Chart,
+  KPI,
+  Layout,
+  Link,
+  PairIcon,
+  Percent,
+  Transactions,
+} from "app/components";
+import {
+  Avatar,
+  Box,
+  Button,
+  Chip,
+  Divider,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableContainer,
+  TableRow,
+  Typography,
+  useMediaQuery,
+} from "@material-ui/core";
+import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import {
+  currencyFormatter,
+  decimalFormatter,
   ethPriceQuery,
+  getApollo,
+  getPair,
   pairDayDatasQuery,
   pairIdsQuery,
   pairQuery,
   transactionsQuery,
-} from "../../operations";
+  useInterval,
+} from "app/core";
+import { getUnixTime, startOfDay, subMonths } from "date-fns";
 
-import Avatar from "@material-ui/core/Avatar";
-import AvatarGroup from "@material-ui/lab/AvatarGroup";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Chart from "../../components/Chart";
-import Chip from "@material-ui/core/Chip";
-import Divider from "@material-ui/core/Divider";
-import Grid from "@material-ui/core/Grid";
 import Head from "next/head";
-import Layout from "../../components/Layout";
-import Link from "../../components/Link";
-import Paper from "@material-ui/core/Paper";
-import Percent from "../../components/Percent";
+import React from "react";
 import Router from "next/router";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import Transactions from "../../components/Transactions";
-import Typography from "@material-ui/core/Typography";
-import { getApollo } from "../../apollo";
-import { getPair } from "../../api";
 import { makeStyles } from "@material-ui/core/styles";
 import { toChecksumAddress } from "web3-utils";
-import useInterval from "../../hooks/useInterval";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
@@ -157,14 +164,21 @@ function PairPage(props) {
   } = useQuery(pairDayDatasQuery, {
     variables: {
       pairs: [id],
+      date: getUnixTime(startOfDay(subMonths(Date.now(), 1))),
     },
     pollInterval: 60000,
   });
 
-
-  const volumeUSD = pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD
-  const oneDayVolumeUSD = pair?.oneDay?.volumeUSD === "0" ? pair?.oneDay?.untrackedVolumeUSD : pair?.oneDay?.volumeUSD
-  const twoDayVolumeUSD = pair?.twoDay?.volumeUSD === "0" ? pair?.twoDay?.untrackedVolumeUSD : pair?.twoDay?.volumeUSD
+  const volumeUSD =
+    pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD;
+  const oneDayVolumeUSD =
+    pair?.oneDay?.volumeUSD === "0"
+      ? pair?.oneDay?.untrackedVolumeUSD
+      : pair?.oneDay?.volumeUSD;
+  const twoDayVolumeUSD =
+    pair?.twoDay?.volumeUSD === "0"
+      ? pair?.twoDay?.untrackedVolumeUSD
+      : pair?.twoDay?.volumeUSD;
 
   const volume = volumeUSD - oneDayVolumeUSD;
   const volumeYesterday = oneDayVolumeUSD - twoDayVolumeUSD;
@@ -179,13 +193,20 @@ function PairPage(props) {
       (previousValue, currentValue) => {
         const time = new Date(currentValue.date * 1e3)
           .toISOString()
-          .slice(0, 10)
+          .slice(0, 10);
 
-        const untrackedVolumeUSD = (currentValue?.token0.derivedETH * currentValue?.volumeToken0) + (currentValue?.token1.derivedETH * currentValue?.volumeToken1) * bundles[0].ethPrice
+        const untrackedVolumeUSD =
+          currentValue?.token0.derivedETH * currentValue?.volumeToken0 +
+          currentValue?.token1.derivedETH *
+            currentValue?.volumeToken1 *
+            bundles[0].ethPrice;
 
         // console.log("untrackedVolumeUSD", untrackedVolumeUSD)
 
-        const volumeUSD = currentValue?.volumeUSD === "0" ? untrackedVolumeUSD : currentValue?.volumeUSD;
+        const volumeUSD =
+          currentValue?.volumeUSD === "0"
+            ? untrackedVolumeUSD
+            : currentValue?.volumeUSD;
 
         previousValue["liquidity"].push({
           time,
@@ -195,13 +216,13 @@ function PairPage(props) {
           time,
           value: parseFloat(volumeUSD),
         });
-        previousValue["transactions"].push({
+        previousValue["fees"].push({
           time,
-          value: parseInt(currentValue.txCount),
+          value: parseFloat(currentValue.volumeUSD) * 0.003,
         });
         return previousValue;
       },
-      { liquidity: [], volume: [], transactions: [] }
+      { liquidity: [], volume: [], fees: [] }
     );
 
   return (
@@ -219,20 +240,7 @@ function PairPage(props) {
       >
         <Grid item xs={12} sm="auto" className={classes.title}>
           <Box display="flex" alignItems="center">
-            <AvatarGroup className={classes.avatars}>
-              <Avatar
-                imgProps={{ loading: "lazy" }}
-                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                  pair.token0.id
-                )}/logo.png`}
-              />
-              <Avatar
-                imgProps={{ loading: "lazy" }}
-                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                  pair.token1.id
-                )}/logo.png`}
-              />
-            </AvatarGroup>
+            <PairIcon base={pair.token0.id} quote={pair.token1.id} />
             <Typography variant="h5" component="h1">
               {pair.token0.symbol}-{pair.token1.symbol}
             </Typography>
@@ -256,267 +264,149 @@ function PairPage(props) {
         </Grid>
       </Grid>
 
-      <Grid container className={classes.chips}>
-        <Grid item xs={12} sm="auto">
-          <Chip
-            color="primary"
-            avatar={
-              <Avatar
-                style={{ backgroundColor: "transparent" }}
-                alt="USDC"
-                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                  pair.token0.id
-                )}/logo.png`}
-              />
-            }
-            clickable
-            onClick={() => {
-              Router.push("/tokens/" + pair.token0.id);
-            }}
-            label={`1 ${pair.token0.symbol} = ${decimalFormatter.format(
-              pair.reserve1 / pair.reserve0
-            )} ${pair.token1.symbol} (${currencyFormatter.format(
-              pair.token0?.derivedETH * bundles[0].ethPrice
-            )})`}
-            variant="outlined"
-          />
-        </Grid>
-        <Grid item xs={12} sm="auto">
-          <Chip
-            color="primary"
-            avatar={
-              <Avatar
-                style={{ backgroundColor: "transparent" }}
-                alt="ETH"
-                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                  pair.token1.id
-                )}/logo.png`}
-              />
-            }
-            clickable
-            onClick={() => {
-              Router.push("/tokens/" + pair.token1.id);
-            }}
-            label={`1 ${pair.token1.symbol} = ${decimalFormatter.format(
-              pair.reserve0 / pair.reserve1
-            )} ${pair.token0.symbol} (${currencyFormatter.format(
-              pair.token1?.derivedETH * bundles[0].ethPrice
-            )})`}
-            variant="outlined"
-          />
-        </Grid>
-      </Grid>
-
-      <Typography variant="h6" component="h2" gutterBottom>
-        Analytics
-      </Typography>
-
-      <Grid container spacing={2} style={{ alignItems: "stretch" }}>
-        <Grid item xs={12} sm={4}>
-          <Grid container direction="column" spacing={2}>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Total Liquidity
-                </Typography>
-                <Typography variant="body2">
-                  <Box display="flex">
-                    <Typography variant="body2">
-                      {currencyFormatter.format(pair?.reserveUSD || 0)}
-                    </Typography>
-                    <Percent
-                      marginLeft={1}
-                      percent={(
-                        ((pair?.reserveUSD - pair?.oneDay?.reserveUSD) /
-                          pair?.oneDay?.reserveUSD) *
-                        100
-                      ).toFixed(2)}
-                    />
-                  </Box>
-                </Typography>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Volume (24h)
-                </Typography>
-
-                <Box display="flex">
-                  <Typography variant="body2">
-                    {currencyFormatter.format(
-                      volume || 0
-                    )}
-                  </Typography>
-                  <Percent marginLeft={1} percent={volumeChange} />
-                </Box>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Fees (24h)
-                </Typography>
-                <Typography variant="body2">
-                  <Box display="flex">
-                    <Typography variant="body2">
-                      {currencyFormatter.format(fees)}
-                    </Typography>
-                    <Percent
-                      marginLeft={1}
-                      percent={(
-                        ((fees - feesYesterday) / feesYesterday) *
-                        100
-                      ).toFixed(2)}
-                    />
-                  </Box>
-                </Typography>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Pooled Tokens
-                </Typography>
-                <Box display="flex" alignItems="center" mb={1}>
-                  <Avatar
-                    className={classes.avatar}
-                    imgProps={{ loading: "lazy" }}
-                    src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                      pair.token0.id
-                    )}/logo.png`}
-                  />
-                  <Typography variant="body2" noWrap>
-                    {decimalFormatter.format(pair.reserve0)}{" "}
-                    {pair.token0.symbol}
-                  </Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <Avatar
-                    className={classes.avatar}
-                    imgProps={{ loading: "lazy" }}
-                    src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                      pair.token1.id
-                    )}/logo.png`}
-                  />
-                  <Typography variant="body2" noWrap>
-                    {decimalFormatter.format(pair.reserve1)}{" "}
-                    {pair.token1.symbol}
-                  </Typography>
-                </Box>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} sm={8}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
           <Paper
-            className={classes.paper}
             variant="outlined"
-            component={Box}
-            display="flex"
-            flexDirection="column"
-            height="100%"
+            style={{ height: 300, position: "relative" }}
           >
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mb={2}
-            >
-              <div>
-                <ToggleButtonGroup
-                  value={type}
-                  exclusive
-                  onChange={handleType}
-                  aria-label="chart type"
-                >
-                  <ToggleButton value="liquidity" aria-label="liquidity chart">
-                    Liquidity
-                  </ToggleButton>
-                  <ToggleButton value="volume" aria-label="volume chart">
-                    Volume
-                  </ToggleButton>
-                  {/* <ToggleButton
-                    value="transactions"
-                    aria-label="transactions chart"
-                  >
-                    Transactions
-                  </ToggleButton> */}
-                </ToggleButtonGroup>
-              </div>
-              <div>
-                <ToggleButtonGroup
-                  value={timeframe}
-                  exclusive
-                  onChange={handleTimeframe}
-                  aria-label="timeframe"
-                >
-                  <ToggleButton value="1W" aria-label="1W">
-                    1W
-                  </ToggleButton>
-                  <ToggleButton value="1M" aria-label="1M">
-                    1M
-                  </ToggleButton>
-                  <ToggleButton value="ALL" aria-label="ALL">
-                    ALL
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </div>
-            </Box>
-            <Chart data={chartDatas[type].reverse()} type={chartType} />
+            <AreaChart
+              title="Liquidity"
+              data={chartDatas.liquidity.reverse()}
+              margin={{ top: 120, right: 0, bottom: 0, left: 0 }}
+              tooltipDisabled
+              overlayEnabled
+            />
           </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <BarChart
+              title="Volume"
+              data={chartDatas.volume.reverse()}
+              margin={{ top: 120, right: 0, bottom: 0, left: 0 }}
+              tooltipDisabled
+              overlayEnabled
+            />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <KPI
+            title="Liquidity (24h)"
+            value={currencyFormatter.format(pair?.reserveUSD || 0)}
+            difference={(
+              ((pair?.reserveUSD - pair?.oneDay?.reserveUSD) /
+                pair?.oneDay?.reserveUSD) *
+              100
+            ).toFixed(2)}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <KPI
+            title="Volume (24h)"
+            value={currencyFormatter.format(volume || 0)}
+            difference={volumeChange}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <KPI
+            title="Fees (24h)"
+            value={currencyFormatter.format(fees)}
+            difference={(
+              ((fees - feesYesterday) / feesYesterday) *
+              100
+            ).toFixed(2)}
+          />
         </Grid>
       </Grid>
 
       <Box my={4}>
+        <BasicTable
+          title="Information"
+          headCells={[
+            {
+              key: "name",
+              label: "Name",
+            },
+            { key: "id", label: "Address" },
+            { key: "token0", label: "Token 0" },
+            { key: "token1", label: "Token 1" },
+            { key: "etherscan", label: "Etherscan", align: "right" },
+          ]}
+          bodyCells={[
+            <Typography variant="body2" noWrap>
+              {pair.token0.symbol}-{pair.token1.symbol}
+            </Typography>,
+            <Typography variant="body2" noWrap>
+              {pair.id}
+            </Typography>,
+            <Typography variant="body2" noWrap>
+              {pair.token0.id}
+            </Typography>,
+            <Typography variant="body2" noWrap>
+              {pair.token1.id}
+            </Typography>,
+            <Link href={`https://etherscan.io/address/${pair.id}`}>View</Link>,
+          ]}
+        />
+      </Box>
+      <Box mb={4}>
         <Typography variant="h6" component="h2" gutterBottom>
-          Information
+          Reserves
         </Typography>
-
-        <TableContainer component={Paper} variant="outlined">
-          <Table aria-label="pair information">
-            <TableHead>
-              <TableRow>
-                <TableCell key="name">Name</TableCell>
-                <TableCell key="address">Address</TableCell>
-                <TableCell key="token0">Token0</TableCell>
-                <TableCell key="token1">Token1</TableCell>
-                <TableCell key="etherscan" align="right">
-                  Etherscan
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow key={pair.id}>
-                <TableCell component="th" scope="row">
-                  <Typography variant="body2" noWrap>
-                    {pair.token0.symbol}-{pair.token1.symbol}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2" noWrap>
-                    {pair.id}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2" noWrap>
-                    {pair.token0.id}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2" noWrap>
-                    {pair.token1.id}
-                  </Typography>
-                </TableCell>
-                <TableCell align="right">
-                  <Link href={`https://etherscan.io/address/${pair.id}`}>
-                    View
-                  </Link>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <Paper variant="outlined" className={classes.paper}>
+              <Typography
+                variant="subtitle2"
+                color="textSecondary"
+                gutterBottom
+                noWrap
+              >
+                {pair.token0.symbol}
+              </Typography>
+              <Box display="flex" alignItems="center">
+                <Avatar
+                  className={classes.avatar}
+                  imgProps={{ loading: "lazy" }}
+                  src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                    pair.token0.id
+                  )}/logo.png`}
+                />
+                <Typography variant="subtitle1" color="textPrimary" noWrap>
+                  {decimalFormatter.format(pair.reserve0)} {pair.token0.symbol}
+                </Typography>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Paper variant="outlined" className={classes.paper}>
+              <Typography
+                variant="subtitle2"
+                color="textSecondary"
+                gutterBottom
+                noWrap
+              >
+                {pair.token1.symbol}
+              </Typography>
+              <Box display="flex" alignItems="center">
+                <Avatar
+                  className={classes.avatar}
+                  imgProps={{ loading: "lazy" }}
+                  src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                    pair.token1.id
+                  )}/logo.png`}
+                />
+                <Typography variant="subtitle1" color="textPrimary" noWrap>
+                  {decimalFormatter.format(pair.reserve1)} {pair.token1.symbol}
+                </Typography>
+              </Box>
+            </Paper>
+          </Grid>
+        </Grid>
       </Box>
       <Transactions transactions={transactions} txCount={pair.txCount} />
     </Layout>
@@ -537,6 +427,7 @@ export async function getStaticProps({ params: { id } }) {
     query: pairDayDatasQuery,
     variables: {
       pairs: [id],
+      date: getUnixTime(startOfDay(subMonths(Date.now(), 1))),
     },
   });
 
@@ -556,7 +447,6 @@ export async function getStaticProps({ params: { id } }) {
 }
 
 export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
   const apollo = getApollo();
 
   const { data } = await apollo.query({

@@ -1,16 +1,17 @@
-import Chart, { defaultOptions } from "../components/Chart";
-import { Grid, Paper, Typography } from "@material-ui/core";
-import { barHistoriesQuery, barQuery } from "../operations";
-import { getBar, getBarHistories } from "../api";
+import { Grid, Paper, useTheme } from "@material-ui/core";
+import { KPI, Layout, LineChart } from "app/components";
+import {
+  barHistoriesQuery,
+  barQuery,
+  getApollo,
+  getBar,
+  getBarHistories,
+  useInterval,
+} from "app/core";
 
-import DashboardChart from "../components/DashboardChart";
 import Head from "next/head";
-import Layout from "../components/Layout";
 import React from "react";
-import { currencyFormatter } from "../intl";
-import { getApollo } from "../apollo";
 import { makeStyles } from "@material-ui/core/styles";
-import useInterval from "../hooks/useInterval";
 import { useQuery } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "center",
+    // textAlign: "center",
     color: theme.palette.text.secondary,
   },
 }));
@@ -28,19 +29,18 @@ const useStyles = makeStyles((theme) => ({
 function PoolsPage() {
   const classes = useStyles();
 
+  const theme = useTheme();
+
   const {
     data: { bar },
-    error,
   } = useQuery(barQuery, {
     context: {
       clientName: "bar",
     },
   });
-  console.log("Bar", bar);
 
   const {
     data: { histories },
-    error: historiesError,
   } = useQuery(barHistoriesQuery, {
     context: {
       clientName: "bar",
@@ -54,8 +54,13 @@ function PoolsPage() {
   const [
     sushiStakedUSD,
     sushiHarvestedUSD,
-    ratio,
-    sushiXsushi,
+    xSushiSushi,
+    xSushiPerSushi,
+    xSushiMinted,
+    xSushiBurned,
+    xSushiAge,
+    xSushiAgeDestroyed,
+    xSushi,
   ] = histories.reduce(
     (previousValue, currentValue) => {
       const time = new Date(currentValue.date * 1e3).toISOString().slice(0, 10);
@@ -75,72 +80,149 @@ function PoolsPage() {
         time,
         value: 2 - parseFloat(currentValue.ratio),
       });
+      previousValue[4].push({
+        time,
+        value: parseFloat(currentValue.xSushiMinted),
+      });
+      previousValue[5].push({
+        time,
+        value: parseFloat(currentValue.xSushiBurned),
+      });
+      previousValue[6].push({
+        time,
+        value: parseInt(currentValue.xSushiAge),
+        stroke: theme.palette.positive.light,
+      });
+      previousValue[7].push({
+        time,
+        value: parseInt(currentValue.xSushiAgeDestroyed),
+      });
+
+      previousValue[8].push({
+        time,
+        value: parseFloat(currentValue.xSushiSupply),
+      });
+
       return previousValue;
     },
-    [[], [], [], []]
+    [[], [], [], [], [], [], [], [], []]
   );
 
+  // console.log("xSushiAge", xSushiAge);
+  // console.log("xSushiAgeDestroyed", xSushiAgeDestroyed);
   return (
     <Layout>
       <Head>
         <title>Sushi Bar | SushiSwap Analytics</title>
       </Head>
-      <Typography variant="h5" component="h1" gutterBottom>
-        Sushi Bar
-      </Typography>
-
-      {/* <Typography>xSushi: {parseFloat(bar.totalSupply).toFixed(2)}</Typography>
-
-      <Typography>
-        Sushi Staked: {parseFloat(bar.sushiStaked).toFixed(2)} (
-        {currencyFormatter.format(bar.sushiStakedUSD)})
-      </Typography>
-
-      <Typography>
-        Sushi Harvested: {parseFloat(bar.sushiHarvested).toFixed(2)} (
-        {currencyFormatter.format(bar.sushiHarvestedUSD)})
-      </Typography>
-
-      <Typography>
-        xSushi:Sushi Ratio {parseFloat(bar.ratio).toFixed(4)}
-      </Typography> */}
 
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper} variant="outlined">
-            xSushi: {parseFloat(bar.totalSupply).toLocaleString()}
+        <Grid item xs={12}>
+          <Grid container spacing={3}>
+            {/* <Grid item xs>
+              <KPI
+                title="xSushi Age"
+                value={parseFloat(bar.xSushiAge).toLocaleString()}
+              />
+            </Grid> */}
+            <Grid item xs>
+              <KPI
+                title="xSushi"
+                value={parseFloat(bar.totalSupply).toLocaleString()}
+              />
+            </Grid>
+            <Grid item xs>
+              <KPI
+                title="Sushi"
+                value={parseFloat(bar.sushiStaked).toLocaleString()}
+              />
+            </Grid>
+            <Grid item xs>
+              <KPI
+                title="xSushi:Sushi"
+                value={parseFloat(bar.ratio).toLocaleString()}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+
+        {/* <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <LineChart
+              title="xSushi Age & xSushi Age Destroyed"
+              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
+              strokes={[
+                theme.palette.positive.light,
+                theme.palette.negative.light,
+              ]}
+              lines={[xSushiAge, xSushiAgeDestroyed]}
+            />
+          </Paper>
+        </Grid> */}
+
+        <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <LineChart
+              title="xSushi Total Supply"
+              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
+              strokes={[theme.palette.positive.light]}
+              lines={[xSushi]}
+            />
           </Paper>
         </Grid>
 
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper} variant="outlined">
-            Sushi: {parseFloat(bar.sushiStaked).toLocaleString()}{" "}
-            {currencyFormatter.format(bar.sushiStakedUSD)})
+        <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <LineChart
+              title="Sushi Staked (USD) & Sushi Harvested (USD)"
+              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
+              strokes={[
+                theme.palette.positive.light,
+                theme.palette.negative.light,
+              ]}
+              lines={[sushiStakedUSD, sushiHarvestedUSD]}
+            />
           </Paper>
         </Grid>
-
-        <Grid item xs={12} sm={4}>
-          <Paper className={classes.paper} variant="outlined">
-            xSushi:Sushi {parseFloat(bar.ratio).toLocaleString()}
+        <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <LineChart
+              title="xSushi:Sushi & Sushi:xSushi"
+              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
+              strokes={[
+                theme.palette.positive.light,
+                theme.palette.negative.light,
+              ]}
+              lines={[xSushiSushi, xSushiPerSushi]}
+            />
           </Paper>
         </Grid>
-
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper} variant="outlined">
-            <DashboardChart
-              data={sushiStakedUSD}
-              type="area"
-              title="Sushi Staked"
-            ></DashboardChart>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper} variant="outlined">
-            <DashboardChart
-              data={sushiHarvestedUSD}
-              type="area"
-              title="Sushi Harvested"
-            ></DashboardChart>
+        <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <LineChart
+              title="xSushi Minted & xSushi Burned"
+              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
+              strokes={[
+                theme.palette.positive.light,
+                theme.palette.negative.light,
+              ]}
+              lines={[xSushiMinted, xSushiBurned]}
+            />
           </Paper>
         </Grid>
       </Grid>

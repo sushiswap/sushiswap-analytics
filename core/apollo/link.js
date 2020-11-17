@@ -18,10 +18,18 @@ export const bar = from([
   }),
 ]);
 
+export const masterchef = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/masterchef",
+    shouldBatch: true,
+  }),
+]);
+
 export const sushiswap = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/sushiswap",
+    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/exchange",
     shouldBatch: true,
   }),
 ]);
@@ -41,9 +49,15 @@ export default split(
   blocklytics,
   split(
     (operation) => {
-      return operation.getContext().clientName === "bar";
+      return operation.getContext().clientName === "masterchef";
     },
-    bar,
-    sushiswap
+    masterchef,
+    split(
+      (operation) => {
+        return operation.getContext().clientName === "bar";
+      },
+      bar,
+      sushiswap
+    )
   )
 );

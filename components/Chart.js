@@ -1,11 +1,9 @@
-import { deepPurple, purple } from "@material-ui/core/colors";
+import { darkModeVar, usePrevious } from "app/core";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 
-import { darkModeVar } from "../apollo/variables";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import millify from "millify";
-import { palette } from "../theme";
-import usePrevious from "../hooks/usePrevious";
+import { palette } from "app/theme";
 import { useReactiveVar } from "@apollo/client";
 
 export const defaultOptions = {

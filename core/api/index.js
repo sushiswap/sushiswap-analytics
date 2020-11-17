@@ -3,23 +3,361 @@ import {
   barQuery,
   barUserQuery,
   blockQuery,
+  blocksQuery,
+  ethPriceQuery,
   ethPriceTimeTravelQuery,
+  gainersQuery,
+  getApollo,
+  liquidityPositionSubsetQuery,
+  losersQuery,
   oneDayEthPriceQuery,
   pairQuery,
+  pairSubsetQuery,
   pairTimeTravelQuery,
   pairsQuery,
   pairsTimeTravelQuery,
+  poolHistoryQuery,
+  poolQuery,
+  poolUserQuery,
+  poolsQuery,
+  sevenDayEthPriceQuery,
   tokenPairsQuery,
   tokenQuery,
   tokenTimeTravelQuery,
   tokensQuery,
   tokensTimeTravelQuery,
-  uniswapUserQuery,
   userQuery,
-} from "../operations";
-import { startOfMinute, subDays, subWeeks } from "date-fns";
+} from "app/core";
+import {
+  startOfHour,
+  startOfMinute,
+  subDays,
+  subHours,
+  subWeeks,
+} from "date-fns";
 
-import { getApollo } from "../apollo";
+import { POOL_DENY } from "../../constants";
+
+export async function preload() {
+  // Pre-load anything that might be needed globally (stuff for search bar etc...)
+  await getTokens();
+  await getPairs();
+}
+
+export async function getPoolUser(id, client = getApollo()) {
+  const {
+    data: { users },
+  } = await client.query({
+    query: poolUserQuery,
+    variables: {
+      address: id,
+    },
+    context: {
+      clientName: "masterchef",
+    },
+  });
+
+  await client.cache.writeQuery({
+    query: poolUserQuery,
+    data: {
+      users,
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: poolUserQuery,
+  });
+}
+
+export async function getAverageBlockTime(client = getApollo()) {
+  const now = startOfHour(Date.now());
+  const start = Math.floor(startOfMinute(subHours(now, 1)) / 1000);
+  const end = Math.floor(now) / 1000;
+
+  const {
+    data: { blocks },
+  } = await client.query({
+    query: blocksQuery,
+    variables: {
+      start,
+      end,
+    },
+    context: {
+      clientName: "blocklytics",
+    },
+  });
+
+  const { averageBlockTime } = blocks.reduce(
+    (previousValue, currentValue, currentIndex) => {
+      if (previousValue.timestamp) {
+        const difference = previousValue.timestamp - currentValue.timestamp;
+
+        previousValue.averageBlockTime =
+          previousValue.averageBlockTime + difference / currentIndex + 1;
+      }
+
+      previousValue.timestamp = currentValue.timestamp;
+
+      return previousValue;
+    },
+    { timestamp: null, averageBlockTime: 12 }
+  );
+
+  return averageBlockTime;
+}
+
+export async function getPoolHistories(id, client = getApollo()) {
+  const {
+    data: { poolHistories },
+  } = await client.query({
+    query: poolHistoryQuery,
+    fetchPolicy: "network-only",
+    variables: { id },
+    context: {
+      clientName: "masterchef",
+    },
+  });
+
+  await client.cache.writeQuery({
+    query: poolHistoryQuery,
+    data: {
+      poolHistories,
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: poolHistoryQuery,
+  });
+}
+
+export async function getPool(id, client = getApollo()) {
+  const {
+    data: { pool },
+  } = await client.query({
+    query: poolQuery,
+    fetchPolicy: "network-only",
+    variables: { id },
+    context: {
+      clientName: "masterchef",
+    },
+  });
+
+  const {
+    data: { pair: liquidityPair },
+  } = await client.query({
+    query: pairQuery,
+    variables: { id: pool.pair },
+    fetchPolicy: "network-only",
+  });
+
+  await client.cache.writeQuery({
+    query: poolQuery,
+    data: {
+      pool: {
+        ...pool,
+        liquidityPair,
+      },
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: poolQuery,
+  });
+}
+
+export async function getPools(client = getApollo()) {
+  const {
+    data: { pools },
+  } = await client.query({
+    query: poolsQuery,
+    fetchPolicy: "network-only",
+    context: {
+      clientName: "masterchef",
+    },
+  });
+
+  const pairAddresses = pools
+    .map((pool) => {
+      return pool.pair;
+    })
+    .sort();
+
+  const {
+    data: { pairs },
+  } = await client.query({
+    query: pairSubsetQuery,
+    variables: { pairAddresses },
+    fetchPolicy: "network-only",
+  });
+
+  const averageBlockTime = (await getAverageBlockTime()) / 100;
+
+  // const averageBlockTime = 12;
+
+  const { bundles } = await getEthPrice();
+
+  const ethPrice = bundles[0].ethPrice;
+
+  const { token } = await getToken(
+    "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+  );
+
+  const sushiPrice = ethPrice * token.derivedETH;
+
+  const {
+    data: { liquidityPositions },
+  } = await client.query({
+    query: liquidityPositionSubsetQuery,
+    variables: { user: "0xc2edad668740f1aa35e4d8f227fb8e17dca888cd" },
+    fetchPolicy: "network-only",
+  });
+
+  await client.cache.writeQuery({
+    query: poolsQuery,
+    data: {
+      pools: pools
+        .filter(
+          (pool) => !POOL_DENY.includes(pool.id) && pool.allocPoint !== "0"
+        )
+        .map((pool) => {
+          const pair = pairs.find((pair) => pair.id === pool.pair);
+
+          const liquidityPosition = liquidityPositions.find(
+            (liquidityPosition) => liquidityPosition.pair.id === pair.id
+          );
+
+          const poolWeight = pool.allocPoint / pool.owner.totalAllocPoint;
+
+          const balance = Number(pool.balance / 1e18);
+
+          const balanceUSD =
+            (balance / Number(pair.totalSupply)) * Number(pair.reserveUSD);
+
+          const rewardPerBlock =
+            ((pool.allocPoint / pool.owner.totalAllocPoint) *
+              pool.owner.sushiPerBlock) /
+            1e18;
+
+          const blocksPerHour = 3600 / averageBlockTime;
+
+          const roiPerBlock = (rewardPerBlock * sushiPrice) / balanceUSD;
+
+          const roiPerHour = roiPerBlock * blocksPerHour;
+
+          const roiPerDay = roiPerHour * 24;
+
+          const roiPerMonth = roiPerDay * 30;
+
+          const roiPerYear = roiPerMonth * 12;
+
+          return {
+            ...pool,
+            liquidityPair: pair,
+            roiPerBlock,
+            roiPerHour,
+            roiPerDay,
+            roiPerMonth,
+            roiPerYear,
+            rewardPerThousand: (1e3 / balanceUSD) * rewardPerBlock,
+            tvl:
+              (pair.reserveUSD / pair.totalSupply) *
+              liquidityPosition.liquidityTokenBalance,
+          };
+        }),
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: poolsQuery,
+  });
+}
+
+export async function getGainers(client = getApollo()) {
+  const {
+    data: { pairs },
+  } = await client.query({
+    query: gainersQuery,
+    fetchPolicy: "network-only",
+  });
+
+  const pairAddresses = pairs.map((pair) => pair.id).sort();
+
+  const oneDayBlock = await getOneDayBlock();
+
+  const {
+    data: { pairs: oneDayPairs },
+  } = await client.query({
+    query: pairsTimeTravelQuery,
+    variables: {
+      block: oneDayBlock,
+      pairAddresses,
+    },
+    fetchPolicy: "no-cache",
+  });
+
+  // console.log("one day pairs", oneDayPairs);
+
+  await client.cache.writeQuery({
+    query: gainersQuery,
+    data: {
+      pairs: pairs.map((pair) => {
+        const oneDayPair = oneDayPairs.find(({ id }) => pair.id === id);
+        return {
+          ...pair,
+          reserveUSDGained: pair.reserveUSD - oneDayPair?.reserveUSD,
+          volumeUSDGained: pair.volumeUSD - oneDayPair?.volumeUSD,
+        };
+      }),
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: gainersQuery,
+  });
+}
+
+export async function getLosers(client = getApollo()) {
+  const {
+    data: { pairs },
+  } = await client.query({
+    query: losersQuery,
+    fetchPolicy: "network-only",
+  });
+
+  const pairAddresses = pairs.map((pair) => pair.id).sort();
+
+  const oneDayBlock = await getOneDayBlock();
+
+  const {
+    data: { pairs: oneDayPairs },
+  } = await client.query({
+    query: pairsTimeTravelQuery,
+    variables: {
+      block: oneDayBlock,
+      pairAddresses,
+    },
+    fetchPolicy: "no-cache",
+  });
+
+  // console.log("one day pairs", oneDayPairs);
+
+  await client.cache.writeQuery({
+    query: losersQuery,
+    data: {
+      pairs: pairs.map((pair) => {
+        const oneDayPair = oneDayPairs.find(({ id }) => pair.id === id);
+        return {
+          ...pair,
+          reserveUSDLost: pair.reserveUSD - oneDayPair?.reserveUSD,
+        };
+      }),
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: losersQuery,
+  });
+}
 
 export async function getLiquidityPositionSnapshots(
   user,
@@ -221,10 +559,16 @@ export async function getSevenDayBlock(client = getApollo()) {
 }
 
 // Eth Price
-async function getEthPrice(client = getApollo()) {
-  await client.query({
+export async function getEthPrice(client = getApollo()) {
+  const { data } = await client.query({
     query: ethPriceQuery,
   });
+
+  await client.cache.writeQuery({
+    query: ethPriceQuery,
+    data,
+  });
+
   return await client.cache.readQuery({
     query: ethPriceQuery,
   });
@@ -245,6 +589,27 @@ export async function getOneDayEthPrice(client = getApollo()) {
 
   await client.cache.writeQuery({
     query: oneDayEthPriceQuery,
+    data: {
+      ethPrice: bundles[0]?.ethPrice,
+    },
+  });
+}
+
+export async function getSevenDayEthPrice(client = getApollo()) {
+  const block = await getSevenDayBlock();
+
+  const {
+    data: { bundles },
+  } = await client.query({
+    query: ethPriceTimeTravelQuery,
+    variables: {
+      block,
+    },
+    fetchPolicy: "no-cache",
+  });
+
+  await client.cache.writeQuery({
+    query: sevenDayEthPriceQuery,
     data: {
       ethPrice: bundles[0]?.ethPrice,
     },
@@ -337,17 +702,33 @@ export async function getTokens(client = getApollo()) {
     fetchPolicy: "no-cache",
   });
 
+  const {
+    data: { tokens: sevenDayTokens },
+  } = await client.query({
+    query: tokensTimeTravelQuery,
+    variables: {
+      block: await getSevenDayBlock(),
+    },
+    fetchPolicy: "no-cache",
+  });
+
   await client.writeQuery({
     query: tokensQuery,
     data: {
       tokens: tokens.map((token) => {
         const oneDayToken = oneDayTokens.find(({ id }) => token.id === id);
+        const sevenDayToken = sevenDayTokens.find(({ id }) => token.id === id);
         return {
           ...token,
           oneDay: {
             volumeUSD: String(oneDayToken?.volumeUSD),
             derivedETH: String(oneDayToken?.derivedETH),
             liquidity: String(oneDayToken?.liquidity),
+          },
+          sevenDay: {
+            volumeUSD: String(sevenDayToken?.volumeUSD),
+            derivedETH: String(sevenDayToken?.derivedETH),
+            liquidity: String(sevenDayToken?.liquidity),
           },
         };
       }),
@@ -358,8 +739,6 @@ export async function getTokens(client = getApollo()) {
     query: tokensQuery,
   });
 }
-
-async function getOneDayTokens() {}
 
 // Pairs
 export async function getPair(id, client = getApollo()) {

@@ -1,10 +1,11 @@
 import SvgIcon from "@material-ui/core/SvgIcon";
 import { useTheme } from "@material-ui/core";
-export default function Sushi() {
+export default function Sushi(props) {
   const theme = useTheme();
   return (
     <SvgIcon
-      fontSize="large"
+      {...props}
+      fontSize="default"
       viewBox="0 0 121 150"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

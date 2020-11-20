@@ -1,59 +1,136 @@
 import {
+  AreaChart,
+  BarChart,
+  Layout,
+  PairTable,
+  Search,
+  TokenTable,
+} from "app/components";
+import { Box, Grid, Paper } from "@material-ui/core";
+import {
+  dayDatasQuery,
   ethPriceQuery,
-  pairDayDatasQuery,
+  getApollo,
+  getDayData,
+  getEthPrice,
+  getOneDayEthPrice,
+  getPairs,
+  getSevenDayEthPrice,
+  getTokens,
   pairsQuery,
-  tokenDayDatasQuery,
   tokensQuery,
-  uniswapDayDatasQuery,
-} from "../operations";
-import { getOneDayEthPrice, getPairs, getTokens } from "../api";
+  useInterval,
+} from "app/core";
+import { getUnixTime, startOfDay, subMonths } from "date-fns";
 
-import Box from "@material-ui/core/Box";
-import DashboardCharts from "../components/DashboardCharts";
 import Head from "next/head";
-import Layout from "../components/Layout";
-import PairTable from "../components/PairTable";
 import React from "react";
-import Search from "../components/Search";
-import TokenTable from "../components/TokenTable";
-import Typography from "@material-ui/core/Typography";
-import { getApollo } from "../apollo";
-import useInterval from "../hooks/useInterval";
 import { useQuery } from "@apollo/client";
 
 function IndexPage() {
   const {
     data: { tokens },
   } = useQuery(tokensQuery);
+
   const {
     data: { pairs },
   } = useQuery(pairsQuery);
+  const date = getUnixTime(startOfDay(subMonths(Date.now(), 1)));
+  console.log("[CLIENT] date", date);
 
+  const {
+    data: { dayDatas },
+    loading,
+    error,
+  } = useQuery(dayDatasQuery, {
+    pollInterval: 60000,
+    variables: {
+      date,
+    },
+  });
+  if (error) return <p>Error :(</p>;
+  if (loading) return <p>Loading ...</p>;
+
+  // console.log({ data, error, loading });
+
+  // Update every 60 seconds...
   useInterval(
-    () => Promise.all([getPairs, getTokens, getOneDayEthPrice]),
+    () =>
+      Promise.all([
+        getPairs,
+        getTokens,
+        // getDayData,
+        getOneDayEthPrice,
+        getSevenDayEthPrice,
+      ]),
     60000
   );
+
+  const [liquidity, volume] = dayDatas
+    .filter((d) => d.date > getUnixTime(startOfDay(subMonths(Date.now(), 1))))
+    .reduce(
+      (previousValue, currentValue) => {
+        const time = new Date(currentValue.date * 1e3)
+          .toISOString()
+          .slice(0, 10);
+        previousValue[0].push({
+          time,
+          value: parseFloat(currentValue.liquidityUSD),
+        });
+        previousValue[1].push({
+          time,
+          value: parseFloat(currentValue.volumeUSD),
+        });
+        return previousValue;
+      },
+      [[], []]
+    );
 
   return (
     <Layout>
       <Head>
         <title>Dashboard | SushiSwap Analytics</title>
       </Head>
-      <Box my={4}>
+      <Box mb={3}>
         <Search />
       </Box>
-      <Typography variant="h5" component="h1" gutterBottom>
-        Dashboard
-      </Typography>
-      <DashboardCharts />
-      <Typography variant="h6" component="h2" gutterBottom>
-        Top Tokens
-      </Typography>
-      <TokenTable tokens={tokens} />
-      <Typography variant="h6" component="h2" gutterBottom>
-        Top Pairs
-      </Typography>
-      <PairTable pairs={pairs} />
+
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <AreaChart
+              title="Liquidity"
+              data={liquidity}
+              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+              tooltipDisabled
+              overlayEnabled
+            />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <BarChart
+              title="Volume"
+              data={volume}
+              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+              tooltipDisabled
+              overlayEnabled
+            />
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <TokenTable title="Top Tokens" tokens={tokens} />
+        </Grid>
+        <Grid item xs={12}>
+          <PairTable title="Top Pairs" pairs={pairs} />
+        </Grid>
+      </Grid>
     </Layout>
   );
 }
@@ -61,21 +138,21 @@ function IndexPage() {
 export async function getStaticProps() {
   const client = getApollo();
 
-  // uniswapDayDatasQuery
-  await client.query({
-    query: uniswapDayDatasQuery,
-  });
+  // Sushi Swap day data
+  const date = getUnixTime(startOfDay(subMonths(Date.now(), 1)));
+  console.log("[SERVER] date", date);
 
-  // ethPriceQuery
-  await client.query({
-    query: ethPriceQuery,
-  });
+  await getDayData(client);
+
+  await getEthPrice(client);
+
+  await getOneDayEthPrice(client);
+
+  await getSevenDayEthPrice(client);
 
   await getTokens(client);
 
   await getPairs(client);
-
-  await getOneDayEthPrice(client);
 
   return {
     props: {

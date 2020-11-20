@@ -23,9 +23,11 @@ export const palette = {
   },
   positive: {
     main: green[500],
+    light: green[400],
   },
   negative: {
     main: red[500],
+    light: red[400],
   },
 
   seaweed: {

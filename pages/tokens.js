@@ -1,14 +1,17 @@
-import { ethPriceQuery, tokensQuery } from "../operations";
-import { getOneDayEthPrice, getTokens } from "../api";
+import {
+  ethPriceQuery,
+  getApollo,
+  getOneDayEthPrice,
+  getTokens,
+  tokensQuery,
+  useInterval,
+} from "app/core";
 import { useApolloClient, useQuery } from "@apollo/client";
 
 import Head from "next/head";
-import Layout from "../components/Layout";
+import { Layout } from "app/components";
 import React from "react";
 import TokenTable from "../components/TokenTable";
-import Typography from "@material-ui/core/Typography";
-import { getApollo } from "../apollo";
-import useInterval from "../hooks/useInterval";
 
 function TokensPage() {
   const {
@@ -24,10 +27,7 @@ function TokensPage() {
       <Head>
         <title>Tokens | SushiSwap Analytics</title>
       </Head>
-      <Typography variant="h5" component="h1" gutterBottom>
-        Tokens
-      </Typography>
-      <TokenTable tokens={tokens} />
+      <TokenTable title="Tokens" tokens={tokens} />
     </Layout>
   );
 }
@@ -39,9 +39,9 @@ export async function getStaticProps() {
     query: ethPriceQuery,
   });
 
-  await getTokens(client);
-
   await getOneDayEthPrice(client);
+
+  await getTokens(client);
 
   return {
     props: {

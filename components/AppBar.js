@@ -1,21 +1,21 @@
+import {
+  AppBar,
+  Box,
+  Container,
+  Hidden,
+  IconButton,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
+import { Brightness4, Brightness7 } from "@material-ui/icons";
+import { Link, Sushi } from ".";
 import { gql, useQuery, useReactiveVar } from "@apollo/client";
 
-import AppBar from "@material-ui/core/AppBar";
-import Box from "@material-ui/core/Box";
-import Brightness4Icon from "@material-ui/icons/Brightness4";
-import Brightness7Icon from "@material-ui/icons/Brightness7";
-import Container from "@material-ui/core/Container";
-import { Hidden } from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
-import Link from "./Link";
 import React from "react";
-import Sushi from "./Sushi";
-import Toolbar from "@material-ui/core/Toolbar";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
-import { darkModeVar } from "../apollo/variables";
+import { darkModeVar } from "app/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 // import useDarkMode from "../hooks/useDarkMode.js.bk";
 
@@ -43,7 +43,7 @@ export default function ButtonAppBar() {
   const classes = useStyles();
 
   const darkMode = useReactiveVar(darkModeVar);
-  const router = useRouter()
+  const router = useRouter();
   function toggleDarkMode() {
     // console.log("toggleDarkMode");
     const value = !darkModeVar();
@@ -96,7 +96,7 @@ export default function ButtonAppBar() {
                 color="default"
                 aria-label="theme toggle"
               >
-                {!darkMode ? <Brightness4Icon /> : <Brightness7Icon />}
+                {!darkMode ? <Brightness4 /> : <Brightness7 />}
               </IconButton>
             </Tooltip>
           </Toolbar>

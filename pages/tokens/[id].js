@@ -1,53 +1,55 @@
 import {
+  AreaChart,
+  BarChart,
+  BasicTable,
+  KPI,
+  Layout,
+  Link,
+  PageHeader,
+  PairTable,
+  Percent,
+  TokenIcon,
+  Transactions,
+} from "app/components";
+import {
+  Box,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@material-ui/core";
+import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import {
+  currencyFormatter,
   ethPriceQuery,
+  getApollo,
+  getOneDayBlock,
+  getOneDayEthPrice,
+  getToken,
+  getTokenPairs,
   oneDayEthPriceQuery,
+  sevenDayEthPriceQuery,
   tokenDayDatasQuery,
   tokenIdsQuery,
   tokenPairsQuery,
   tokenQuery,
   transactionsQuery,
-} from "../../operations";
-import {
-  getOneDayBlock,
-  getOneDayEthPrice,
-  getToken,
-  getTokenPairs,
-} from "api";
-import { useEffect, useState } from "react";
+  useInterval,
+} from "app/core";
+import { getUnixTime, startOfDay, subMonths } from "date-fns";
 
-import Avatar from "@material-ui/core/Avatar";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Chart from "../../components/Chart";
-import Grid from "@material-ui/core/Grid";
 import Head from "next/head";
-import Layout from "../../components/Layout";
-import Link from "../../components/Link";
-import PairTable from "../../components/PairTable";
-import Paper from "@material-ui/core/Paper";
-import Percent from "../../components/Percent";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import Transactions from "app/components/Transactions";
-import Typography from "@material-ui/core/Typography";
-import { currencyFormatter } from "../../intl";
-import { getApollo } from "../../apollo";
 import { makeStyles } from "@material-ui/core/styles";
-import { toChecksumAddress } from "web3-utils";
-import useInterval from "../../hooks/useInterval";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
-  top: {
-    marginBottom: theme.spacing(4),
-  },
   title: {
     marginBottom: theme.spacing(4),
     [theme.breakpoints.up("sm")]: {
@@ -139,6 +141,7 @@ function TokenPage() {
   } = useQuery(tokenDayDatasQuery, {
     variables: {
       tokens: [id],
+      date: getUnixTime(startOfDay(subMonths(Date.now(), 1))),
     },
     pollInterval: 60000,
   });
@@ -159,7 +162,8 @@ function TokenPage() {
   });
 
   const chartDatas = tokenDayDatas
-    .filter((tokenDayData) => tokenDayData.date > start.getTime() / 1000)
+    .filter((d) => d.date > getUnixTime(startOfDay(subMonths(Date.now(), 1))))
+    // .filter((tokenDayData) => tokenDayData.date > start.getTime() / 1000)
     .reduce(
       (previousValue, currentValue) => {
         const time = new Date(currentValue.date * 1e3)
@@ -178,9 +182,13 @@ function TokenPage() {
           time,
           value: parseFloat(currentValue.priceUSD),
         });
+        previousValue["fees"].push({
+          time,
+          value: parseFloat(currentValue.volumeUSD) * 0.003,
+        });
         return previousValue;
       },
-      { liquidity: [], volume: [], price: [] }
+      { liquidity: [], volume: [], price: [], fees: [] }
     );
 
   const totalLiquidityUSD =
@@ -215,136 +223,156 @@ function TokenPage() {
           Analytics
         </title>
       </Head>
-      <Grid
-        container
-        direction="row"
-        justify="space-between"
-        alignItems="center"
-        className={classes.top}
-      >
-        <Grid item xs={12} sm="auto" className={classes.title}>
-          <Box display="flex" alignItems="center">
-            <Avatar
-              className={classes.avatar}
-              imgProps={{ loading: "lazy" }}
-              src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                token.id
-              )}/logo.png`}
-            />
-            <Typography variant="h5" component="h1" noWrap>
-              {token.name} ({token.symbol})
-            </Typography>
-          </Box>
+      <PageHeader mb={3}>
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="center"
+          // className={classes.top}
+        >
+          <Grid item xs={12} sm="auto" className={classes.title}>
+            <Box display="flex" alignItems="center">
+              <TokenIcon id={token.id} />
+              <Typography variant="h5" component="h1" noWrap>
+                {token.name} ({token.symbol})
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm="auto" className={classes.links}>
+            <Link
+              href={`https://exchange.sushiswapclassic.org/#/add/${token.id}/ETH`}
+              target="_blank"
+              variant="body1"
+            >
+              Add Liquidity
+            </Link>
+            <Link
+              href={`https://exchange.sushiswapclassic.org/#/swap?inputCurrency=${token.id}`}
+              target="_blank"
+              variant="body1"
+            >
+              Trade
+            </Link>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm="auto" className={classes.links}>
-          <Link
-            href={`https://exchange.sushiswapclassic.org/#/add/${token.id}/ETH`}
-            target="_blank"
-            variant="body1"
-          >
-            Add Liquidity
-          </Link>
-          <Link
-            href={`https://exchange.sushiswapclassic.org/#/swap?inputCurrency=${token.id}`}
-            target="_blank"
-            variant="body1"
-          >
-            Trade
-          </Link>
-        </Grid>
-      </Grid>
+      </PageHeader>
 
-      <Typography variant="h6" component="h2" gutterBottom>
-        Analytics
-      </Typography>
-
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={4}>
-          <Grid container direction="column" spacing={2}>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Price
-                </Typography>
-                <Box display="flex">
-                  <Typography variant="body2">
-                    {currencyFormatter.format(price || 0)}
-                  </Typography>
-                  <Percent marginLeft={1} percent={priceChange} />
-                </Box>
-              </Paper>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Grid container spacing={3}>
+            <Grid item xs>
+              <KPI
+                title="Price"
+                value={currencyFormatter.format(price || 0)}
+                difference={priceChange}
+              />
             </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Liquidity
-                </Typography>
-
-                <Box display="flex">
-                  <Typography variant="body2">
-                    {currencyFormatter.format(totalLiquidityUSD || 0)}
-                  </Typography>
-                  <Percent
-                    marginLeft={1}
-                    percent={(
-                      ((totalLiquidityUSD - totalLiquidityUSDYesterday) /
-                        totalLiquidityUSDYesterday) *
-                      100
-                    ).toFixed(2)}
-                  />
-                </Box>
-              </Paper>
+            <Grid item xs>
+              <KPI
+                title="Liquidity"
+                value={currencyFormatter.format(totalLiquidityUSD || 0)}
+                difference={(
+                  ((totalLiquidityUSD - totalLiquidityUSDYesterday) /
+                    totalLiquidityUSDYesterday) *
+                  100
+                ).toFixed(2)}
+              />
             </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Volume (24h)
-                </Typography>
-
-                <Box display="flex">
-                  <Typography variant="body2">
-                    {currencyFormatter.format(volume || 0)}
-                  </Typography>
-                  <Percent
-                    marginLeft={1}
-                    percent={(
-                      ((volume - volumeYesterday) / volumeYesterday) *
-                      100
-                    ).toFixed(2)}
-                  />
-                </Box>
-              </Paper>
+            <Grid item xs>
+              <KPI
+                title="Volume (24h)"
+                value={currencyFormatter.format(volume || 0)}
+                difference={(
+                  ((volume - volumeYesterday) / volumeYesterday) *
+                  100
+                ).toFixed(2)}
+              />
             </Grid>
-            <Grid item>
-              <Paper variant="outlined" className={classes.paper}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Transactions (24h)
-                </Typography>
-
-                <Box display="flex">
-                  <Typography variant="body2">
-                    {txCount.toLocaleString() || 0}
-                  </Typography>
-                  <Percent
-                    marginLeft={1}
-                    percent={(
-                      ((txCount - txCountYesterday) / txCountYesterday) *
-                      100
-                    ).toFixed(2)}
-                  />
-                </Box>
-              </Paper>
+            <Grid item xs>
+              <KPI
+                title="Transactions (24h)"
+                value={txCount.toLocaleString() || 0}
+                difference={(
+                  ((txCount - txCountYesterday) / txCountYesterday) *
+                  100
+                ).toFixed(2)}
+              />
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={8}>
+
+        <Grid item xs={12} sm={6}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <AreaChart
+              title="Liquidity"
+              data={chartDatas.liquidity.reverse()}
+              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+              tooltipDisabled
+              overlayEnabled
+            />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <BarChart
+              title="Volume"
+              data={chartDatas.volume.reverse()}
+              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+              tooltipDisabled
+              overlayEnabled
+            />
+          </Paper>
+        </Grid>
+        {/* 
+        <Grid item xs={12} sm={6}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <BarChart
+              title="Fees"
+              data={chartDatas.fees.reverse()}
+              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+              tooltipDisabled
+              overlayEnabled
+            />
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <AreaChart
+              title="Price"
+              data={chartDatas.price.reverse()}
+              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+              tooltipDisabled
+              overlayEnabled
+            />
+          </Paper>
+        </Grid> */}
+
+        {/* <Grid item xs={12}>
+          <Paper variant="outlined" style={{ height: 300 }}>
+            <AreaChart data={chartDatas[type].reverse()} />
+          </Paper>
+
           <Box
             component={Paper}
             className={classes.paper}
             variant="outlined"
             display="flex"
             flexDirection="column"
-            height="100%"
+            height="300px"
           >
             <Box
               display="flex"
@@ -387,60 +415,31 @@ function TokenPage() {
                 </ToggleButton>
               </ToggleButtonGroup>
             </Box>
-            <Chart data={chartDatas[type].reverse()} type={chartType} />
+
+            <AreaChart data={chartDatas[type].reverse()} />
           </Box>
-        </Grid>
+        </Grid> */}
       </Grid>
 
       <Box my={4}>
-        <Typography variant="h6" component="h2" gutterBottom>
-          Information
-        </Typography>
-
-        <TableContainer component={Paper} variant="outlined">
-          <Table aria-label="token information">
-            <TableHead>
-              <TableRow>
-                <TableCell key="name">Name</TableCell>
-                <TableCell key="symbol">Symbol</TableCell>
-                <TableCell key="address">Address</TableCell>
-                <TableCell key="etherscan" align="right">
-                  Etherscan
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow key={token.id}>
-                <TableCell component="th" scope="row">
-                  <Typography variant="body2" noWrap>
-                    {token.name}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2" noWrap>
-                    {token.symbol}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2" noWrap>
-                    {token.id}
-                  </Typography>
-                </TableCell>
-                <TableCell align="right">
-                  <Link href={`https://etherscan.io/address/${token.id}`}>
-                    View
-                  </Link>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <BasicTable
+          title="Information"
+          headCells={[
+            { key: "name", label: "Name" },
+            { key: "symbol", label: "Symbol" },
+            { key: "address", label: "Address" },
+            { key: "etherscan", label: "Etherscan", align: "right" },
+          ]}
+          bodyCells={[
+            token.name,
+            token.symbol,
+            token.id,
+            <Link href={`https://etherscan.io/address/${token.id}`}>View</Link>,
+          ]}
+        />
       </Box>
 
-      <Typography variant="h6" component="h2" gutterBottom>
-        Pairs
-      </Typography>
-      <PairTable pairs={pairs} />
+      <PairTable title="Pairs" pairs={pairs} />
 
       <Transactions transactions={transactions} txCount={token.txCount} />
     </Layout>
@@ -460,6 +459,7 @@ export async function getStaticProps({ params: { id } }) {
     query: tokenDayDatasQuery,
     variables: {
       tokens: [id],
+      date: getUnixTime(startOfDay(subMonths(Date.now(), 1))),
     },
   });
 

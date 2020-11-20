@@ -46,3 +46,5 @@ export function useApollo(initialState) {
   const store = useMemo(() => getApollo(initialState), [initialState]);
   return store;
 }
+
+export * from "./variables";

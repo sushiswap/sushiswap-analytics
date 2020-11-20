@@ -1,24 +1,34 @@
+import { Layout, PoolTable } from "../components";
+import { getApollo, getPools, poolsQuery, useInterval } from "app/core";
+
 import Head from "next/head";
-import Layout from "../components/Layout";
 import React from "react";
-import Typography from "@material-ui/core/Typography";
-import { getApollo } from "../apollo";
+import { useQuery } from "@apollo/client";
 
 function PoolsPage() {
+  const {
+    data: { pools },
+  } = useQuery(poolsQuery, {
+    context: {
+      clientName: "masterchef",
+    },
+  });
+
+  useInterval(getPools, 60000);
+
   return (
     <Layout>
       <Head>
         <title>Pools | SushiSwap Analytics</title>
       </Head>
-      <Typography variant="h5" component="h1" gutterBottom>
-        Pools
-      </Typography>
+      <PoolTable pools={pools} orderBy="rewardPerThousand" order="desc" />
     </Layout>
   );
 }
 
 export async function getStaticProps() {
   const client = getApollo();
+  await getPools(client);
   return {
     props: {
       initialApolloState: client.cache.extract(),

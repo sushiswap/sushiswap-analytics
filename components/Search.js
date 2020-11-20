@@ -3,7 +3,7 @@ import Autocomplete, {
 } from "@material-ui/lab/Autocomplete";
 /* eslint-disable no-use-before-define */
 import React, { useState } from "react";
-import { pairsQuery, tokensQuery } from "../operations";
+import { pairsQuery, tokensQuery } from "../core";
 
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -65,7 +65,12 @@ export default function Search() {
       }}
       loading={pairsLoading || tokensLoading}
       renderInput={(params) => (
-        <TextField {...params} label="Search" variant="outlined" size="small" />
+        <TextField
+          {...params}
+          label="Looking for something?"
+          variant="outlined"
+          size="small"
+        />
       )}
       renderOption={(option, { inputValue }) => {
         const matches = match(option.text, inputValue);

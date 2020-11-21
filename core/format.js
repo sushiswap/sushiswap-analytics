@@ -8,6 +8,8 @@ export const currencyFormatter = new Intl.NumberFormat(locales, {
 
 export const decimalFormatter = new Intl.NumberFormat(locales, {
   style: "decimal",
+  minimumSignificantDigits: 1,
+  maximumSignificantDigits: 4,
 });
 
 export const dateTimeFormatter = new Intl.DateTimeFormat(locales, {

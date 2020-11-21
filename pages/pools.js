@@ -21,7 +21,12 @@ function PoolsPage() {
       <Head>
         <title>Pools | SushiSwap Analytics</title>
       </Head>
-      <PoolTable pools={pools} orderBy="rewardPerThousand" order="desc" />
+      <PoolTable
+        pools={pools}
+        orderBy="rewardPerThousand"
+        order="desc"
+        rowsPerPage={100}
+      />
     </Layout>
   );
 }

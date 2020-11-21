@@ -87,7 +87,7 @@ export default function SortableTable({
   const [order, setOrder] = React.useState(props.order || "desc");
   const [orderBy, setOrderBy] = React.useState(props.orderBy);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(props.rowsPerPage || 10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";

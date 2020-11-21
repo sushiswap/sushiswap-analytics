@@ -1,9 +1,9 @@
 import { AddressAvatar, Link, SortableTable } from ".";
 import { Avatar, Box } from "@material-ui/core";
+import { currencyFormatter, decimalFormatter } from "app/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import React from "react";
-import { currencyFormatter } from "app/core";
 import { deepPurple } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +59,8 @@ export default function LiquidityProviderList({
             key: "amount",
             label: "Liquidity Tokens Staked",
             align: "right",
-            render: (row) => `${parseInt(row.amount / 1e18)} SLP`,
+            render: (row) =>
+              `${decimalFormatter.format(row.amount / 1e18)} SLP`,
           },
           {
             key: "value",

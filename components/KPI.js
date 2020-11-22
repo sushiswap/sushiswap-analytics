@@ -56,7 +56,7 @@ function KPI(props) {
                 {!Number.isNaN(value) ? value : 0}
               </Typography>
               <Typography variant="subtitle1" color="textSecondary" noWrap>
-                {!Number.isNaN(difference) && (
+                {difference && !Number.isNaN(difference) && (
                   <Percent marginLeft={1} percent={difference} />
                 )}
               </Typography>

@@ -56,7 +56,9 @@ function KPI(props) {
                 {value}
               </Typography>
               <Typography variant="subtitle1" color="textSecondary" noWrap>
-                {difference && <Percent marginLeft={1} percent={difference} />}
+                {!Number.isNaN(difference) && (
+                  <Percent marginLeft={1} percent={difference} />
+                )}
               </Typography>
             </Box>
           </Grid>

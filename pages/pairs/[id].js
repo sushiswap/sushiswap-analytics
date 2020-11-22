@@ -87,6 +87,9 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
   },
+  reserve: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
 function PairPage(props) {
@@ -230,6 +233,8 @@ function PairPage(props) {
       { liquidity: [], volume: [], fees: [] }
     );
 
+  console.log(volumeChange);
+
   return (
     <Layout>
       <Head>
@@ -251,6 +256,7 @@ function PairPage(props) {
             </Typography>
           </Box>
         </Grid>
+
         <Grid item xs={12} sm="auto" className={classes.links}>
           <Link
             href={`https://exchange.sushiswapclassic.org/#/add/${pair.token0.id}/${pair.token1.id}`}
@@ -270,34 +276,40 @@ function PairPage(props) {
       </Grid>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Paper
-            variant="outlined"
-            style={{ height: 300, position: "relative" }}
-          >
-            <AreaChart
-              title="Liquidity"
-              data={chartDatas.liquidity.reverse()}
-              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
-              tooltipDisabled
-              overlayEnabled
-            />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper
-            variant="outlined"
-            style={{ height: 300, position: "relative" }}
-          >
-            <BarChart
-              title="Volume"
-              data={chartDatas.volume.reverse()}
-              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
-              tooltipDisabled
-              overlayEnabled
-            />
-          </Paper>
-        </Grid>
+        {chartDatas.liquidity.length > 1 ? (
+          <Grid item xs={12} md={6}>
+            <Paper
+              variant="outlined"
+              style={{ height: 300, position: "relative" }}
+            >
+              <AreaChart
+                title="Liquidity"
+                data={chartDatas.liquidity.reverse()}
+                margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+                tooltipDisabled
+                overlayEnabled
+              />
+            </Paper>
+          </Grid>
+        ) : null}
+
+        {chartDatas.liquidity.length > 1 ? (
+          <Grid item xs={12} md={6}>
+            <Paper
+              variant="outlined"
+              style={{ height: 300, position: "relative" }}
+            >
+              <BarChart
+                title="Volume"
+                data={chartDatas.volume.reverse()}
+                margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+                tooltipDisabled
+                overlayEnabled
+              />
+            </Paper>
+          </Grid>
+        ) : null}
+
         <Grid item xs={12} md={4}>
           <KPI
             title="Liquidity (24h)"
@@ -320,13 +332,60 @@ function PairPage(props) {
           <KPI
             title="Fees (24h)"
             value={currencyFormatter.format(fees)}
-            difference={(
-              ((fees - feesYesterday) / feesYesterday) *
-              100
-            ).toFixed(2)}
+            difference={((fees - feesYesterday) / feesYesterday) * 100}
           />
         </Grid>
       </Grid>
+
+      <Box my={4}>
+        <Typography variant="h6" component="h2" gutterBottom>
+          Pair Balances
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item>
+            <Box display="flex" alignItems="center">
+              <Avatar
+                className={classes.avatar}
+                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                  pair.token0.id
+                )}/logo.png`}
+              />
+              <Typography
+                variant="h6"
+                color="textPrimary"
+                noWrap
+                className={classes.reserve}
+              >
+                {decimalFormatter.format(pair.reserve0)}
+              </Typography>
+              <Typography variant="subtitle2" color="textSecondary" noWrap>
+                {pair.token0.symbol}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item>
+            <Box display="flex" alignItems="center">
+              <Avatar
+                className={classes.avatar}
+                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                  pair.token1.id
+                )}/logo.png`}
+              />
+              <Typography
+                variant="h6"
+                color="textPrimary"
+                noWrap
+                className={classes.reserve}
+              >
+                {decimalFormatter.format(pair.reserve1)}
+              </Typography>
+              <Typography variant="subtitle2" color="textSecondary" noWrap>
+                {pair.token1.symbol}
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
 
       <Box my={4}>
         <BasicTable
@@ -336,9 +395,9 @@ function PairPage(props) {
               key: "name",
               label: "Name",
             },
-            { key: "id", label: "Address" },
-            { key: "token0", label: "Token 0" },
-            { key: "token1", label: "Token 1" },
+            { key: "id", label: "Address", maxWidth: "250px" },
+            { key: "token0", label: "Token 0", maxWidth: "250px" },
+            { key: "token1", label: "Token 1", maxWidth: "250px" },
             { key: "etherscan", label: "Etherscan", align: "right" },
           ]}
           bodyCells={[
@@ -357,61 +416,6 @@ function PairPage(props) {
             <Link href={`https://etherscan.io/address/${pair.id}`}>View</Link>,
           ]}
         />
-      </Box>
-      <Box mb={4}>
-        <Typography variant="h6" component="h2" gutterBottom>
-          Reserves
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <Paper variant="outlined" className={classes.paper}>
-              <Typography
-                variant="subtitle2"
-                color="textSecondary"
-                gutterBottom
-                noWrap
-              >
-                {pair.token0.symbol}
-              </Typography>
-              <Box display="flex" alignItems="center">
-                <Avatar
-                  className={classes.avatar}
-                  imgProps={{ loading: "lazy" }}
-                  src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                    pair.token0.id
-                  )}/logo.png`}
-                />
-                <Typography variant="subtitle1" color="textPrimary" noWrap>
-                  {decimalFormatter.format(pair.reserve0)} {pair.token0.symbol}
-                </Typography>
-              </Box>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Paper variant="outlined" className={classes.paper}>
-              <Typography
-                variant="subtitle2"
-                color="textSecondary"
-                gutterBottom
-                noWrap
-              >
-                {pair.token1.symbol}
-              </Typography>
-              <Box display="flex" alignItems="center">
-                <Avatar
-                  className={classes.avatar}
-                  imgProps={{ loading: "lazy" }}
-                  src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                    pair.token1.id
-                  )}/logo.png`}
-                />
-                <Typography variant="subtitle1" color="textPrimary" noWrap>
-                  {decimalFormatter.format(pair.reserve1)} {pair.token1.symbol}
-                </Typography>
-              </Box>
-            </Paper>
-          </Grid>
-        </Grid>
       </Box>
       <Transactions transactions={transactions} txCount={pair.txCount} />
     </Layout>

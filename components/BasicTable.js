@@ -22,7 +22,11 @@ export default function BasicTable({ title, headCells, bodyCells, style }) {
           <TableHead>
             <TableRow>
               {headCells.map((cell) => (
-                <TableCell key={cell.key} align={cell.align || "left"}>
+                <TableCell
+                  key={cell.key}
+                  align={cell.align || "left"}
+                  style={{ maxWidth: cell.maxWidth || "initial" }}
+                >
                   {cell.label}
                 </TableCell>
               ))}
@@ -34,7 +38,7 @@ export default function BasicTable({ title, headCells, bodyCells, style }) {
                 <TableCell
                   {...(index === 0 ? { component: "th", scope: "row" } : {})}
                   align={headCells[index].align || "left"}
-                  style={{ maxWidth: headCells[index].maxWidth || "unset" }}
+                  style={{ maxWidth: headCells[index].maxWidth || "initial" }}
                 >
                   {cell}
                 </TableCell>

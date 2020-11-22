@@ -52,7 +52,7 @@ function KPI(props) {
             </Typography>
 
             <Box display="flex" alignItems="center">
-              <Typography variant="h5" color="textPrimary" noWrap>
+              <Typography variant="h6" color="textPrimary" noWrap>
                 {!Number.isNaN(value) ? value : 0}
               </Typography>
               <Typography variant="subtitle2" color="textSecondary" noWrap>

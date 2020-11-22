@@ -141,7 +141,6 @@ export async function getPools(client = getApollo()) {
   } = await client.query({
     query: liquidityPositionSubsetQuery,
     variables: { user: "0xc2edad668740f1aa35e4d8f227fb8e17dca888cd" },
-    fetchPolicy: "network-only",
   });
 
   await client.cache.writeQuery({

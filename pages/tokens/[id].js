@@ -215,6 +215,9 @@ function TokenPage() {
   const txCount = token?.txCount - token?.oneDay?.txCount;
   const txCountYesterday = token?.oneDay?.txCount - token?.twoDay?.txCount;
 
+  const fees = volume * 0.003;
+  const feesYesterday = volumeYesterday * 0.003;
+
   return (
     <Layout>
       <Head>
@@ -235,8 +238,10 @@ function TokenPage() {
             <Box display="flex" alignItems="center">
               <TokenIcon id={token.id} />
               <Typography variant="h5" component="h1" noWrap>
-                {token.name} ({token.symbol})
+                {token.name} ({token.symbol}){" "}
+                {currencyFormatter.format(price || 0)}
               </Typography>
+              <Percent percent={priceChange} ml={1} />
             </Box>
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
@@ -259,49 +264,6 @@ function TokenPage() {
       </PageHeader>
 
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Grid container spacing={3}>
-            <Grid item xs>
-              <KPI
-                title="Price"
-                value={currencyFormatter.format(price || 0)}
-                difference={priceChange}
-              />
-            </Grid>
-            <Grid item xs>
-              <KPI
-                title="Liquidity"
-                value={currencyFormatter.format(totalLiquidityUSD || 0)}
-                difference={(
-                  ((totalLiquidityUSD - totalLiquidityUSDYesterday) /
-                    totalLiquidityUSDYesterday) *
-                  100
-                ).toFixed(2)}
-              />
-            </Grid>
-            <Grid item xs>
-              <KPI
-                title="Volume (24h)"
-                value={currencyFormatter.format(volume || 0)}
-                difference={(
-                  ((volume - volumeYesterday) / volumeYesterday) *
-                  100
-                ).toFixed(2)}
-              />
-            </Grid>
-            <Grid item xs>
-              <KPI
-                title="Transactions (24h)"
-                value={txCount.toLocaleString() || 0}
-                difference={(
-                  ((txCount - txCountYesterday) / txCountYesterday) *
-                  100
-                ).toFixed(2)}
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-
         <Grid item xs={12} sm={6}>
           <Paper
             variant="outlined"
@@ -330,95 +292,32 @@ function TokenPage() {
             />
           </Paper>
         </Grid>
-        {/* 
-        <Grid item xs={12} sm={6}>
-          <Paper
-            variant="outlined"
-            style={{ height: 300, position: "relative" }}
-          >
-            <BarChart
-              title="Fees"
-              data={chartDatas.fees.reverse()}
-              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
-              tooltipDisabled
-              overlayEnabled
-            />
-          </Paper>
+
+        <Grid item xs={12} md={4}>
+          <KPI
+            title="Liquidity (24h)"
+            value={currencyFormatter.format(totalLiquidityUSD || 0)}
+            difference={
+              ((totalLiquidityUSD - totalLiquidityUSDYesterday) /
+                totalLiquidityUSDYesterday) *
+              100
+            }
+          />
         </Grid>
-
-        <Grid item xs={12} sm={6}>
-          <Paper
-            variant="outlined"
-            style={{ height: 300, position: "relative" }}
-          >
-            <AreaChart
-              title="Price"
-              data={chartDatas.price.reverse()}
-              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
-              tooltipDisabled
-              overlayEnabled
-            />
-          </Paper>
-        </Grid> */}
-
-        {/* <Grid item xs={12}>
-          <Paper variant="outlined" style={{ height: 300 }}>
-            <AreaChart data={chartDatas[type].reverse()} />
-          </Paper>
-
-          <Box
-            component={Paper}
-            className={classes.paper}
-            variant="outlined"
-            display="flex"
-            flexDirection="column"
-            height="300px"
-          >
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mb={2}
-            >
-              <ToggleButtonGroup
-                value={type}
-                exclusive
-                onChange={handleType}
-                aria-label="chart type"
-                variant="text"
-              >
-                <ToggleButton value="liquidity" aria-label="liquidity chart">
-                  Liquidity
-                </ToggleButton>
-                <ToggleButton value="volume" aria-label="volume chart">
-                  Volume
-                </ToggleButton>
-                <ToggleButton value="price" aria-label="price chart">
-                  Price
-                </ToggleButton>
-              </ToggleButtonGroup>
-              <ToggleButtonGroup
-                value={timeframe}
-                exclusive
-                onChange={handleTimeframe}
-                aria-label="timeframe"
-                variant="text"
-              >
-                <ToggleButton value="1W" aria-label="1W">
-                  1W
-                </ToggleButton>
-                <ToggleButton value="1M" aria-label="1M">
-                  1M
-                </ToggleButton>
-                <ToggleButton value="ALL" aria-label="ALL">
-                  ALL
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Box>
-
-            <AreaChart data={chartDatas[type].reverse()} />
-          </Box>
-        </Grid> */}
+        <Grid item xs={12} md={4}>
+          <KPI
+            title="Volume (24h)"
+            value={currencyFormatter.format(volume || 0)}
+            difference={((volume - volumeYesterday) / volumeYesterday) * 100}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <KPI
+            title="Fees (24h)"
+            value={currencyFormatter.format(fees)}
+            difference={((fees - feesYesterday) / feesYesterday) * 100}
+          />
+        </Grid>
       </Grid>
 
       <Box my={4}>

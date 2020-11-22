@@ -90,9 +90,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PairPage(props) {
-  const classes = useStyles();
-
   const router = useRouter();
+
+  if (router.isFallback) {
+    return <Layout>New pair detected, generating...</Layout>;
+  }
+
+  const classes = useStyles();
 
   const { id } = router.query;
 
@@ -461,7 +465,7 @@ export async function getStaticPaths() {
 
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 
   // return { paths: [], fallback: false };
 }

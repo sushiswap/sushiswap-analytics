@@ -189,14 +189,14 @@ function UserPage() {
 
   console.log(barData);
 
-  // const poolInvestments = poolData?.users.reduce(
-  //   (previousValue, currentValue) => {
-  //     return previousValue + currentValue.entryUSD;
-  //   },
-  //   0
-  // );
+  const poolInvestments = poolData?.users.reduce(
+    (previousValue, currentValue) => {
+      return parseFloat(previousValue) + parseFloat(currentValue.entryUSD);
+    },
+    0
+  );
 
-  // console.log("poolInvestments", poolInvestments);
+  console.log("poolInvestments", poolInvestments);
 
   // const originalInvestments = barData?.user?.sushiStakedUSD + poolInvestments;
 
@@ -393,8 +393,18 @@ function UserPage() {
                     <TableCell key="value" align="right">
                       Value
                     </TableCell>
+
                     <TableCell key="pendingSushi" align="right">
                       Pending Sushi
+                    </TableCell>
+                    <TableCell key="entryUSD" align="right">
+                      Entries
+                    </TableCell>
+                    <TableCell key="exitUSD" align="right">
+                      Exits
+                    </TableCell>
+                    <TableCell key="pl" align="right">
+                      Profit/Loss
                     </TableCell>
                     {/* <TableCell key="apy" align="right">
                       APY
@@ -418,6 +428,14 @@ function UserPage() {
                         user.rewardDebt) /
                       1e18;
                     // user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
+
+                    console.log(
+                      user,
+                      user.entryUSD,
+                      user.exitUSD,
+                      pendingSushi * sushiPrice
+                    );
+
                     return (
                       <TableRow key="12">
                         <TableCell component="th" scope="row">
@@ -450,6 +468,7 @@ function UserPage() {
                         <TableCell align="right">
                           {decimalFormatter.format(slp)} SLP
                         </TableCell>
+
                         <TableCell align="right">
                           {Number(token0.toFixed(2)).toLocaleString()}{" "}
                           {pair.token0.symbol} +{" "}
@@ -462,6 +481,19 @@ function UserPage() {
                         <TableCell align="right">
                           {decimalFormatter.format(pendingSushi)} (
                           {currencyFormatter.format(pendingSushi * sushiPrice)})
+                        </TableCell>
+                        <TableCell align="right">
+                          {currencyFormatter.format(user.entryUSD)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {currencyFormatter.format(user.exitUSD)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {currencyFormatter.format(
+                            user.entryUSD -
+                              user.exitUSD +
+                              pendingSushi * sushiPrice
+                          )}
                         </TableCell>
                         {/* <TableCell align="right">23.76%</TableCell> */}
                       </TableRow>

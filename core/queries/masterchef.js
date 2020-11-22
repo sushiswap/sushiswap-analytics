@@ -16,8 +16,8 @@ export const poolUserQuery = gql`
       rewardDebt
       sushiHarvested
       sushiHarvestedSinceLockup
-      # entryUSD
-      # exitUSD
+      entryUSD
+      exitUSD
     }
   }
 `;

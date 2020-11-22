@@ -397,7 +397,7 @@ function UserPage() {
                     <TableCell key="pendingSushi" align="right">
                       Pending Sushi
                     </TableCell>
-                    <TableCell key="entryUSD" align="right">
+                    {/* <TableCell key="entryUSD" align="right">
                       Entries
                     </TableCell>
                     <TableCell key="exitUSD" align="right">
@@ -405,7 +405,7 @@ function UserPage() {
                     </TableCell>
                     <TableCell key="pl" align="right">
                       Profit/Loss
-                    </TableCell>
+                    </TableCell> */}
                     {/* <TableCell key="apy" align="right">
                       APY
                     </TableCell> */}
@@ -482,7 +482,7 @@ function UserPage() {
                           {decimalFormatter.format(pendingSushi)} (
                           {currencyFormatter.format(pendingSushi * sushiPrice)})
                         </TableCell>
-                        <TableCell align="right">
+                        {/* <TableCell align="right">
                           {currencyFormatter.format(user.entryUSD)}
                         </TableCell>
                         <TableCell align="right">
@@ -495,7 +495,7 @@ function UserPage() {
                               parseFloat(pendingSushi * sushiPrice) -
                               parseFloat(user.entryUSD)
                           )}
-                        </TableCell>
+                        </TableCell> */}
                         {/* <TableCell align="right">23.76%</TableCell> */}
                       </TableRow>
                     );

@@ -53,7 +53,7 @@ function KPI(props) {
 
             <Box display="flex">
               <Typography variant="subtitle1" color="textPrimary" noWrap>
-                {value}
+                {!Number.isNaN(value) ? value : 0}
               </Typography>
               <Typography variant="subtitle1" color="textSecondary" noWrap>
                 {!Number.isNaN(difference) && (

@@ -490,9 +490,10 @@ function UserPage() {
                         </TableCell>
                         <TableCell align="right">
                           {currencyFormatter.format(
-                            user.entryUSD -
-                              user.exitUSD +
-                              pendingSushi * sushiPrice
+                            parseFloat(pair.reserveUSD * share) +
+                              parseFloat(user.exitUSD) +
+                              parseFloat(pendingSushi * sushiPrice) -
+                              parseFloat(user.entryUSD)
                           )}
                         </TableCell>
                         {/* <TableCell align="right">23.76%</TableCell> */}

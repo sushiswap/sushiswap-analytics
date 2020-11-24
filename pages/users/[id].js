@@ -175,10 +175,14 @@ function UserPage() {
 
   // const barHarvested = barData?.user?.sushiHarvested + barData?.user?.sushiOut;
 
-  const barStaked = barData?.user?.sushiStaked - stakedTransferProportion;
+  const barStaked = barData?.user?.sushiStaked;
 
-  const barStakedUSD =
-    barData?.user?.sushiStakedUSD - stakedUSDTransferProportion;
+  const barStakedUSD = barData?.user?.sushiStakedUSD;
+
+  // const barStaked = barData?.user?.sushiStaked - stakedTransferProportion;
+
+  // const barStakedUSD =
+  //   barData?.user?.sushiStakedUSD - stakedUSDTransferProportion;
 
   const farmingStaked = poolUsers?.reduce((previousValue, currentValue) => {
     // console.log(currentValue);
@@ -201,7 +205,7 @@ function UserPage() {
       );
     }, 0) * sushiPrice;
 
-  console.log({ barData, poolData });
+  console.log({ barData });
 
   const poolInvestments = poolData?.users.reduce(
     (previousValue, currentValue) => {

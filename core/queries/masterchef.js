@@ -2,16 +2,12 @@ import gql from "graphql-tag";
 
 export const lockupUserQuery = gql`
   query lockupUserQuery($address: String!) {
-    users(where: { address: $address }) {
+    users(first: 1000, where: { amount_gt: 0, address: $address }) {
       id
       amount
       rewardDebt
       pool {
         id
-        lockup {
-          id
-          totalAllocPoint
-        }
         balance
         accSushiPerShare
       }
@@ -21,7 +17,7 @@ export const lockupUserQuery = gql`
 
 export const poolUserQuery = gql`
   query poolUserQuery($address: String!) {
-    users(where: { address: $address }) {
+    users(first: 1000, where: { amount_gt: 0, address: $address }) {
       id
       address
       pool {

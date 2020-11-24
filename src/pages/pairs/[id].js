@@ -1,10 +1,10 @@
 import {
+  AppShell,
   AreaChart,
   BarChart,
   BasicTable,
   Chart,
   KPI,
-  Layout,
   Link,
   PairIcon,
   Percent,
@@ -96,7 +96,7 @@ function PairPage(props) {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <Layout>New pair detected, generating...</Layout>;
+    return <AppShell />;
   }
 
   const classes = useStyles();
@@ -234,7 +234,7 @@ function PairPage(props) {
     );
 
   return (
-    <Layout>
+    <AppShell>
       <Head>
         <title>
           {pair.token0.symbol}-{pair.token1.symbol} | SushiSwap Analytics
@@ -416,7 +416,7 @@ function PairPage(props) {
         />
       </Box>
       <Transactions transactions={transactions} txCount={pair.txCount} />
-    </Layout>
+    </AppShell>
   );
 }
 

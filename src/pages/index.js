@@ -1,8 +1,8 @@
 import {
+  AppShell,
   AreaChart,
   BarChart,
   BrushChart,
-  Layout,
   PairTable,
   Search,
   TokenTable,
@@ -85,7 +85,7 @@ function IndexPage() {
     );
 
   return (
-    <Layout>
+    <AppShell>
       <Head>
         <title>Dashboard | SushiSwap Analytics</title>
       </Head>
@@ -129,7 +129,7 @@ function IndexPage() {
           <PairTable title="Top Pairs" pairs={pairs} />
         </Grid>
       </Grid>
-    </Layout>
+    </AppShell>
   );
 }
 

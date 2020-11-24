@@ -81,7 +81,7 @@ export default class MyDocument extends Document {
 
           {/* TWITTER */}
           <meta name="twitter:card" content="summary" />
-          <meta name="twitter:url" content="https://sushiswapanalytics.com" />
+          <meta name="twitter:url" content={process.env.APP_URL} />
           <meta name="twitter:title" content={process.env.APP_NAME} />
           <meta
             name="twitter:description"
@@ -98,7 +98,7 @@ export default class MyDocument extends Document {
             content={process.env.APP_DESCRIPTION}
           />
           <meta property="og:site_name" content={process.env.APP_NAME} />
-          <meta property="og:url" content="https://sushiswapanalytics.com" />
+          <meta property="og:url" content={process.env.APP_URL} />
           <meta property="og:image" content="/apple-touch-icon.png" />
         </Head>
         <body className="no-js">

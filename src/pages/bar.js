@@ -1,4 +1,4 @@
-import { BrushChart, KPI, Layout, LineChart } from "app/components";
+import { AppShell, BrushChart, KPI, LineChart } from "app/components";
 import { Grid, Paper, Typography, useTheme } from "@material-ui/core";
 import {
   barHistoriesQuery,
@@ -112,7 +112,7 @@ function PoolsPage() {
   // console.log("xSushiAge", xSushiAge);
   // console.log("xSushiAgeDestroyed", xSushiAgeDestroyed);
   return (
-    <Layout>
+    <AppShell>
       <Head>
         <title>Sushi Bar | SushiSwap Analytics</title>
       </Head>
@@ -227,7 +227,7 @@ function PoolsPage() {
       </Grid>
 
       {/* <pre>{JSON.stringify(bar, null, 2)}</pre> */}
-    </Layout>
+    </AppShell>
   );
 }
 

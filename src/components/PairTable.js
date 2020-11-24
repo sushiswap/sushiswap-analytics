@@ -1,6 +1,6 @@
 import { Box } from "@material-ui/core";
 import Link from "./Link";
-import { PAIR_DENY } from "../constants";
+import { PAIR_DENY } from "app/core/constants";
 import PairIcon from "./PairIcon";
 import Percent from "./Percent";
 import React from "react";

@@ -11,7 +11,7 @@ import Link from "./Link";
 import Percent from "./Percent";
 import React from "react";
 import SortableTable from "./SortableTable";
-import { TOKEN_DENY } from "../constants";
+import { TOKEN_DENY } from "app/core/constants";
 import TokenIcon from "./TokenIcon";
 import { currencyFormatter } from "app/core";
 import { useQuery } from "@apollo/client";

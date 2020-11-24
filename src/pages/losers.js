@@ -1,32 +1,32 @@
-import { GainersList, Layout } from "app/components";
-import { gainersQuery, getApollo, getGainers, useInterval } from "app/core";
+import { AppShell, LosersList } from "app/components";
+import { getApollo, getLosers, losersQuery, useInterval } from "app/core";
 
 import { Container } from "@material-ui/core";
 import Head from "next/head";
 import React from "react";
 import { useQuery } from "@apollo/client";
 
-function GainersPage() {
-  const { data } = useQuery(gainersQuery);
+function LosersPage() {
+  const { data } = useQuery(losersQuery);
   useInterval(() => {
-    getGainers();
+    getLosers();
   }, 60000);
   const pairs = data.pairs.filter((pair) => {
-    return Math.sign(pair.reserveUSDGained) > 0;
+    return Math.sign(pair.reserveUSDLost) < 0;
   });
   return (
-    <Layout>
+    <AppShell>
       <Head>
-        <title>Top Gainers | SushiSwap Analytics</title>
+        <title>Top Losers | SushiSwap Analytics</title>
       </Head>
-      <GainersList pairs={pairs} />
-    </Layout>
+      <LosersList pairs={pairs} />
+    </AppShell>
   );
 }
 
 export async function getStaticProps() {
   const client = getApollo();
-  await getGainers(client);
+  await getLosers(client);
   return {
     props: {
       initialApolloState: client.cache.extract(),
@@ -35,4 +35,4 @@ export async function getStaticProps() {
   };
 }
 
-export default GainersPage;
+export default LosersPage;

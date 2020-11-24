@@ -10,7 +10,7 @@ export { default as ChartOverlay } from "./ChartOverlay";
 export { default as Difference } from "./Difference";
 export { default as GainersList } from "./GainersList";
 export { default as KPI } from "./KPI";
-export { default as Layout } from "./Layout";
+export { default as AppShell } from "./AppShell";
 export { default as LineChart } from "./LineChart";
 export { default as Link } from "./Link";
 export { default as LiquidityProviderList } from "./LiquidityProviderList";

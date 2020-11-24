@@ -1,9 +1,9 @@
 import {
+  AppShell,
   AreaChart,
   BarChart,
   BasicTable,
   KPI,
-  Layout,
   Link,
   PageHeader,
   PairTable,
@@ -219,7 +219,7 @@ function TokenPage() {
   const feesYesterday = volumeYesterday * 0.003;
 
   return (
-    <Layout>
+    <AppShell>
       <Head>
         <title>
           {currencyFormatter.format(price || 0)} | {token.symbol} | SushiSwap
@@ -341,7 +341,7 @@ function TokenPage() {
       <PairTable title="Pairs" pairs={pairs} />
 
       <Transactions transactions={transactions} txCount={token.txCount} />
-    </Layout>
+    </AppShell>
   );
 }
 

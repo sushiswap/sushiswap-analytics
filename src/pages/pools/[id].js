@@ -1,8 +1,8 @@
 import {
+  AppShell,
   AreaChart,
   BrushChart,
   KPI,
-  Layout,
   LineChart,
   LiquidityProviderList,
   PageHeader,
@@ -30,7 +30,7 @@ import {
 } from "app/core";
 
 import Head from "next/head";
-import { POOL_DENY } from "../../constants";
+import { POOL_DENY } from "app/core/constants";
 import { deepPurple } from "@material-ui/core/colors";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -43,7 +43,7 @@ function PoolPage() {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <Layout />;
+    return <AppShell />;
   }
 
   const classes = useStyles();
@@ -140,7 +140,7 @@ function PoolPage() {
   );
 
   return (
-    <Layout>
+    <AppShell>
       <Head>
         <title>Pool {id} | SushiSwap Analytics</title>
       </Head>
@@ -274,7 +274,7 @@ function PoolPage() {
         title="Top Liquidity Providers"
       />
       {/* <pre>{JSON.stringify(pool, null, 2)}</pre> */}
-    </Layout>
+    </AppShell>
   );
 }
 

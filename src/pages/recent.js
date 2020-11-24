@@ -1,4 +1,4 @@
-import { Layout, PairTable, PoolTable } from "app/components";
+import { AppShell, PairTable, PoolTable } from "app/components";
 import {
   getApollo,
   getPairs,
@@ -28,13 +28,13 @@ function RecentlyAddedPage() {
   useInterval(() => Promise.all([getPairs, getPools]), 60000);
 
   return (
-    <Layout>
+    <AppShell>
       <Head>
         <title>Recently Added | SushiSwap Analytics</title>
       </Head>
       <PoolTable pools={pools} orderBy="timestamp" order="desc" />
       <PairTable pairs={pairs} orderBy="timestamp" order="desc" />
-    </Layout>
+    </AppShell>
   );
 }
 

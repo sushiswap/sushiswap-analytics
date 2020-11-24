@@ -1,4 +1,4 @@
-import { Layout, PairTable, SortableTable } from "../components";
+import { AppShell, PairTable, SortableTable } from "../components";
 import { getApollo, getPairs, pairsQuery, useInterval } from "app/core";
 
 import Head from "next/head";
@@ -11,12 +11,12 @@ function PairsPage() {
   } = useQuery(pairsQuery);
   useInterval(getPairs, 60000);
   return (
-    <Layout>
+    <AppShell>
       <Head>
         <title>Pairs | SushiSwap Analytics</title>
       </Head>
       <PairTable title="Pairs" pairs={pairs} />
-    </Layout>
+    </AppShell>
   );
 }
 

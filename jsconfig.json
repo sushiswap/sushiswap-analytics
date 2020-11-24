@@ -1,9 +1,16 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      "app/core": ["core/index.js"],
       "app/components": ["components/index.js"],
+      "app/core": ["core/index.js"],
+      "app/core/api": ["core/api/index.js"],
+      "app/core/apollo": ["core/apollo/index.js"],
+      "app/core/constants": ["core/constants.js"],
+      "app/core/conversions": ["core/conversions.js"],
+      "app/core/format": ["core/format.js"],
+      "app/core/hooks": ["core/hooks.js"],
+      "app/core/queries": ["core/queries/index.js"],
       "app/theme": ["theme/index.js"]
     }
   }

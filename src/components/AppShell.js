@@ -120,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Layout(props) {
+function AppShell(props) {
   const { window, children } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -387,4 +387,4 @@ function Layout(props) {
   );
 }
 
-export default Layout;
+export default AppShell;

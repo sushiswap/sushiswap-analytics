@@ -1,3 +1,4 @@
+import { AppShell, TokenTable } from "app/components";
 import {
   ethPriceQuery,
   getApollo,
@@ -6,12 +7,10 @@ import {
   tokensQuery,
   useInterval,
 } from "app/core";
-import { useApolloClient, useQuery } from "@apollo/client";
 
 import Head from "next/head";
-import { Layout } from "app/components";
 import React from "react";
-import TokenTable from "../components/TokenTable";
+import { useQuery } from "@apollo/client";
 
 function TokensPage() {
   const {
@@ -23,12 +22,12 @@ function TokensPage() {
   }, 60000);
 
   return (
-    <Layout>
+    <AppShell>
       <Head>
         <title>Tokens | SushiSwap Analytics</title>
       </Head>
       <TokenTable title="Tokens" tokens={tokens} />
-    </Layout>
+    </AppShell>
   );
 }
 

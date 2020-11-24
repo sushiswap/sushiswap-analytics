@@ -1,3 +1,4 @@
+import { AppShell, Link } from "app/components";
 import {
   Avatar,
   Box,
@@ -12,7 +13,6 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import { Layout, Link } from "app/components";
 import {
   barUserQuery,
   blockQuery,
@@ -42,7 +42,7 @@ import { getUnixTime, startOfMinute, startOfSecond } from "date-fns";
 
 import { AvatarGroup } from "@material-ui/lab";
 import Head from "next/head";
-import { POOL_DENY } from "../../constants";
+import { POOL_DENY } from "app/core/constants";
 import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -64,7 +64,7 @@ function UserPage() {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <Layout>Generating portfolio...</Layout>;
+    return <AppShell />;
   }
 
   const classes = useStyles();
@@ -248,7 +248,7 @@ function UserPage() {
   // console.log({ blocksData, blockDifference, barData, barRoiDailySushi });
 
   return (
-    <Layout>
+    <AppShell>
       <Head>
         <title>User {id} | SushiSwap Analytics</title>
       </Head>
@@ -579,7 +579,7 @@ function UserPage() {
           )}
         </Grid>
       </Grid>
-    </Layout>
+    </AppShell>
   );
 }
 

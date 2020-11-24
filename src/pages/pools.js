@@ -1,4 +1,4 @@
-import { Layout, PoolTable } from "../components";
+import { AppShell, PoolTable } from "../components";
 import { getApollo, getPools, poolsQuery, useInterval } from "app/core";
 
 import Head from "next/head";
@@ -19,7 +19,7 @@ function PoolsPage() {
   // console.log("pools", pools);
 
   return (
-    <Layout>
+    <AppShell>
       <Head>
         <title>Pools | SushiSwap Analytics</title>
       </Head>
@@ -29,7 +29,7 @@ function PoolsPage() {
         order="desc"
         rowsPerPage={100}
       />
-    </Layout>
+    </AppShell>
   );
 }
 

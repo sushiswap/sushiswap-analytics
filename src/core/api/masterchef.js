@@ -12,7 +12,7 @@ import {
   poolsQuery,
 } from "app/core";
 
-import { POOL_DENY } from "../../constants";
+import { POOL_DENY } from "app/core/constants";
 
 export async function getPoolIds(client = getApollo()) {
   const {

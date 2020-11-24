@@ -75,6 +75,8 @@ export const barUserQuery = gql`
       sushiOut
       usdIn
       usdOut
+      createdAt
+      createdAtBlock
     }
   }
 `;

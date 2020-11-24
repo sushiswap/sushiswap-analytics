@@ -23,6 +23,7 @@ import {
   getApollo,
   getPool,
   getPoolHistories,
+  getPoolIds,
   getPools,
   poolHistoryQuery,
   poolQuery,
@@ -98,9 +99,11 @@ function PoolPage() {
         value: currentValue.slpAgeRemoved,
       });
 
+      // console.log({ userCount: parseFloat(currentValue.userCount) });
+
       previousValue[2].push({
         time,
-        value: parseInt(currentValue.userCount),
+        value: parseFloat(currentValue.userCount),
       });
 
       previousValue[3].push({
@@ -114,7 +117,7 @@ function PoolPage() {
       });
 
       const average =
-        parseInt(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
+        parseFloat(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
 
       previousValue[5].push({
         time,
@@ -288,13 +291,11 @@ export async function getStaticProps({ params: { id } }) {
 }
 
 export async function getStaticPaths() {
-  const { pools } = await getPools();
-  const paths = pools
-    .filter((pool) => !POOL_DENY.includes(pool.id))
-    .map((pool) => ({
-      params: { id: pool.id },
-    }));
-  // console.log("STATIC PATH FOR POOLS", paths);
+  const client = getApollo();
+  const { pools } = await getPoolIds(client);
+  const paths = pools.map((pool) => ({
+    params: { id: pool.id },
+  }));
   return { paths, fallback: true };
 }
 

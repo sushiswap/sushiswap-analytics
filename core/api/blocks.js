@@ -1,4 +1,4 @@
-import { blockQuery, blocksQuery, getApollo } from "app/core";
+import { blockQuery, blocksQuery, getApollo, latestBlockQuery } from "app/core";
 import {
   differenceInSeconds,
   getUnixTime,
@@ -11,24 +11,14 @@ import {
   subWeeks,
 } from "date-fns";
 
-export async function getLatestBlock() {
-  const date = startOfMinute(Date.now());
-  const start = Math.floor(date / 1000);
-  const end = Math.floor(date / 1000) - 600;
-
-  const { data: blocksData } = await client.query({
-    query: blockQuery,
-    variables: {
-      start,
-      end,
-    },
+export async function getLatestBlock(client = getApollo()) {
+  const { data } = await client.query({
+    query: latestBlockQuery,
     context: {
       clientName: "blocklytics",
     },
-    fetchPolicy: "network-only",
   });
-
-  return { number: Number(blocksData?.blocks[0].number) };
+  return data;
 }
 
 export async function getOneDayBlock(client = getApollo()) {

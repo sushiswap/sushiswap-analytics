@@ -1,5 +1,24 @@
 import gql from "graphql-tag";
 
+export const lockupUserQuery = gql`
+  query lockupUserQuery($address: String!) {
+    users(where: { address: $address }) {
+      id
+      amount
+      rewardDebt
+      pool {
+        id
+        lockup {
+          id
+          totalAllocPoint
+        }
+        balance
+        accSushiPerShare
+      }
+    }
+  }
+`;
+
 export const poolUserQuery = gql`
   query poolUserQuery($address: String!) {
     users(where: { address: $address }) {
@@ -65,6 +84,24 @@ export const poolQuery = gql`
       slpAge
       liquidityPair @client
       timestamp
+    }
+  }
+`;
+
+export const poolIdsQuery = gql`
+  query poolIdsQuery(
+    $first: Int! = 1000
+    $skip: Int! = 0
+    $orderBy: String! = "timestamp"
+    $orderDirection: String! = "desc"
+  ) {
+    pools(
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      id
     }
   }
 `;

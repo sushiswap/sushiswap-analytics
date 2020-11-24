@@ -42,3 +42,18 @@ export const blocksQuery = gql`
   }
   ${blockFieldsQuery}
 `;
+
+export const latestBlockQuery = gql`
+  query latestBlockQuery {
+    blocks(
+      first: 1
+      skip: 0
+      orderBy: number
+      orderDirection: desc
+      where: { number_gt: 9300000 }
+    ) {
+      ...blockFields
+    }
+  }
+  ${blockFieldsQuery}
+`;

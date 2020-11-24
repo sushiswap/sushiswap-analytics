@@ -15,17 +15,21 @@ import {
 import { Layout, Link } from "app/components";
 import {
   barUserQuery,
+  blockQuery,
   currencyFormatter,
   decimalFormatter,
   ethPriceQuery,
   getApollo,
   getBarUser,
   getEthPrice,
+  getLatestBlock,
   getPairs,
   getPoolUser,
   getSushiToken,
   getToken,
   getUser,
+  latestBlockQuery,
+  lockupUserQuery,
   pairSubsetQuery,
   pairsQuery,
   poolUserQuery,
@@ -34,6 +38,7 @@ import {
   userIdsQuery,
   userQuery,
 } from "app/core";
+import { getUnixTime, startOfMinute, startOfSecond } from "date-fns";
 
 import { AvatarGroup } from "@material-ui/lab";
 import Head from "next/head";
@@ -87,6 +92,15 @@ function UserPage() {
     },
     context: {
       clientName: "masterchef",
+    },
+  });
+
+  const { data: lockupData } = useQuery(lockupUserQuery, {
+    variables: {
+      address: id.toLowerCase(),
+    },
+    context: {
+      clientName: "lockup",
     },
   });
 
@@ -187,7 +201,7 @@ function UserPage() {
       );
     }, 0) * sushiPrice;
 
-  console.log(barData);
+  console.log({ barData, poolData });
 
   const poolInvestments = poolData?.users.reduce(
     (previousValue, currentValue) => {
@@ -195,8 +209,6 @@ function UserPage() {
     },
     0
   );
-
-  console.log("poolInvestments", poolInvestments);
 
   // const originalInvestments = barData?.user?.sushiStakedUSD + poolInvestments;
 
@@ -216,6 +228,20 @@ function UserPage() {
     barData?.user?.sushiStakedUSD -
     barData?.user?.usdOut +
     barPendingUSD;
+
+  const { data: blocksData } = useQuery(latestBlockQuery, {
+    context: {
+      clientName: "blocklytics",
+    },
+  });
+
+  const blockDifference =
+    parseInt(blocksData?.blocks[0].number) -
+    parseInt(barData.user.createdAtBlock);
+
+  const barRoiDailySushi =
+    ((barPending + barRoiSushi - barStaked) / blockDifference) * 6440;
+  // console.log({ blocksData, blockDifference, barData, barRoiDailySushi });
 
   return (
     <Layout>
@@ -302,10 +328,16 @@ function UserPage() {
                     <TableCell key="balance" align="right">
                       Pending Sushi
                     </TableCell>
-                    <TableCell key="apy" align="right">
+                    <TableCell key="barRoiDaily" align="right">
+                      ROI (Daily)
+                    </TableCell>
+                    <TableCell key="barRoiDaily" align="right">
+                      ROI (Yearly)
+                    </TableCell>
+                    <TableCell key="barRoiSushi" align="right">
                       ROI (Sushi)
                     </TableCell>
-                    <TableCell key="apy" align="right">
+                    <TableCell key="barRoiUSD" align="right">
                       ROI (USD)
                     </TableCell>
                   </TableRow>
@@ -346,7 +378,18 @@ function UserPage() {
                       {currencyFormatter.format(sushiPrice * barPending)})
                     </TableCell>
                     <TableCell align="right">
-                      {decimalFormatter.format(barRoiSushi)}
+                      {decimalFormatter.format(barRoiDailySushi)} (
+                      {currencyFormatter.format(barRoiDailySushi * sushiPrice)})
+                    </TableCell>
+                    <TableCell align="right">
+                      {decimalFormatter.format(barRoiDailySushi * 365)} (
+                      {currencyFormatter.format(
+                        barRoiDailySushi * 365 * sushiPrice
+                      )}
+                      )
+                    </TableCell>
+                    <TableCell align="right">
+                      {decimalFormatter.format(barRoiSushi)}{" "}
                       {/* {Number(
                         barStaked - (barPending + barData?.user?.sushiHarvested)
                       ).toFixed(2)}{" "} */}
@@ -397,7 +440,13 @@ function UserPage() {
                     <TableCell key="pendingSushi" align="right">
                       Pending Sushi
                     </TableCell>
-                    {/* <TableCell key="entryUSD" align="right">
+                    <TableCell key="sushiHarvested" align="right">
+                      Sushi Harvested
+                    </TableCell>
+                    <TableCell key="sushiLocked" align="right">
+                      Sushi Locked
+                    </TableCell>
+                    <TableCell key="entryUSD" align="right">
                       Entries
                     </TableCell>
                     <TableCell key="exitUSD" align="right">
@@ -405,7 +454,7 @@ function UserPage() {
                     </TableCell>
                     <TableCell key="pl" align="right">
                       Profit/Loss
-                    </TableCell> */}
+                    </TableCell>
                     {/* <TableCell key="apy" align="right">
                       APY
                     </TableCell> */}
@@ -429,12 +478,22 @@ function UserPage() {
                       1e18;
                     // user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
 
-                    console.log(
-                      user,
-                      user.entryUSD,
-                      user.exitUSD,
-                      pendingSushi * sushiPrice
+                    // console.log(
+                    //   user,
+                    //   user.entryUSD,
+                    //   user.exitUSD,
+                    //   pendingSushi * sushiPrice
+                    // );
+
+                    const lockupUser = lockupData.users.find(
+                      (u) => u.pool.id === user.pool.id
                     );
+
+                    const sushiAtLockup =
+                      ((lockupUser.amount * lockupUser.pool.accSushiPerShare) /
+                        1e12 -
+                        lockupUser.rewardDebt) /
+                      1e18;
 
                     return (
                       <TableRow key="12">
@@ -457,11 +516,11 @@ function UserPage() {
                               />
                             </AvatarGroup>
                             <Link
-                              href={`/pairs/0x795065dcc9f64b5614c407a6efdc400da6221fb0`}
+                              href={`/pools/${user.pool.id}`}
                               variant="body2"
                               noWrap
                             >
-                              {pair.token0.symbol} + {pair.token1.symbol}
+                              {pair.token0.symbol}-{pair.token1.symbol}
                             </Link>
                           </Box>
                         </TableCell>
@@ -470,9 +529,8 @@ function UserPage() {
                         </TableCell>
 
                         <TableCell align="right">
-                          {Number(token0.toFixed(2)).toLocaleString()}{" "}
-                          {pair.token0.symbol} +{" "}
-                          {Number(token1.toFixed(2)).toLocaleString()}{" "}
+                          {decimalFormatter.format(token0)} {pair.token0.symbol}{" "}
+                          + {decimalFormatter.format(token1)}{" "}
                           {pair.token1.symbol}
                         </TableCell>
                         <TableCell align="right">
@@ -482,7 +540,18 @@ function UserPage() {
                           {decimalFormatter.format(pendingSushi)} (
                           {currencyFormatter.format(pendingSushi * sushiPrice)})
                         </TableCell>
-                        {/* <TableCell align="right">
+                        <TableCell align="right">
+                          {decimalFormatter.format(user.sushiHarvested)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {decimalFormatter.format(
+                            (parseFloat(user.sushiHarvestedSinceLockup) +
+                              pendingSushi -
+                              sushiAtLockup) *
+                              2
+                          )}
+                        </TableCell>
+                        <TableCell align="right">
                           {currencyFormatter.format(user.entryUSD)}
                         </TableCell>
                         <TableCell align="right">
@@ -495,7 +564,7 @@ function UserPage() {
                               parseFloat(pendingSushi * sushiPrice) -
                               parseFloat(user.entryUSD)
                           )}
-                        </TableCell> */}
+                        </TableCell>
                         {/* <TableCell align="right">23.76%</TableCell> */}
                       </TableRow>
                     );
@@ -519,9 +588,21 @@ export async function getStaticProps({ params: { id } }) {
 
   await getBarUser(id.toLowerCase(), client);
 
+  await client.query({
+    query: lockupUserQuery,
+    variables: {
+      address: id.toLowerCase(),
+    },
+    context: {
+      clientName: "lockup",
+    },
+  });
+
   const poolData = await getPoolUser(id.toLowerCase(), client);
 
   await getPairs(client);
+
+  await getLatestBlock(client);
 
   return {
     props: {

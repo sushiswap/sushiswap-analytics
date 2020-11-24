@@ -6,12 +6,35 @@ import {
   pairQuery,
   pairSubsetQuery,
   poolHistoryQuery,
+  poolIdsQuery,
   poolQuery,
   poolUserQuery,
   poolsQuery,
 } from "app/core";
 
 import { POOL_DENY } from "../../constants";
+
+export async function getPoolIds(client = getApollo()) {
+  const {
+    data: { pools },
+  } = await client.query({
+    query: poolIdsQuery,
+    context: {
+      clientName: "masterchef",
+    },
+  });
+  await client.cache.writeQuery({
+    query: poolIdsQuery,
+    data: {
+      pools: pools.filter(
+        (pool) => !POOL_DENY.includes(pool.id) && pool.allocPoint !== "0"
+      ),
+    },
+  });
+  return await client.cache.readQuery({
+    query: poolIdsQuery,
+  });
+}
 
 export async function getPoolUser(id, client = getApollo()) {
   const {
@@ -126,7 +149,7 @@ export async function getPools(client = getApollo()) {
   const averageBlockTime = await getAverageBlockTime();
   // const averageBlockTime = 13;
 
-  console.log({ averageBlockTime });
+  // console.log({ averageBlockTime });
 
   const { bundles } = await getEthPrice();
 

@@ -6,11 +6,14 @@ import {
   Brightness4Outlined,
   Brightness7,
   DashboardOutlined,
+  ExpandLess,
+  ExpandMore,
   FastfoodOutlined,
   FiberNewOutlined,
   Menu,
   RadioButtonUncheckedOutlined,
   SettingsEthernetOutlined,
+  StarBorder,
   TrendingDownOutlined,
   TrendingUpOutlined,
   WavesOutlined,
@@ -19,6 +22,7 @@ import {
   AppBar,
   Box,
   Button,
+  Collapse,
   Container,
   Dialog,
   DialogActions,
@@ -111,6 +115,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     width: `calc(100% - ${drawerWidth}px)`,
   },
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
 }));
 
 function Layout(props) {
@@ -181,7 +188,11 @@ function Layout(props) {
             url: "/portfolio",
           },
           { text: "Bar", icon: <FastfoodOutlined />, url: "/bar" },
-          { text: "Pools", icon: <WavesOutlined />, url: "/pools" },
+          {
+            text: "Pools",
+            icon: <WavesOutlined />,
+            url: "/pools",
+          },
           { text: "Pairs", icon: <SettingsEthernetOutlined />, url: "/pairs" },
           {
             text: "Tokens",
@@ -210,7 +221,12 @@ function Layout(props) {
             selected={item.url === router.pathname}
             onClick={() => {
               if (item.url === "/portfolio") {
-                handleClickOpen();
+                const defaultAddress = localStorage.getItem("defaultAddress");
+                if (defaultAddress) {
+                  router.push("/users/" + defaultAddress);
+                } else {
+                  handleClickOpen();
+                }
               } else {
                 router.push(item.url);
               }
@@ -357,6 +373,7 @@ function Layout(props) {
           </Button>
           <Button
             onClick={() => {
+              localStorage.setItem("defaultAddress", address);
               router.push("/users/" + address);
               handleClose();
             }}

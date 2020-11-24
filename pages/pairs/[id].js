@@ -460,16 +460,11 @@ export async function getStaticPaths() {
     query: pairIdsQuery,
   });
 
-  // Get the paths we want to pre-render based on pairs
   const paths = data.pairs.map((pair) => ({
     params: { id: pair.id },
   }));
 
-  // We'll pre-render only these paths at build time.
-  // { fallback: false } means other routes should 404.
   return { paths, fallback: true };
-
-  // return { paths: [], fallback: false };
 }
 
 export default PairPage;

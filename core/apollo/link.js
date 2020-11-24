@@ -42,6 +42,14 @@ export const blocklytics = from([
   }),
 ]);
 
+export const lockup = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/lockup",
+    shouldBatch: true,
+  }),
+]);
+
 export default split(
   (operation) => {
     return operation.getContext().clientName === "blocklytics";
@@ -57,7 +65,13 @@ export default split(
         return operation.getContext().clientName === "bar";
       },
       bar,
-      exchange
+      split(
+        (operation) => {
+          return operation.getContext().clientName === "lockup";
+        },
+        lockup,
+        exchange
+      )
     )
   )
 );

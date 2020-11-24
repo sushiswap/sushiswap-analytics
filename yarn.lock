@@ -1602,6 +1602,18 @@
     classnames "^2.2.5"
     prop-types "^15.5.10"
 
+"@visx/marker@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@visx/marker/-/marker-1.1.0.tgz#c0c7174173e94cd189c3d68d0af1cfe5384afdae"
+  integrity sha512-MY0LuVusbXu9jsmZSuIL9PK699M/6gQSInBHS1gt8qABCNHEzynK7lqk1t7yrK33NUy5t0GimefM+qjmPHE/tQ==
+  dependencies:
+    "@types/classnames" "^2.2.9"
+    "@types/react" "*"
+    "@visx/group" "1.0.0"
+    "@visx/shape" "1.1.0"
+    classnames "^2.2.5"
+    prop-types "^15.6.2"
+
 "@visx/mock-data@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@visx/mock-data/-/mock-data-1.0.0.tgz#9b3f28c8fba830b38c06cc05a5280efd3bf74449"

@@ -2,8 +2,8 @@ import {
   AppShell,
   AreaChart,
   BrushChart,
+  Curves,
   KPI,
-  LineChart,
   LiquidityProviderList,
   PageHeader,
   PairIcon,
@@ -184,89 +184,69 @@ function PoolPage() {
             )}
           />
         </Grid> */}
-
         <Grid item xs={12}>
-          <Typography variant="h6" component="h2" gutterBottom>
-            ~ SLP Age (Days)
-          </Typography>
           <Paper
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <BrushChart data={averageSlpAge} />
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="h6" component="h2" gutterBottom>
-            Users
-          </Typography>
-          <Paper
-            variant="outlined"
-            style={{ height: 400, position: "relative" }}
-          >
-            <BrushChart data={users} />
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="h6" component="h2" gutterBottom>
-            SLP Balance
-          </Typography>
-          <Paper
-            variant="outlined"
-            style={{ height: 400, position: "relative" }}
-          >
-            <BrushChart data={slpBalance} />
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Paper
-            variant="outlined"
-            style={{ height: 400, position: "relative" }}
-          >
-            <LineChart
+            <Curves
               title="SLP Age & SLP Age Removed"
               margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
-              strokes={[
-                theme.palette.positive.light,
-                theme.palette.negative.light,
-              ]}
-              lines={[slpAge, slpAgeRemoved]}
+              data={[slpAge, slpAgeRemoved]}
             />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <Paper
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <LineChart
+            <Curves
               title="SLP Deposited & SLP Withdrawn"
               margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
-              strokes={[
-                theme.palette.positive.light,
-                theme.palette.negative.light,
-              ]}
-              lines={[slpDeposited, slpWithdrawn]}
+              data={[slpDeposited, slpWithdrawn]}
+            />
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{ height: 400, position: "relative" }}
+          >
+            <BrushChart
+              title="~ SLP Age (Days)"
+              data={averageSlpAge}
+              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+            />
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{ height: 400, position: "relative" }}
+          >
+            <BrushChart
+              title="Users"
+              data={users}
+              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+            />
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{ height: 400, position: "relative" }}
+          >
+            <BrushChart
+              title="SLP Balance"
+              data={slpBalance}
+              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
             />
           </Paper>
         </Grid>
       </Grid>
-
-      {/* <Grid item xs={12}>
-          <Typography variant="h6" component="h2" gutterBottom>
-            SLP Deposited & SLP Withdrawn
-          </Typography>
-          <Paper
-            variant="outlined"
-            style={{ height: 300, position: "relative" }}
-          >
-            <StackedBrushChart data={[slpDeposited, slpWithdrawn]} />
-          </Paper>
-        </Grid>
-      </Grid> */}
 
       <LiquidityProviderList
         pool={pool}

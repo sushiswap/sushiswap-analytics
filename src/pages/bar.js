@@ -1,4 +1,4 @@
-import { AppShell, BrushChart, KPI, LineChart } from "app/components";
+import { AppShell, BrushChart, Curves, KPI, Lines } from "app/components";
 import { Grid, Paper, Typography, useTheme } from "@material-ui/core";
 import {
   barHistoriesQuery,
@@ -165,14 +165,15 @@ function PoolsPage() {
         </Grid> */}
 
         <Grid item xs={12}>
-          <Typography variant="h6" component="h2" gutterBottom>
-            xSushi Total Supply
-          </Typography>
           <Paper
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <BrushChart data={xSushi} />
+            <BrushChart
+              title="xSushi Total Supply"
+              data={xSushi}
+              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+            />
           </Paper>
         </Grid>
 
@@ -181,14 +182,10 @@ function PoolsPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <LineChart
+            <Curves
               title="Sushi Staked (USD) & Sushi Harvested (USD)"
+              data={[sushiStakedUSD, sushiHarvestedUSD]}
               margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
-              strokes={[
-                theme.palette.positive.light,
-                theme.palette.negative.light,
-              ]}
-              lines={[sushiStakedUSD, sushiHarvestedUSD]}
             />
           </Paper>
         </Grid>
@@ -197,14 +194,10 @@ function PoolsPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <LineChart
+            <Curves
               title="xSushi:Sushi & Sushi:xSushi"
               margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
-              strokes={[
-                theme.palette.positive.light,
-                theme.palette.negative.light,
-              ]}
-              lines={[xSushiSushi, xSushiPerSushi]}
+              data={[xSushiSushi, xSushiPerSushi]}
             />
           </Paper>
         </Grid>
@@ -213,14 +206,10 @@ function PoolsPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <LineChart
+            <Curves
               title="xSushi Minted & xSushi Burned"
               margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
-              strokes={[
-                theme.palette.positive.light,
-                theme.palette.negative.light,
-              ]}
-              lines={[xSushiMinted, xSushiBurned]}
+              data={[xSushiMinted, xSushiBurned]}
             />
           </Paper>
         </Grid>

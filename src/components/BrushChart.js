@@ -6,12 +6,10 @@ import AreaChart from "./Area";
 import { Brush } from "@visx/brush";
 import { LinearGradient } from "@visx/gradient";
 import { PatternLines } from "@visx/pattern";
-import appleStock from "@visx/mock-data/lib/mocks/appleStock";
+import { Text } from "@visx/text";
 import { deepPurple } from "@material-ui/core/colors";
 import { withParentSize } from "@visx/responsive";
 
-// Initialize some variables
-const stock = appleStock.slice(1000);
 const brushMargin = { top: 10, bottom: 15, left: 50, right: 20 };
 const chartSeparation = 30;
 const PATTERN_ID = "brush_pattern";
@@ -30,6 +28,7 @@ const getDate = (d) => new Date(d.time);
 const getStockValue = (d) => d.value;
 
 function BrushChart({
+  title,
   compact = false,
   data,
   width,
@@ -188,6 +187,18 @@ function BrushChart({
             selectedBoxStyle={selectedBrushStyle}
           />
         </AreaChart>
+        {title && (
+          <Text
+            y={margin.top / 2}
+            x={parentWidth / 2}
+            width={parentWidth}
+            verticalAnchor="start"
+            textAnchor="middle"
+            fill="currentColor"
+          >
+            {title}
+          </Text>
+        )}
       </svg>
     </div>
   );

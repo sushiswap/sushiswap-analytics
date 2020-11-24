@@ -185,7 +185,7 @@ function PoolsPage() {
             <Curves
               title="Sushi Staked (USD) & Sushi Harvested (USD)"
               data={[sushiStakedUSD, sushiHarvestedUSD]}
-              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
+              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
             />
           </Paper>
         </Grid>
@@ -196,7 +196,7 @@ function PoolsPage() {
           >
             <Curves
               title="xSushi:Sushi & Sushi:xSushi"
-              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
+              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
               data={[xSushiSushi, xSushiPerSushi]}
             />
           </Paper>
@@ -208,7 +208,7 @@ function PoolsPage() {
           >
             <Curves
               title="xSushi Minted & xSushi Burned"
-              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
+              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
               data={[xSushiMinted, xSushiBurned]}
             />
           </Paper>

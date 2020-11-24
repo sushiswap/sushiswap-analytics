@@ -128,12 +128,6 @@ function PoolPage() {
         time,
         value: parseFloat(currentValue.slpBalance),
       });
-
-      previousValue[7].push({
-        time,
-        slpDeposited: parseFloat(currentValue.slpDeposited),
-        slpWithdrawn: parseFloat(currentValue.slpWithdrawn),
-      });
       return previousValue;
     },
     [[], [], [], [], [], [], [], []]
@@ -191,7 +185,7 @@ function PoolPage() {
           >
             <Curves
               title="SLP Age & SLP Age Removed"
-              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
+              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
               data={[slpAge, slpAgeRemoved]}
             />
           </Paper>
@@ -203,7 +197,7 @@ function PoolPage() {
           >
             <Curves
               title="SLP Deposited & SLP Withdrawn"
-              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
+              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
               data={[slpDeposited, slpWithdrawn]}
             />
           </Paper>

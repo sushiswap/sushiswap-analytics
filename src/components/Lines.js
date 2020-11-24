@@ -66,13 +66,6 @@ const Lines = withParentSize(
       nice: true,
     });
 
-    // bounds
-    const lineHeight = parentHeight / 1;
-
-    // update scales
-    // xScale.range([0, parentWidth]);
-    // yScale.range([parentHeight, 0]);
-
     return (
       <div style={{ position: "relative" }}>
         <svg width={parentWidth} height={parentHeight}>

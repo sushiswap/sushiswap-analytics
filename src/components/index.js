@@ -6,7 +6,6 @@ export { default as AreaChart } from "./AreaChart";
 export { default as BarChart } from "./BarChart";
 export { default as BasicTable } from "./BasicTable";
 export { default as BrushChart } from "./BrushChart";
-export { default as Chart } from "./Chart";
 export { default as ChartOverlay } from "./ChartOverlay";
 export { default as Curves } from "./Curves";
 export { default as Difference } from "./Difference";

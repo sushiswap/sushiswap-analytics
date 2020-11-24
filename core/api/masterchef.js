@@ -121,9 +121,12 @@ export async function getPools(client = getApollo()) {
     fetchPolicy: "network-only",
   });
 
-  const averageBlockTime = (await getAverageBlockTime()) / 100;
+  // const averageBlockTime = (await getAverageBlockTime()) / 100;
 
-  // const averageBlockTime = 12;
+  const averageBlockTime = await getAverageBlockTime();
+  // const averageBlockTime = 13;
+
+  console.log({ averageBlockTime });
 
   const { bundles } = await getEthPrice();
 

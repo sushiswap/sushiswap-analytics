@@ -23,7 +23,7 @@ import letterFrequency, {
 import { scaleBand, scaleLinear } from "@visx/scale";
 import { timeFormat, timeParse } from "d3-time-format";
 
-import { ChartOverlay } from ".";
+import ChartOverlay from "./ChartOverlay";
 import { Group } from "@visx/group";
 import { Text } from "@visx/text";
 import { Typography } from "@material-ui/core";

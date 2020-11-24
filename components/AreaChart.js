@@ -1,4 +1,4 @@
-import { AreaClosed, Bar, Line } from "@visx/shape";
+import { Area, AreaClosed, Bar, Line } from "@visx/shape";
 import { AxisBottom, AxisLeft, AxisRight } from "@visx/axis";
 import { GradientOrangeRed, LinearGradient } from "@visx/gradient";
 import { GradientPurpleTeal, GradientTealBlue } from "@visx/gradient";
@@ -13,7 +13,7 @@ import { bisector, extent, max } from "d3-array";
 import { scaleLinear, scaleTime } from "@visx/scale";
 import { useCallback, useMemo, useState } from "react";
 
-import { ChartOverlay } from ".";
+import ChartOverlay from "./ChartOverlay";
 import { Group } from "@visx/group";
 import { Typography } from "@material-ui/core";
 import { appleStock } from "@visx/mock-data";

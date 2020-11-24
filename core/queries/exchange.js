@@ -81,8 +81,8 @@ export const dayDataFieldsQuery = gql`
 
 // Dashboard...
 export const dayDatasQuery = gql`
-  query dayDatasQuery($date: Int!) {
-    dayDatas(where: { date_gt: 0 }) {
+  query dayDatasQuery($date: Int! = 0) {
+    dayDatas(where: { date_gt: $date }) {
       ...dayDataFields
     }
   }

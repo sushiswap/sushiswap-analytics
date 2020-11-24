@@ -1,7 +1,8 @@
-import { Link, SortableTable } from ".";
 import { currencyFormatter, decimalFormatter } from "app/core";
 
+import Link from "./Link";
 import React from "react";
+import SortableTable from "./SortableTable";
 import { Typography } from "@material-ui/core";
 import formatDistance from "date-fns/formatDistance";
 import { makeStyles } from "@material-ui/core/styles";

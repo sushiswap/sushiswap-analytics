@@ -16,6 +16,8 @@ function PoolsPage() {
 
   useInterval(getPools, 60000);
 
+  // console.log("pools", pools);
+
   return (
     <Layout>
       <Head>

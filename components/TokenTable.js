@@ -1,5 +1,4 @@
 import { Box, Typography } from "@material-ui/core";
-import { Link, Percent, SortableTable, TokenIcon } from ".";
 import { Sparklines, SparklinesLine } from "react-sparklines";
 import {
   ethPriceQuery,
@@ -8,8 +7,12 @@ import {
 } from "app/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
+import Link from "./Link";
+import Percent from "./Percent";
 import React from "react";
+import SortableTable from "./SortableTable";
 import { TOKEN_DENY } from "../constants";
+import TokenIcon from "./TokenIcon";
 import { currencyFormatter } from "app/core";
 import { useQuery } from "@apollo/client";
 

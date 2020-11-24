@@ -1,11 +1,14 @@
 import {
   AreaChart,
+  BrushChart,
   KPI,
   Layout,
   LineChart,
   LiquidityProviderList,
   PageHeader,
   PairIcon,
+  StackedBrushChart,
+  ThresholdChart,
 } from "app/components";
 import {
   Box,
@@ -16,6 +19,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import {
+  currencyFormatter,
   getApollo,
   getPool,
   getPoolHistories,
@@ -38,7 +42,7 @@ function PoolPage() {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <Layout>New pool detected, generating...</Layout>;
+    return <Layout />;
   }
 
   const classes = useStyles();
@@ -76,6 +80,8 @@ function PoolPage() {
     slpDeposited,
     slpWithdrawn,
     averageSlpAge,
+    slpBalance,
+    slpFlow,
   ] = poolHistories.reduce(
     (previousValue, currentValue) => {
       const time = new Date(parseInt(currentValue.timestamp) * 1e3)
@@ -109,14 +115,25 @@ function PoolPage() {
 
       const average =
         parseInt(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
+
       previousValue[5].push({
         time,
         value: !Number.isNaN(average) ? average : 0,
       });
 
+      previousValue[6].push({
+        time,
+        value: parseFloat(currentValue.slpBalance),
+      });
+
+      previousValue[7].push({
+        time,
+        slpDeposited: parseFloat(currentValue.slpDeposited),
+        slpWithdrawn: parseFloat(currentValue.slpWithdrawn),
+      });
       return previousValue;
     },
-    [[], [], [], [], [], []]
+    [[], [], [], [], [], [], [], []]
   );
 
   return (
@@ -148,7 +165,7 @@ function PoolPage() {
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <KPI title="Pool Users" value={pool.userCount} />
+          <KPI title="Users" value={pool.userCount} />
         </Grid>
         <Grid item xs={12} sm={4}>
           <KPI
@@ -156,11 +173,55 @@ function PoolPage() {
             value={`${(pool.balance / 1e18).toFixed(4)} SLP`}
           />
         </Grid>
+        {/* <Grid item xs={12} sm={4}>
+          <KPI
+            title="Fees (24h)"
+            value={currencyFormatter.format(
+              pool.liquidityPair.volumeUSD * 0.03
+            )}
+          />
+        </Grid> */}
+
+        <Grid item xs={12}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            ~ SLP Age (Days)
+          </Typography>
+          <Paper
+            variant="outlined"
+            style={{ height: 400, position: "relative" }}
+          >
+            <BrushChart data={averageSlpAge} />
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Users
+          </Typography>
+          <Paper
+            variant="outlined"
+            style={{ height: 400, position: "relative" }}
+          >
+            <BrushChart data={users} />
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            SLP Balance
+          </Typography>
+          <Paper
+            variant="outlined"
+            style={{ height: 400, position: "relative" }}
+          >
+            <BrushChart data={slpBalance} />
+          </Paper>
+        </Grid>
 
         <Grid item xs={12} md={6}>
           <Paper
             variant="outlined"
-            style={{ height: 300, position: "relative" }}
+            style={{ height: 400, position: "relative" }}
           >
             <LineChart
               title="SLP Age & SLP Age Removed"
@@ -176,7 +237,7 @@ function PoolPage() {
         <Grid item xs={12} md={6}>
           <Paper
             variant="outlined"
-            style={{ height: 300, position: "relative" }}
+            style={{ height: 400, position: "relative" }}
           >
             <LineChart
               title="SLP Deposited & SLP Withdrawn"
@@ -189,33 +250,20 @@ function PoolPage() {
             />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper
-            variant="outlined"
-            style={{ height: 300, position: "relative" }}
-          >
-            <LineChart
-              title="~ SLP Age (Days)"
-              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
-              strokes={[theme.palette.positive.light]}
-              lines={[averageSlpAge]}
-            />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper
-            variant="outlined"
-            style={{ height: 300, position: "relative" }}
-          >
-            <LineChart
-              title="Active Users"
-              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
-              strokes={[theme.palette.positive.light]}
-              lines={[users]}
-            />
-          </Paper>
-        </Grid>
       </Grid>
+
+      {/* <Grid item xs={12}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            SLP Deposited & SLP Withdrawn
+          </Typography>
+          <Paper
+            variant="outlined"
+            style={{ height: 300, position: "relative" }}
+          >
+            <StackedBrushChart data={[slpDeposited, slpWithdrawn]} />
+          </Paper>
+        </Grid>
+      </Grid> */}
 
       <LiquidityProviderList
         pool={pool}

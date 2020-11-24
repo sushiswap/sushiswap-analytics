@@ -1,7 +1,9 @@
 import { Box, Typography } from "@material-ui/core";
-import { Link, PairIcon, SortableTable } from ".";
 
+import Link from "./Link";
+import PairIcon from "./PairIcon";
 import React from "react";
+import SortableTable from "./SortableTable";
 import { formatCurrency } from "app/core";
 import { makeStyles } from "@material-ui/core/styles";
 

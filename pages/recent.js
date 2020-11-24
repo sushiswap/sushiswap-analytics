@@ -23,10 +23,6 @@ function RecentlyAddedPage() {
     context: {
       clientName: "masterchef",
     },
-    variables: {
-      orderBy: "timestamp",
-      orderDirection: "desc",
-    },
   });
 
   useInterval(() => Promise.all([getPairs, getPools]), 60000);
@@ -36,7 +32,7 @@ function RecentlyAddedPage() {
       <Head>
         <title>Recently Added | SushiSwap Analytics</title>
       </Head>
-      <PoolTable pools={pools} />
+      <PoolTable pools={pools} orderBy="timestamp" order="desc" />
       <PairTable pairs={pairs} orderBy="timestamp" order="desc" />
     </Layout>
   );

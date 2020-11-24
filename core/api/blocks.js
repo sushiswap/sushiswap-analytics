@@ -1,7 +1,11 @@
 import { blockQuery, blocksQuery, getApollo } from "app/core";
 import {
+  differenceInSeconds,
+  getUnixTime,
+  parseISO,
   startOfHour,
   startOfMinute,
+  startOfSecond,
   subDays,
   subHours,
   subWeeks,
@@ -88,10 +92,10 @@ export async function getSevenDayBlock(client = getApollo()) {
 }
 
 export async function getAverageBlockTime(client = getApollo()) {
-  const now = startOfHour(Date.now());
-  const start = Math.floor(startOfMinute(subHours(now, 1)) / 1000);
-  const end = Math.floor(now) / 1000;
-
+  // Course timestamps used to make better use of the cache (startOfHour + startOfMinuite + startOfSecond)
+  const now = startOfSecond(startOfMinute(startOfHour(Date.now())));
+  const start = getUnixTime(subHours(now, 6));
+  const end = getUnixTime(now);
   const {
     data: { blocks },
   } = await client.query({
@@ -105,20 +109,23 @@ export async function getAverageBlockTime(client = getApollo()) {
     },
   });
 
-  const { averageBlockTime } = blocks.reduce(
+  const averageBlockTime = blocks.reduce(
     (previousValue, currentValue, currentIndex) => {
       if (previousValue.timestamp) {
         const difference = previousValue.timestamp - currentValue.timestamp;
 
-        previousValue.averageBlockTime =
-          previousValue.averageBlockTime + difference / currentIndex + 1;
+        previousValue.difference = previousValue.difference + difference;
       }
 
       previousValue.timestamp = currentValue.timestamp;
 
+      if (currentIndex === blocks.length - 1) {
+        return previousValue.difference / blocks.length;
+      }
+
       return previousValue;
     },
-    { timestamp: null, averageBlockTime: 12 }
+    { timestamp: null, difference: 0 }
   );
 
   return averageBlockTime;

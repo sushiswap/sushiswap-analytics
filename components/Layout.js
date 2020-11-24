@@ -20,6 +20,11 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   Drawer,
   Hidden,
@@ -28,21 +33,17 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  TextField,
   Toolbar,
   Tooltip,
   Typography,
   useMediaQuery,
 } from "@material-ui/core";
-import { AppFooter, Sushi } from ".";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import AppFooter from "./AppFooter";
 import React from "react";
-import TextField from "@material-ui/core/TextField";
+import Sushi from "./Sushi";
 import { darkModeVar } from "app/core";
 import { useReactiveVar } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -112,12 +113,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ResponsiveDrawer(props) {
+function Layout(props) {
   const { window, children } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const router = useRouter();
+
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -276,16 +279,18 @@ function ResponsiveDrawer(props) {
               {page.charAt(0).toUpperCase() + page.slice(1)}
             </Typography>
           </div>
-          <Tooltip title="Toggle theme" enterDelay={300}>
-            <IconButton
-              edge="end"
-              onClick={toggleDarkMode}
-              color="default"
-              aria-label="theme toggle"
-            >
-              {!darkMode ? <Brightness4 /> : <Brightness7 />}
-            </IconButton>
-          </Tooltip>
+          {!prefersDarkMode && (
+            <Tooltip title="Toggle theme" enterDelay={300}>
+              <IconButton
+                edge="end"
+                onClick={toggleDarkMode}
+                color="default"
+                aria-label="theme toggle"
+              >
+                {!darkMode ? <Brightness4 /> : <Brightness7 />}
+              </IconButton>
+            </Tooltip>
+          )}
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
@@ -365,4 +370,4 @@ function ResponsiveDrawer(props) {
   );
 }
 
-export default ResponsiveDrawer;
+export default Layout;

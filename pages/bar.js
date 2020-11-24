@@ -1,5 +1,5 @@
-import { Grid, Paper, useTheme } from "@material-ui/core";
-import { KPI, Layout, LineChart } from "app/components";
+import { BrushChart, KPI, Layout, LineChart } from "app/components";
+import { Grid, Paper, Typography, useTheme } from "@material-ui/core";
 import {
   barHistoriesQuery,
   barQuery,
@@ -10,6 +10,7 @@ import {
 } from "app/core";
 
 import Head from "next/head";
+import { ParentSize } from "@visx/responsive";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from "@apollo/client";
@@ -164,23 +165,21 @@ function PoolsPage() {
         </Grid> */}
 
         <Grid item xs={12}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            xSushi Total Supply
+          </Typography>
           <Paper
             variant="outlined"
-            style={{ height: 300, position: "relative" }}
+            style={{ height: 400, position: "relative" }}
           >
-            <LineChart
-              title="xSushi Total Supply"
-              margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
-              strokes={[theme.palette.positive.light]}
-              lines={[xSushi]}
-            />
+            <BrushChart data={xSushi} />
           </Paper>
         </Grid>
 
         <Grid item xs={12}>
           <Paper
             variant="outlined"
-            style={{ height: 300, position: "relative" }}
+            style={{ height: 400, position: "relative" }}
           >
             <LineChart
               title="Sushi Staked (USD) & Sushi Harvested (USD)"
@@ -196,7 +195,7 @@ function PoolsPage() {
         <Grid item xs={12}>
           <Paper
             variant="outlined"
-            style={{ height: 300, position: "relative" }}
+            style={{ height: 400, position: "relative" }}
           >
             <LineChart
               title="xSushi:Sushi & Sushi:xSushi"
@@ -212,7 +211,7 @@ function PoolsPage() {
         <Grid item xs={12}>
           <Paper
             variant="outlined"
-            style={{ height: 300, position: "relative" }}
+            style={{ height: 400, position: "relative" }}
           >
             <LineChart
               title="xSushi Minted & xSushi Burned"

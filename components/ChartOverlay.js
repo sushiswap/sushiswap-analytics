@@ -3,7 +3,7 @@ import { Box, Typography } from "@material-ui/core";
 export default function ChartOverlay({ overlay }) {
   const { title, value, time } = overlay;
   return (
-    <div style={{ position: "absolute", top: 32, left: 32 }}>
+    <div style={{ position: "absolute", top: 24, left: 24 }}>
       <Typography variant="subtitle2" color="textSecondary">
         {title}
       </Typography>

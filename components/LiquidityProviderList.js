@@ -1,9 +1,11 @@
-import { AddressAvatar, Link, SortableTable } from ".";
 import { Avatar, Box } from "@material-ui/core";
 import { currencyFormatter, decimalFormatter } from "app/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
+import AddressAvatar from "./AddressAvatar";
+import Link from "./Link";
 import React from "react";
+import SortableTable from "./SortableTable";
 import { deepPurple } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({

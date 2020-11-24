@@ -16,12 +16,8 @@ export async function getSushiToken(client = getApollo()) {
 }
 
 export async function getDayData(client = getApollo()) {
-  const date = getUnixTime(startOfDay(subMonths(Date.now(), 1)));
   const { data } = await client.query({
     query: dayDatasQuery,
-    variables: {
-      date,
-    },
   });
 
   await client.cache.writeQuery({

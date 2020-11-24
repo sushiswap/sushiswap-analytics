@@ -233,8 +233,6 @@ function PairPage(props) {
       { liquidity: [], volume: [], fees: [] }
     );
 
-  console.log(volumeChange);
-
   return (
     <Layout>
       <Head>

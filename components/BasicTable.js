@@ -20,7 +20,7 @@ export default function BasicTable({ title, headCells, bodyCells, style }) {
       <TableContainer component={Paper} variant="outlined">
         <Table aria-label="information">
           <TableHead>
-            <TableRow>
+            <TableRow key={Date.now()}>
               {headCells.map((cell) => (
                 <TableCell
                   key={cell.key}

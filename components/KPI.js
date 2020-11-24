@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Grid, Typography } from "@material-ui/core";
 
-import { Percent } from ".";
+import Percent from "./Percent";
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
@@ -23,16 +23,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function KPI(props) {
+function KPI({
+  className,
+  title = "",
+  difference = "",
+  value = "",
+  valueUSD = "",
+  type = "full",
+  ...rest
+}) {
   const classes = useStyles();
-  const {
-    className,
-    title = "",
-    difference = "",
-    value = "",
-    valueUSD = "",
-    ...rest
-  } = props;
   return (
     <Card
       {...rest}

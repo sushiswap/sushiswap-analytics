@@ -1,6 +1,7 @@
 import {
   AreaChart,
   BarChart,
+  BrushChart,
   Layout,
   PairTable,
   Search,
@@ -44,9 +45,6 @@ function IndexPage() {
     error,
   } = useQuery(dayDatasQuery, {
     pollInterval: 60000,
-    variables: {
-      date,
-    },
   });
   // if (error) return <p>Error :(</p>;
   // if (loading) return <p>Loading ...</p>;
@@ -67,7 +65,7 @@ function IndexPage() {
   );
 
   const [liquidity, volume] = dayDatas
-    .filter((d) => d.date > getUnixTime(startOfDay(subMonths(Date.now(), 1))))
+    .filter((d) => d.liquidityUSD !== "0")
     .reduce(
       (previousValue, currentValue) => {
         const time = new Date(currentValue.date * 1e3)

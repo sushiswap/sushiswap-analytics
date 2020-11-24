@@ -31,6 +31,13 @@ function MyApp({ Component, pageProps }) {
 
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
+  if (prefersDarkMode) {
+    if (!document.documentElement.classList.contains("dark-theme")) {
+      document.documentElement.classList.add(["dark-theme"]);
+    }
+    localStorage.setItem("darkMode", "true");
+  }
+
   const darkMode = useReactiveVar(darkModeVar);
 
   // const theme = useMemo(() => {

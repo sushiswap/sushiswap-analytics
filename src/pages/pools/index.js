@@ -1,4 +1,4 @@
-import { AppShell, PoolTable } from "../components";
+import { AppShell, PoolTable } from "app/components";
 import { getApollo, getPools, poolsQuery, useInterval } from "app/core";
 
 import Head from "next/head";

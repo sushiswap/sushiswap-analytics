@@ -1,56 +1,11 @@
-import {} from "@material-ui/core";
-
-import {
-  AccountTreeOutlined,
-  Brightness4,
-  Brightness4Outlined,
-  Brightness7,
-  DashboardOutlined,
-  ExpandLess,
-  ExpandMore,
-  FastfoodOutlined,
-  FiberNewOutlined,
-  Menu,
-  RadioButtonUncheckedOutlined,
-  SettingsEthernetOutlined,
-  StarBorder,
-  TrendingDownOutlined,
-  TrendingUpOutlined,
-  WavesOutlined,
-} from "@material-ui/icons";
-import {
-  AppBar,
-  Box,
-  Button,
-  Collapse,
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Divider,
-  Drawer,
-  Hidden,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  TextField,
-  Toolbar,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-} from "@material-ui/core";
+import { Container, Drawer, Hidden, useMediaQuery } from "@material-ui/core";
+import React, { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
+import AppBar from "./AppBar";
 import AppFooter from "./AppFooter";
-import React from "react";
-import Sushi from "./Sushi";
-import { darkModeVar } from "app/core";
-import { useReactiveVar } from "@apollo/client";
-import { useRouter } from "next/router";
+import AppNavigation from "./AppNavigation";
+import clsx from "clsx";
 
 const drawerWidth = 240;
 
@@ -58,15 +13,20 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
+  // drawer: {
+  //   [theme.breakpoints.up("sm")]: {
+  //     width: drawerWidth,
+  //     flexShrink: 0,
+  //   },
+  // },
+  // drawerPaper: {
+  //   background: "transparent",
+  //   width: drawerWidth,
+  //   border: 0,
+  // },
 
-  logo: {
-    display: "flex",
-    flexGrow: 1,
-    alignItems: "center",
-    justifyContent: "flex-center",
-    [theme.breakpoints.up("sm")]: {
-      justifyContent: "flex-center",
-    },
+  hide: {
+    display: "none",
   },
 
   drawer: {
@@ -75,48 +35,42 @@ const useStyles = makeStyles((theme) => ({
       flexShrink: 0,
     },
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    [theme.breakpoints.up("sm")]: {
-      // width: `calc(100% - ${drawerWidth}px)`,
-      // marginLeft: drawerWidth,
-    },
-    borderBottom:
-      theme.palette.type === "light"
-        ? "1px solid rgba(0, 0, 0, 0.12)"
-        : "1px solid rgba(255, 255, 255, 0.12)",
+
+  drawerPaper: {
+    width: drawerWidth,
   },
-  title: {
-    flexGrow: 1,
-    textAlign: "center",
-    [theme.breakpoints.up("sm")]: {
-      textAlign: "left",
-    },
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
-    },
-  },
+
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
-  drawerPaper: {
-    background: "transparent",
-    width: drawerWidth,
-    border: 0,
-  },
+
   drawerPaperMobile: {
     width: drawerWidth,
     border: 0,
   },
+
   content: {
-    flexGrow: 1,
+    // flexGrow: 1,
+    // padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    // marginLeft: -drawerWidth,
+
     padding: theme.spacing(3),
-    width: `calc(100% - ${drawerWidth}px)`,
+    flexGrow: 1,
+
+    width: "100%",
+    // width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: -drawerWidth,
   },
-  nested: {
-    paddingLeft: theme.spacing(4),
+  contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+    width: `calc(100% - ${drawerWidth}px)`,
   },
 }));
 
@@ -124,200 +78,36 @@ function AppShell(props) {
   const { window, children } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const router = useRouter();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-  const darkMode = useReactiveVar(darkModeVar);
-  function toggleDarkMode() {
-    // console.log("toggleDarkMode");
-    const value = !darkModeVar();
-    darkModeVar(value);
-    if (!value) {
-      document.documentElement.classList.remove("dark-theme");
-      // document.documentElement.style.background = "#fafafa";
-      document.documentElement.style.color = "rgba(0, 0, 0, 0.87)";
-      // document.body.style.background = "#fafafa";
-      // document.body.style.color = "rgba(0, 0, 0, 0.87)";
-    } else {
-      document.documentElement.classList.add("dark-theme");
-      // document.documentElement.style.background = "#303030";
-      document.documentElement.style.color = "#FFFFFF";
-      // document.body.style.background = "#303030";
-      // document.body.style.color = "#FFFFFF";
-    }
-    // Last
-    localStorage.setItem("darkMode", value);
-  }
+  const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
-  const [open, setOpen] = React.useState(false);
-
-  const [address, setAddress] = React.useState("");
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const drawer = (
-    <div>
-      <div className={classes.toolbar}>
-        <Hidden smUp implementation="css">
-          <Box display="flex" alignItems="center" py={0.5}>
-            <IconButton edge={false} onClick={() => router.push("/")}>
-              <Sushi />
-            </IconButton>
-            <Typography variant="subtitle1" color="textPrimary" noWrap>
-              SushiSwap Analytics
-            </Typography>
-          </Box>
-        </Hidden>
-      </div>
-      <List direction="horizontal">
-        {[
-          { text: "Dashboard", icon: <DashboardOutlined />, url: "/" },
-          {
-            text: "Portfolio",
-            icon: <AccountTreeOutlined />,
-            url: "/portfolio",
-          },
-          { text: "Bar", icon: <FastfoodOutlined />, url: "/bar" },
-          {
-            text: "Pools",
-            icon: <WavesOutlined />,
-            url: "/pools",
-          },
-          { text: "Pairs", icon: <SettingsEthernetOutlined />, url: "/pairs" },
-          {
-            text: "Tokens",
-            icon: <RadioButtonUncheckedOutlined />,
-            url: "/tokens",
-          },
-          {
-            text: "Gainers",
-            icon: <TrendingUpOutlined />,
-            url: "/gainers",
-          },
-          {
-            text: "Losers",
-            icon: <TrendingDownOutlined />,
-            url: "/losers",
-          },
-          {
-            text: "Recent",
-            icon: <FiberNewOutlined />,
-            url: "/recent",
-          },
-        ].map((item, index) => (
-          <ListItem
-            button
-            key={item.text}
-            selected={item.url === router.pathname}
-            onClick={() => {
-              if (item.url === "/portfolio") {
-                const defaultAddress = localStorage.getItem("defaultAddress");
-                if (defaultAddress) {
-                  router.push("/users/" + defaultAddress);
-                } else {
-                  handleClickOpen();
-                }
-              } else {
-                router.push(item.url);
-              }
-            }}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItem>
-        ))}
-      </List>
-      {/* <Divider /> */}
-    </div>
-  );
+  const [open, setOpen] = useState(true);
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-  const matches = useMediaQuery("(min-width:600px)");
-
-  const page =
-    router.pathname === "/" ? "Dashboard" : router.pathname.split("/")[1];
+  const onToggleSidebar = () => {
+    if (!matches) {
+      setOpen(false);
+      setMobileOpen(!mobileOpen);
+    } else {
+      setOpen(!open);
+    }
+  };
 
   return (
     <div className={classes.root}>
-      <AppBar
-        position="fixed"
-        color="transparent"
-        color="inherit"
-        elevation={0}
-        className={classes.appBar}
-      >
-        <Toolbar>
-          <IconButton
-            color="default"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <Menu />
-          </IconButton>
-          <div className={classes.logo}>
-            <Hidden xsDown implementation="css">
-              <Box display="flex" alignItems="center">
-                <IconButton
-                  edge={matches ? "start" : false}
-                  onClick={() => router.push("/")}
-                >
-                  <Sushi />
-                </IconButton>
-                <Typography variant="subtitle1" color="textPrimary" noWrap>
-                  SushiSwap Analytics
-                </Typography>
-              </Box>
-            </Hidden>
-
-            <Typography
-              variant="h6"
-              color="textPrimary"
-              noWrap
-              style={{ marginLeft: 8, marginRight: 8 }}
-            >
-              /
-            </Typography>
-            <Typography variant="subtitle1" color="textPrimary" noWrap>
-              {page.charAt(0).toUpperCase() + page.slice(1)}
-            </Typography>
-          </div>
-          {!prefersDarkMode && (
-            <Tooltip title="Toggle theme" enterDelay={300}>
-              <IconButton
-                edge="end"
-                onClick={toggleDarkMode}
-                color="default"
-                aria-label="theme toggle"
-              >
-                {!darkMode ? <Brightness4 /> : <Brightness7 />}
-              </IconButton>
-            </Tooltip>
-          )}
-        </Toolbar>
-      </AppBar>
-      <nav className={classes.drawer} aria-label="mailbox folders">
+      <AppBar onToggleSidebar={onToggleSidebar} open={open} />
+      <nav className={classes.drawer} aria-label="navigation">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
             container={container}
             variant="temporary"
-            anchor={theme.direction === "rtl" ? "right" : "left"}
+            anchor={"left"}
             open={mobileOpen}
-            onClose={handleDrawerToggle}
+            onClose={onToggleSidebar}
             classes={{
               paper: classes.drawerPaperMobile,
             }}
@@ -325,64 +115,32 @@ function AppShell(props) {
               keepMounted: true, // Better open performance on mobile.
             }}
           >
-            {drawer}
+            <AppNavigation />
           </Drawer>
         </Hidden>
         <Hidden xsDown implementation="css">
           <Drawer
+            className={classes.drawer}
+            variant="persistent"
+            anchor="left"
+            open={open}
             classes={{
               paper: classes.drawerPaper,
             }}
-            variant="permanent"
-            open
           >
-            {drawer}
+            <AppNavigation />
           </Drawer>
         </Hidden>
       </nav>
-      <main className={classes.content}>
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: open,
+        })}
+      >
         <div className={classes.toolbar} />
         <Container maxWidth="xl">{children}</Container>
-        <AppFooter />
+        {/* <AppFooter /> */}
       </main>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Portfolio</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Enter an address and click load.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="address"
-            label="Address"
-            type="text"
-            onChange={(event) => {
-              setAddress(event.target.value);
-            }}
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              localStorage.setItem("defaultAddress", address);
-              router.push("/users/" + address);
-              handleClose();
-            }}
-            color="primary"
-          >
-            Load
-          </Button>
-        </DialogActions>
-      </Dialog>
     </div>
   );
 }

@@ -107,35 +107,14 @@ export default class MyDocument extends Document {
               __html: `
                 try {
                   var query = window.matchMedia("(prefers-color-scheme: dark)");
-                  // var preference = window.localStorage.getItem("theme");
-                  var preference = window.localStorage.getItem("darkMode") === "true" ? "dark" : "light";
+                  var darkMode = window.localStorage.getItem("darkMode") === "true";
                 
-                  if (preference) {
-                    // preference = JSON.parse(preference);
-                
-                    if ((preference === "system" && query.matches) || preference === "dark") {
-                      // console.log("add dark theme class");
-                      document.documentElement.classList.add("dark-theme");
-                      // document.documentElement.style.background = "#303030";
-                      document.documentElement.style.color = "#FFFFFF";
-
-                      // document.body.style.background = "#303030";
-                      // document.body.style.color = "#FFFFFF";
-
-                    }
+                  if (darkMode) {
+                    document.documentElement.classList.add("dark-theme");
                   }
-                } catch (e) {}
-
-                // try {
-                //   const darkModeEnabled = window.localStorage.getItem("darkMode") === "true";
-                //   if (darkModeEnabled) {                
-                //     document.documentElement.classList.add("dark-theme");
-                //     document.documentElement.style.color = "#FFFFFF";
-                //   }
-                // } catch () {
-                //   // Silence
-                // }
-
+                } catch (e) {
+                  // Silence
+                }
               `,
             }}
           />

@@ -31,50 +31,27 @@ function MyApp({ Component, pageProps }) {
 
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
-  if (prefersDarkMode) {
-    if (!document.documentElement.classList.contains("dark-theme")) {
-      document.documentElement.classList.add(["dark-theme"]);
-    }
-    localStorage.setItem("darkMode", "true");
-  }
+  // if (prefersDarkMode) {
+  //   if (!document.documentElement.classList.contains("dark-theme")) {
+  //     document.documentElement.classList.add(["dark-theme"]);
+  //   }
+  //   localStorage.setItem("darkMode", "true");
+  // }
 
   const darkMode = useReactiveVar(darkModeVar);
 
-  // const theme = useMemo(() => {
-  //   return createMuiTheme({
-  //     palette: {
-  //       type: prefersDarkMode || darkMode ? "dark" : "light",
-  //       ...palette,
-  //     },
-  //     typography: {
-  //       fontFamily: [
-  //         "Inter",
-  //         "-apple-system",
-  //         "BlinkMacSystemFont",
-  //         "Segoe UI",
-  //         "Roboto",
-  //         "Oxygen",
-  //         "Ubuntu",
-  //         "Cantarell",
-  //         "Fira Sans",
-  //         "Droid Sans",
-  //         "Helvetica Neue",
-  //         "sans-serif",
-  //       ],
-  //     },
-  //     overrides: {
-  //       MuiTable: {
-  //         root: {
-  //           "& > tbody > tr:last-child > *": { border: 0 },
-  //         },
-  //       },
-  //     },
-  //   });
-  // }, [prefersDarkMode, darkMode]);
+  // if ((prefersDarkMode && darkMode === null) || darkMode === "true") {
+  //   document.documentElement.classList.add(["dark-theme"]);
+  //   localStorage.setItem("darkMode", "true");
+  // } else {
+  //   document.documentElement.classList.remove(["dark-theme"]);
+  //   localStorage.setItem("darkMode", "false");
+  // }
 
-  // const theme = prefersDarkMode || darkMode ? darkTheme : lightTheme;
-
-  // console.log(theme.palette.type, theme.palette.background.default);
+  // const theme = React.useMemo(
+  //   () => (darkMode && prefersDarkMode ? darkTheme : lightTheme),
+  //   [prefersDarkMode, darkMode]
+  // );
 
   return (
     <>
@@ -90,9 +67,7 @@ function MyApp({ Component, pageProps }) {
         />
       </Head>
       <ApolloProvider client={client}>
-        <ThemeProvider
-          theme={prefersDarkMode || darkMode ? darkTheme : lightTheme}
-        >
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
           <CssBaseline />
           <Component {...pageProps} />
         </ThemeProvider>

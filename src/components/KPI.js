@@ -11,12 +11,14 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     alignItems: "center",
+    justifyContent: "center",
     display: "flex",
   },
   title: {
     fontWeight: 500,
   },
   cardContent: {
+    textAlign: "center",
     "&:last-child": {
       paddingBottom: 16,
     },
@@ -40,29 +42,24 @@ function KPI({
       variant="outlined"
     >
       <CardContent className={classes.cardContent}>
-        <Grid container justify="space-between">
-          <Grid item>
-            <Typography
-              variant="subtitle2"
-              color="textSecondary"
-              gutterBottom
-              noWrap
-            >
-              {title}
-            </Typography>
-
-            <Box display="flex" alignItems="center">
-              <Typography variant="h6" color="textPrimary" noWrap>
-                {!Number.isNaN(value) ? value : 0}
-              </Typography>
-              <Typography variant="subtitle2" color="textSecondary" noWrap>
-                {difference && !Number.isNaN(difference) ? (
-                  <Percent marginLeft={1} percent={difference} />
-                ) : null}
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
+        <Typography
+          variant="subtitle2"
+          color="textSecondary"
+          gutterBottom
+          noWrap
+        >
+          {title}
+        </Typography>
+        <Box display="flex" alignItems="center" justifyContent="center">
+          <Typography variant="h6" color="textPrimary" noWrap>
+            {!Number.isNaN(value) ? value : 0}
+          </Typography>
+          <Typography variant="subtitle2" color="textSecondary" noWrap>
+            {difference && !Number.isNaN(difference) ? (
+              <Percent marginLeft={1} percent={difference} />
+            ) : null}
+          </Typography>
+        </Box>
       </CardContent>
     </Card>
   );

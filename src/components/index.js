@@ -1,4 +1,5 @@
 export { default as AppBar } from "./AppBar";
+export { default as AppNavigation } from "./AppNavigation";
 export { default as AddressAvatar } from "./AddressAvatar";
 export { default as AppFooter } from "./AppFooter";
 export { default as Areas } from "./Areas";

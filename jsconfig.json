@@ -11,6 +11,7 @@
       "app/core/format": ["core/format.js"],
       "app/core/hooks": ["core/hooks.js"],
       "app/core/queries": ["core/queries/index.js"],
+      "app/core/timestamps": ["core/timestamps.js"],
       "app/theme": ["theme/index.js"]
     }
   }

@@ -9,9 +9,7 @@ import { currencyFormatter } from "app/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
+  root: {},
 }));
 
 export default function PairTable({ pairs, title, ...rest }) {
@@ -59,7 +57,7 @@ export default function PairTable({ pairs, title, ...rest }) {
     <div className={classes.root}>
       <SortableTable
         orderBy="reserveUSD"
-        title="Pairs"
+        title={title}
         {...rest}
         columns={[
           {

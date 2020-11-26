@@ -15,26 +15,35 @@ export const lockupUserQuery = gql`
   }
 `;
 
-export const poolUserQuery = gql`
-  query poolUserQuery($address: String!) {
-    users(first: 1000, where: { amount_gt: 0, address: $address }) {
+const poolUserFragment = gql`
+  fragment PoolUser on User {
+    id
+    address
+    pool {
       id
-      address
-      pool {
-        id
-        pair
-        balance
-        accSushiPerShare
-        lastRewardBlock
-      }
-      amount
-      rewardDebt
-      sushiHarvested
-      sushiHarvestedSinceLockup
-      entryUSD
-      exitUSD
+      pair
+      balance
+      accSushiPerShare
+      lastRewardBlock
+    }
+    amount
+    rewardDebt
+    sushiHarvested
+    sushiHarvestedUSD
+    sushiHarvestedSinceLockup
+    sushiHarvestedSinceLockupUSD
+    entryUSD
+    exitUSD
+  }
+`;
+
+export const poolUserQuery = gql`
+  query poolUserQuery($address: String!, $amount_gt: Int! = 0) {
+    users(where: { address: $address, amount_gt: $amount_gt }) {
+      ...PoolUser
     }
   }
+  ${poolUserFragment}
 `;
 
 export const poolHistoryQuery = gql`

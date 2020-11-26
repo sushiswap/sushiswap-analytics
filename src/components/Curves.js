@@ -343,13 +343,13 @@ const Curves = withParentSize(
               return (
                 <Curve
                   curve={curveNatural}
-                  stroke={even ? green[500] : red[500]}
+                  stroke={even ? green[400] : red[400]}
                   strokeWidth={even ? 2 : 1}
                   strokeOpacity={even ? 0.8 : 1}
                   shapeRendering="geometricPrecision"
-                  markerMid="url(#marker-circle)"
-                  markerStart={markerStart}
-                  markerEnd={markerEnd}
+                  // markerMid="url(#marker-circle)"
+                  // markerStart={markerStart}
+                  // markerEnd={markerEnd}
                   hideBottomAxis
                   hideLeftAxis
                   data={brushData}

@@ -10,6 +10,7 @@ import {
   withTooltip,
 } from "@visx/tooltip";
 import { bisector, extent, max } from "d3-array";
+import { currencyFormatter, oneMonth, oneWeek } from "app/core";
 import { scaleLinear, scaleTime } from "@visx/scale";
 import { useCallback, useMemo, useState } from "react";
 
@@ -17,7 +18,6 @@ import ChartOverlay from "./ChartOverlay";
 import { Group } from "@visx/group";
 import { Typography } from "@material-ui/core";
 import { appleStock } from "@visx/mock-data";
-import { currencyFormatter } from "app/core";
 import { curveMonotoneX } from "@visx/curve";
 import { deepPurple } from "@material-ui/core/colors";
 import { localPoint } from "@visx/event";
@@ -38,8 +38,8 @@ const tooltipStyles = {
   zIndex: 1702,
 };
 
-const getDate = (d) => new Date(d.time);
-const bisectDate = bisector((d) => new Date(d.time)).left;
+const getDate = (d) => new Date(d.date);
+const bisectDate = bisector((d) => new Date(d.date)).left;
 const getValue = (d) => d.value;
 
 const formatDate = timeFormat("%b %d, '%y");
@@ -57,6 +57,7 @@ export default withParentSize(
     tooltipData,
     tooltipTop = 0,
     tooltipLeft = 0,
+    onTimespanChange,
     margin = {
       top: 0,
       bottom: 0,
@@ -64,6 +65,26 @@ export default withParentSize(
       right: 0,
     },
   }) {
+    const [timespan, setTimespan] = useState(oneMonth());
+
+    function onTimespanChange(e) {
+      if (e.currentTarget.value === "ALL") {
+        setTimespan(62802180);
+      } else if (e.currentTarget.value === "1W") {
+        setTimespan(oneWeek());
+      } else if (e.currentTarget.value === "1M") {
+        setTimespan(oneMonth());
+      }
+    }
+
+    data = data.filter((d) => timespan <= d.date);
+
+    const [overlay, setOverlay] = useState({
+      title,
+      value: currencyFormatter.format(data[data.length - 1].value),
+      date: data[data.length - 1].date,
+    });
+
     // Max
     const xMax = parentWidth - margin.left - margin.right;
 
@@ -116,7 +137,7 @@ export default withParentSize(
         setOverlay({
           ...overlay,
           value: currencyFormatter.format(d.value),
-          time: d.time,
+          date: d.date,
         });
         showTooltip({
           tooltipData: d,
@@ -129,15 +150,11 @@ export default withParentSize(
 
     if (parentWidth < 10) return null;
 
-    const [overlay, setOverlay] = useState({
-      title,
-      value: currencyFormatter.format(data[data.length - 1].value),
-      time: data[data.length - 1].time,
-    });
-
     return (
       <div style={{ position: "relative" }}>
-        {overlayEnabled && <ChartOverlay overlay={overlay} />}
+        {overlayEnabled && (
+          <ChartOverlay overlay={overlay} onTimespanChange={onTimespanChange} />
+        )}
         <svg width={parentWidth} height={parentHeight}>
           <GradientPurpleTeal id="purple" />
           <GradientTealBlue id="teal" fromOffset={0.5} />
@@ -187,7 +204,7 @@ export default withParentSize(
               setOverlay({
                 ...overlay,
                 value: currencyFormatter.format(data[data.length - 1].value),
-                time: data[data.length - 1].time,
+                date: data[data.length - 1].date,
               });
             }}
           />

@@ -1,31 +1,37 @@
-import { AppShell, PairTable, SortableTable } from "../components";
-import { getApollo, getPairs, pairsQuery, useInterval } from "app/core";
+import { AppShell, PairTable, PoolTable } from "app/components";
+import {
+  getApollo,
+  getPairs,
+  getPools,
+  pairsQuery,
+  poolsQuery,
+  useInterval,
+} from "app/core";
 
 import Head from "next/head";
 import React from "react";
 import { useQuery } from "@apollo/client";
 
-function PairsPage() {
+function RecentPairsPage() {
   const {
     data: { pairs },
   } = useQuery(pairsQuery);
-  useInterval(getPairs, 60000);
+
+  useInterval(() => Promise.all([getPairs]), 60000);
+
   return (
     <AppShell>
       <Head>
-        <title>Pairs | SushiSwap Analytics</title>
+        <title>Recently Added Pairs | SushiSwap Analytics</title>
       </Head>
-      <PairTable title="Pairs" pairs={pairs} />
+      <PairTable pairs={pairs} orderBy="timestamp" order="desc" />
     </AppShell>
   );
 }
 
 export async function getStaticProps() {
   const client = getApollo();
-
-  // Pairs
   await getPairs(client);
-
   return {
     props: {
       initialApolloState: client.cache.extract(),
@@ -34,4 +40,4 @@ export async function getStaticProps() {
   };
 }
 
-export default PairsPage;
+export default RecentPairsPage;

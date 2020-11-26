@@ -1,9 +1,8 @@
-import { AppShell, PairTable, PoolTable } from "app/components";
+import { AppShell, PoolTable } from "app/components";
 import {
   getApollo,
   getPairs,
   getPools,
-  pairsQuery,
   poolsQuery,
   useInterval,
 } from "app/core";
@@ -12,11 +11,7 @@ import Head from "next/head";
 import React from "react";
 import { useQuery } from "@apollo/client";
 
-function RecentlyAddedPage() {
-  const {
-    data: { pairs },
-  } = useQuery(pairsQuery);
-
+function RecentPoolsPage() {
   const {
     data: { pools },
   } = useQuery(poolsQuery, {
@@ -24,16 +19,19 @@ function RecentlyAddedPage() {
       clientName: "masterchef",
     },
   });
-
-  useInterval(() => Promise.all([getPairs, getPools]), 60000);
-
+  useInterval(() => Promise.all([getPools]), 60000);
   return (
     <AppShell>
       <Head>
-        <title>Recently Added | SushiSwap Analytics</title>
+        <title>Recently Added Pools | SushiSwap Analytics</title>
       </Head>
-      <PoolTable pools={pools} orderBy="timestamp" order="desc" />
-      <PairTable pairs={pairs} orderBy="timestamp" order="desc" />
+      <PoolTable
+        title="Recently Added Pools"
+        pools={pools}
+        orderBy="timestamp"
+        order="desc"
+        rowsPerPage={5}
+      />
     </AppShell>
   );
 }
@@ -50,4 +48,4 @@ export async function getStaticProps() {
   };
 }
 
-export default RecentlyAddedPage;
+export default RecentPoolsPage;

@@ -17,9 +17,7 @@ import { currencyFormatter } from "app/core";
 import { useQuery } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
+  root: {},
 }));
 
 export default function TokenTable({ tokens, title }) {
@@ -144,9 +142,9 @@ export default function TokenTable({ tokens, title }) {
                     strokeWidth: 3,
                     stroke:
                       row.sevenDayPriceChange > 0
-                        ? theme.palette.positive.light
+                        ? theme.palette.positive.main
                         : row.sevenDayPriceChange < 0
-                        ? theme.palette.negative.light
+                        ? theme.palette.negative.main
                         : "currentColor",
                     fill: "none",
                   }}

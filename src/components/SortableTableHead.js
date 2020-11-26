@@ -30,6 +30,7 @@ export default function SortableTableHead({
             key={column.key}
             align={column.align || "left"}
             padding={column.disablePadding ? "none" : "default"}
+            // variant="head"
             sortDirection={orderBy === column.key ? order : false}
           >
             <TableSortLabel

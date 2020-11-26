@@ -4,28 +4,29 @@ import {
   BarChart,
   BrushChart,
   PairTable,
+  PoolTable,
   Search,
   TokenTable,
 } from "app/components";
 import { Box, Grid, Paper } from "@material-ui/core";
+import React, { useState } from "react";
 import {
   dayDatasQuery,
-  ethPriceQuery,
   getApollo,
   getDayData,
   getEthPrice,
   getOneDayEthPrice,
   getPairs,
+  getPools,
   getSevenDayEthPrice,
   getTokens,
   pairsQuery,
+  poolsQuery,
   tokensQuery,
   useInterval,
 } from "app/core";
-import { getUnixTime, startOfDay, subMonths } from "date-fns";
 
 import Head from "next/head";
-import React from "react";
 import { useQuery } from "@apollo/client";
 
 function IndexPage() {
@@ -36,28 +37,26 @@ function IndexPage() {
   const {
     data: { pairs },
   } = useQuery(pairsQuery);
-  const date = getUnixTime(startOfDay(subMonths(Date.now(), 1)));
-  console.log("[CLIENT] date", date);
+
+  const {
+    data: { pools },
+  } = useQuery(poolsQuery, {
+    context: {
+      clientName: "masterchef",
+    },
+  });
 
   const {
     data: { dayDatas },
-    loading,
-    error,
-  } = useQuery(dayDatasQuery, {
-    pollInterval: 60000,
-  });
-  // if (error) return <p>Error :(</p>;
-  // if (loading) return <p>Loading ...</p>;
+  } = useQuery(dayDatasQuery);
 
-  // console.log({ data, error, loading });
-
-  // Update every 60 seconds...
   useInterval(
     () =>
       Promise.all([
         getPairs,
+        getPools,
         getTokens,
-        // getDayData,
+        getDayData,
         getOneDayEthPrice,
         getSevenDayEthPrice,
       ]),
@@ -68,15 +67,12 @@ function IndexPage() {
     .filter((d) => d.liquidityUSD !== "0")
     .reduce(
       (previousValue, currentValue) => {
-        const time = new Date(currentValue.date * 1e3)
-          .toISOString()
-          .slice(0, 10);
         previousValue[0].push({
-          time,
+          date: currentValue.date,
           value: parseFloat(currentValue.liquidityUSD),
         });
         previousValue[1].push({
-          time,
+          date: currentValue.date,
           value: parseFloat(currentValue.volumeUSD),
         });
         return previousValue;
@@ -94,39 +90,51 @@ function IndexPage() {
       </Box>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={6}>
           <Paper
             variant="outlined"
             style={{ height: 300, position: "relative" }}
           >
             <AreaChart
               title="Liquidity"
-              data={liquidity}
+              data={liquidity.reverse()}
               margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
               tooltipDisabled
               overlayEnabled
             />
           </Paper>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={6}>
           <Paper
             variant="outlined"
             style={{ height: 300, position: "relative" }}
           >
             <BarChart
               title="Volume"
-              data={volume}
+              data={volume.reverse()}
               margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
               tooltipDisabled
               overlayEnabled
             />
           </Paper>
         </Grid>
+
+        <Grid item xs={12}>
+          <PoolTable
+            title="Top Sushi Reward Pools"
+            pools={pools}
+            orderBy="rewardPerThousand"
+            order="desc"
+            rowsPerPage={25}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <PairTable title="Top Sushi Liquidity Pairs" pairs={pairs} />
+        </Grid>
+
         <Grid item xs={12}>
           <TokenTable title="Top Tokens" tokens={tokens} />
-        </Grid>
-        <Grid item xs={12}>
-          <PairTable title="Top Pairs" pairs={pairs} />
         </Grid>
       </Grid>
     </AppShell>
@@ -135,10 +143,6 @@ function IndexPage() {
 
 export async function getStaticProps() {
   const client = getApollo();
-
-  // Sushi Swap day data
-  const date = getUnixTime(startOfDay(subMonths(Date.now(), 1)));
-  console.log("[SERVER] date", date);
 
   await getDayData(client);
 
@@ -151,6 +155,8 @@ export async function getStaticProps() {
   await getTokens(client);
 
   await getPairs(client);
+
+  await getPools(client);
 
   return {
     props: {

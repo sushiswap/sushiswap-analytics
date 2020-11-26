@@ -17,7 +17,7 @@ export default function BasicTable({ title, headCells, bodyCells, style }) {
           {title}
         </Typography>
       )}
-      <TableContainer component={Paper} variant="outlined">
+      <TableContainer variant="outlined">
         <Table aria-label="information">
           <TableHead>
             <TableRow key={Date.now()}>

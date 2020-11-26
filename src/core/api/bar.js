@@ -1,4 +1,6 @@
-import { barHistoriesQuery, barQuery, barUserQuery, getApollo } from "app/core";
+import { barHistoriesQuery, barQuery, barUserQuery } from "../queries/bar";
+
+import { getApollo } from "../apollo";
 
 export async function getBar(client = getApollo()) {
   const { data } = await client.query({

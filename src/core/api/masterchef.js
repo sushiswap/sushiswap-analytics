@@ -1,18 +1,19 @@
-import { getApollo, getAverageBlockTime } from "app/core";
+import { getAverageBlockTime, getEthPrice, getToken } from "../api";
 import {
-  getEthPrice,
-  getToken,
   liquidityPositionSubsetQuery,
   pairQuery,
   pairSubsetQuery,
+} from "../queries/exchange";
+import {
   poolHistoryQuery,
   poolIdsQuery,
   poolQuery,
   poolUserQuery,
   poolsQuery,
-} from "app/core";
+} from "../queries/masterchef";
 
 import { POOL_DENY } from "app/core/constants";
+import { getApollo } from "../apollo";
 
 export async function getPoolIds(client = getApollo()) {
   const {
@@ -37,10 +38,11 @@ export async function getPoolIds(client = getApollo()) {
 }
 
 export async function getPoolUser(id, client = getApollo()) {
-  const {
-    data: { users },
-  } = await client.query({
+  console.log("GET POOL USER", id);
+
+  const { data } = await client.query({
     query: poolUserQuery,
+    fetchPolicy: "network-only",
     variables: {
       address: id,
     },
@@ -49,11 +51,11 @@ export async function getPoolUser(id, client = getApollo()) {
     },
   });
 
+  console.log("POOL USER DATA", data);
+
   await client.cache.writeQuery({
     query: poolUserQuery,
-    data: {
-      users,
-    },
+    data,
   });
 
   return await client.cache.readQuery({

@@ -1,15 +1,17 @@
 import {
   dayDatasQuery,
-  getApollo,
-  getOneDayBlock,
-  getSevenDayBlock,
-  getTwoDayBlock,
   tokenQuery,
   tokenTimeTravelQuery,
   tokensQuery,
   tokensTimeTravelQuery,
-} from "app/core";
-import { getUnixTime, startOfDay, subMonths } from "date-fns";
+} from "../queries/exchange";
+import {
+  getOneDayBlock,
+  getSevenDayBlock,
+  getTwoDayBlock,
+} from "../api/blocks";
+
+import { getApollo } from "../apollo";
 
 export async function getSushiToken(client = getApollo()) {
   return await getToken("0x6b3595068778dd592e39a122f4f5a5cf09c90fe2", client);

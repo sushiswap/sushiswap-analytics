@@ -20,7 +20,7 @@ export default function PairIcon({ base, quote }) {
   return (
     <AvatarGroup className={classes.tokens}>
       {[base, quote].map((id) => (
-        <TokenIcon id={id} className={classes.token} />
+        <TokenIcon key={id} id={id} className={classes.token} />
       ))}
     </AvatarGroup>
   );

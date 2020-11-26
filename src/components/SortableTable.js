@@ -114,11 +114,7 @@ export default function SortableTable({
           {title}
         </Typography>
       )}
-      <TableContainer
-        component={Paper}
-        className={classes.paper}
-        variant="outlined"
-      >
+      <TableContainer>
         <Table className={classes.table} aria-label={`${title} table`}>
           <SortableTableHead
             columns={columns}
@@ -145,6 +141,7 @@ export default function SortableTable({
                             ? { component: "th", scope: "row" }
                             : {})}
                           align={column.align || "left"}
+                          // variant="body"
                         >
                           {typeof column.render === "function"
                             ? column.render(row, index)

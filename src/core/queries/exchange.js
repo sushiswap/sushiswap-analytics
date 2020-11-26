@@ -81,8 +81,8 @@ export const dayDataFieldsQuery = gql`
 
 // Dashboard...
 export const dayDatasQuery = gql`
-  query dayDatasQuery($date: Int! = 0) {
-    dayDatas(where: { date_gt: $date }) {
+  query dayDatasQuery($first: Int! = 1000, $date: Int! = 0) {
+    dayDatas(first: $first, orderBy: date, orderDirection: desc) {
       ...dayDataFields
     }
   }
@@ -171,7 +171,7 @@ export const pairDayDatasQuery = gql`
       first: $first
       orderBy: date
       orderDirection: desc
-      where: { pair_in: $pairs, date_gt: 0 }
+      where: { pair_in: $pairs, date_gt: $date }
     ) {
       date
       pair {
@@ -315,15 +315,13 @@ export const tokenDayDatasQuery = gql`
   query tokenDayDatasQuery(
     $first: Int! = 1000
     $tokens: [Bytes]!
-    $date: Int!
-    $start: Int
-    $end: Int
+    $date: Int! = 0
   ) {
     tokenDayDatas(
       first: $first
       orderBy: date
       orderDirection: desc
-      where: { token_in: $tokens, date_gt: 0 }
+      where: { token_in: $tokens, date_gt: $date }
     ) {
       id
       date

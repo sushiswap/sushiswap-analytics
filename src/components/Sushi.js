@@ -21,6 +21,8 @@ export default function Sushi(props) {
       <path
         d="M60.2018 65.7899L0.329834 33.1312V117.249L60.1978 149.907L120.07 117.249V33.1312L60.2018 65.7899Z"
         fill={theme.palette.seaweed.main}
+        stroke={theme.palette.rice.main}
+        strokeWidth={1}
       />
     </SvgIcon>
   );

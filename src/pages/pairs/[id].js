@@ -6,26 +6,12 @@ import {
   Chart,
   KPI,
   Link,
+  PageHeader,
   PairIcon,
   Percent,
   Transactions,
 } from "app/components";
-import {
-  Avatar,
-  Box,
-  Button,
-  Chip,
-  Divider,
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableContainer,
-  TableRow,
-  Typography,
-  useMediaQuery,
-} from "@material-ui/core";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import { Avatar, Box, Grid, Paper, Typography } from "@material-ui/core";
 import {
   currencyFormatter,
   decimalFormatter,
@@ -38,11 +24,9 @@ import {
   transactionsQuery,
   useInterval,
 } from "app/core";
-import { getUnixTime, startOfDay, subMonths } from "date-fns";
 
 import Head from "next/head";
 import React from "react";
-import Router from "next/router";
 import { makeStyles } from "@material-ui/core/styles";
 import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
@@ -103,31 +87,6 @@ function PairPage(props) {
 
   const { id } = router.query;
 
-  const [type, setType] = React.useState("liquidity");
-  const [chartType, setChartType] = React.useState("area");
-  const [timeframe, setTimeframe] = React.useState("ALL");
-
-  const handleTimeframe = (event, timeframe) => {
-    if (timeframe) {
-      setTimeframe(timeframe);
-    }
-  };
-
-  const handleType = (event, type) => {
-    if (type) {
-      if (type === "liquidity") {
-        setChartType("area");
-      }
-      if (type === "volume") {
-        setChartType("histogram");
-      }
-      if (type === "transactions") {
-        setChartType("area");
-      }
-      setType(type);
-    }
-  };
-
   const {
     data: { bundles },
   } = useQuery(ethPriceQuery, {
@@ -150,28 +109,11 @@ function PairPage(props) {
     pollInterval: 60000,
   });
 
-  const start = new Date();
-
-  if (timeframe === "ALL") {
-    start.setTime(628021800000);
-  }
-
-  if (timeframe === "1W") {
-    start.setDate(new Date().getDate() - 7);
-    start.setUTCHours(0, 0, 0, 0);
-  }
-
-  if (timeframe === "1M") {
-    start.setDate(new Date().getDate() - 30);
-    start.setUTCHours(0, 0, 0, 0);
-  }
-
   const {
     data: { pairDayDatas },
   } = useQuery(pairDayDatasQuery, {
     variables: {
       pairs: [id],
-      date: getUnixTime(startOfDay(subMonths(Date.now(), 1))),
     },
     pollInterval: 60000,
   });
@@ -194,44 +136,37 @@ function PairPage(props) {
   const fees = volume * 0.003;
   const feesYesterday = volumeYesterday * 0.003;
 
-  const chartDatas = pairDayDatas
-    .filter((d) => d.date > getUnixTime(startOfDay(subMonths(Date.now(), 1))))
-    // .filter((pairDayData) => pairDayData.date > start.getTime() / 1000)
-    .reduce(
-      (previousValue, currentValue) => {
-        const time = new Date(currentValue.date * 1e3)
-          .toISOString()
-          .slice(0, 10);
+  const chartDatas = pairDayDatas.reduce(
+    (previousValue, currentValue) => {
+      const untrackedVolumeUSD =
+        currentValue?.token0.derivedETH * currentValue?.volumeToken0 +
+        currentValue?.token1.derivedETH *
+          currentValue?.volumeToken1 *
+          bundles[0].ethPrice;
 
-        const untrackedVolumeUSD =
-          currentValue?.token0.derivedETH * currentValue?.volumeToken0 +
-          currentValue?.token1.derivedETH *
-            currentValue?.volumeToken1 *
-            bundles[0].ethPrice;
+      // console.log("untrackedVolumeUSD", untrackedVolumeUSD)
 
-        // console.log("untrackedVolumeUSD", untrackedVolumeUSD)
+      const volumeUSD =
+        currentValue?.volumeUSD === "0"
+          ? untrackedVolumeUSD
+          : currentValue?.volumeUSD;
 
-        const volumeUSD =
-          currentValue?.volumeUSD === "0"
-            ? untrackedVolumeUSD
-            : currentValue?.volumeUSD;
-
-        previousValue["liquidity"].push({
-          time,
-          value: parseFloat(currentValue.reserveUSD),
-        });
-        previousValue["volume"].push({
-          time,
-          value: parseFloat(volumeUSD),
-        });
-        previousValue["fees"].push({
-          time,
-          value: parseFloat(currentValue.volumeUSD) * 0.003,
-        });
-        return previousValue;
-      },
-      { liquidity: [], volume: [], fees: [] }
-    );
+      previousValue["liquidity"].push({
+        date: currentValue.date,
+        value: parseFloat(currentValue.reserveUSD),
+      });
+      previousValue["volume"].push({
+        date: currentValue.date,
+        value: parseFloat(volumeUSD),
+      });
+      previousValue["fees"].push({
+        date: currentValue.date,
+        value: parseFloat(currentValue.volumeUSD) * 0.003,
+      });
+      return previousValue;
+    },
+    { liquidity: [], volume: [], fees: [] }
+  );
 
   return (
     <AppShell>
@@ -240,38 +175,40 @@ function PairPage(props) {
           {pair.token0.symbol}-{pair.token1.symbol} | SushiSwap Analytics
         </title>
       </Head>
-      <Grid
-        container
-        alignItems="center"
-        justify="space-between"
-        className={classes.top}
-      >
-        <Grid item xs={12} sm="auto" className={classes.title}>
-          <Box display="flex" alignItems="center">
-            <PairIcon base={pair.token0.id} quote={pair.token1.id} />
-            <Typography variant="h5" component="h1">
-              {pair.token0.symbol}-{pair.token1.symbol}
-            </Typography>
-          </Box>
-        </Grid>
+      <PageHeader>
+        <Grid
+          container
+          alignItems="center"
+          justify="space-between"
+          className={classes.top}
+        >
+          <Grid item xs={12} sm="auto" className={classes.title}>
+            <Box display="flex" alignItems="center">
+              <PairIcon base={pair.token0.id} quote={pair.token1.id} />
+              <Typography variant="h5" component="h1">
+                {pair.token0.symbol}-{pair.token1.symbol}
+              </Typography>
+            </Box>
+          </Grid>
 
-        <Grid item xs={12} sm="auto" className={classes.links}>
-          <Link
-            href={`https://exchange.sushiswapclassic.org/#/add/${pair.token0.id}/${pair.token1.id}`}
-            target="_blank"
-            variant="body1"
-          >
-            Add Liquidity
-          </Link>
-          <Link
-            href={`https://exchange.sushiswapclassic.org/#/swap?inputCurrency=${pair.token0.id}&outputCurrency=${pair.token1.id}`}
-            target="_blank"
-            variant="body1"
-          >
-            Trade
-          </Link>
+          <Grid item xs={12} sm="auto" className={classes.links}>
+            <Link
+              href={`https://exchange.sushiswapclassic.org/#/add/${pair.token0.id}/${pair.token1.id}`}
+              target="_blank"
+              variant="body1"
+            >
+              Add Liquidity
+            </Link>
+            <Link
+              href={`https://exchange.sushiswapclassic.org/#/swap?inputCurrency=${pair.token0.id}&outputCurrency=${pair.token1.id}`}
+              target="_blank"
+              variant="body1"
+            >
+              Trade
+            </Link>
+          </Grid>
         </Grid>
-      </Grid>
+      </PageHeader>
 
       <Grid container spacing={3}>
         {chartDatas.liquidity.length > 1 ? (
@@ -434,7 +371,6 @@ export async function getStaticProps({ params: { id } }) {
     query: pairDayDatasQuery,
     variables: {
       pairs: [id],
-      date: getUnixTime(startOfDay(subMonths(Date.now(), 1))),
     },
   });
 
@@ -454,17 +390,17 @@ export async function getStaticProps({ params: { id } }) {
 }
 
 export async function getStaticPaths() {
-  const apollo = getApollo();
+  // const apollo = getApollo();
 
-  const { data } = await apollo.query({
-    query: pairIdsQuery,
-  });
+  // const { data } = await apollo.query({
+  //   query: pairIdsQuery,
+  // });
 
-  const paths = data.pairs.map((pair) => ({
-    params: { id: pair.id },
-  }));
+  // const paths = data.pairs.map((pair) => ({
+  //   params: { id: pair.id },
+  // }));
 
-  return { paths, fallback: true };
+  return { paths: [], fallback: "blocking" };
 }
 
 export default PairPage;

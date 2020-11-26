@@ -17,6 +17,7 @@ import {
   useTooltipInPortal,
 } from "@visx/tooltip";
 import { bisector, extent, max } from "d3-array";
+import { currencyFormatter, oneMonth, oneWeek } from "app/core";
 import letterFrequency, {
   LetterFrequency,
 } from "@visx/mock-data/lib/mocks/letterFrequency";
@@ -27,7 +28,6 @@ import ChartOverlay from "./ChartOverlay";
 import { Group } from "@visx/group";
 import { Text } from "@visx/text";
 import { Typography } from "@material-ui/core";
-import { currencyFormatter } from "app/core";
 import { deepPurple } from "@material-ui/core/colors";
 import millify from "millify";
 import { withParentSize } from "@visx/responsive";
@@ -39,7 +39,7 @@ export const accentColor2 = "#fbc2eb";
 const verticalMargin = 120;
 
 // accessors
-const getDate = (d) => new Date(d.time);
+const getDate = (d) => new Date(d.date);
 const getValue = (d) => Number(d.value);
 
 const formatDate = timeFormat("%b %d, '%y");
@@ -76,6 +76,26 @@ export default withParentSize(function BarChart({
 
   const { containerRef, TooltipInPortal } = useTooltipInPortal();
 
+  const [timespan, setTimespan] = useState(oneMonth());
+
+  function onTimespanChange(e) {
+    if (e.currentTarget.value === "ALL") {
+      setTimespan(62802180);
+    } else if (e.currentTarget.value === "1W") {
+      setTimespan(oneWeek());
+    } else if (e.currentTarget.value === "1M") {
+      setTimespan(oneMonth());
+    }
+  }
+
+  data = data.filter((d) => timespan <= d.date);
+
+  const [overlay, setOverlay] = useState({
+    title,
+    value: currencyFormatter.format(data[data.length - 1].value),
+    date: data[data.length - 1].date,
+  });
+
   // bounds
   const xMax = parentWidth - margin.left - margin.right;
   const yMax = parentHeight - margin.top - margin.bottom;
@@ -108,15 +128,11 @@ export default withParentSize(function BarChart({
 
   // console.log("tooltip data", tooltipData);
 
-  const [overlay, setOverlay] = useState({
-    title,
-    value: currencyFormatter.format(data[data.length - 1].value),
-    time: data[data.length - 1].time,
-  });
-
   return (
     <div style={{ position: "relative" }}>
-      {overlayEnabled && <ChartOverlay overlay={overlay} />}
+      {overlayEnabled && (
+        <ChartOverlay overlay={overlay} onTimespanChange={onTimespanChange} />
+      )}
 
       <svg ref={containerRef} width={parentWidth} height={parentHeight}>
         <GradientTealBlue id="bar-gradient" />
@@ -169,7 +185,7 @@ export default withParentSize(function BarChart({
                       value: currencyFormatter.format(
                         data[data.length - 1].value
                       ),
-                      time: data[data.length - 1].time,
+                      date: data[data.length - 1].date,
                     });
                   }, 300);
                 }}
@@ -180,7 +196,7 @@ export default withParentSize(function BarChart({
                   setOverlay({
                     ...overlay,
                     value: currencyFormatter.format(d.value),
-                    time: d.time,
+                    date: d.date,
                   });
                   showTooltip({
                     tooltipData: d,

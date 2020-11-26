@@ -1,11 +1,13 @@
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
+import { Box, TextField } from "@material-ui/core";
 /* eslint-disable no-use-before-define */
 import React, { useState } from "react";
 import { pairsQuery, tokensQuery } from "../core";
 
-import TextField from "@material-ui/core/TextField";
+import PairIcon from "./PairIcon";
+import { TokenIcon } from "app/components";
 import Typography from "@material-ui/core/Typography";
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
@@ -37,8 +39,10 @@ export default function Search() {
     return {
       __typename: option.__typename,
       id: option.id,
+      token0: option.token0 ? option.token0.id : "",
+      token1: option.token1 ? option.token1.id : "",
       text: option.name
-        ? `${option.name} ${option.symbol}`
+        ? ` ${option.symbol} ${option.name}`
         : `${option.token0?.symbol}-${option.token1?.symbol}`,
     };
   });
@@ -76,7 +80,12 @@ export default function Search() {
         const matches = match(option.text, inputValue);
         const parts = parse(option.text, matches);
         return (
-          <div>
+          <Box display="flex" alignItems="center">
+            {option.__typename === "Token" ? (
+              <TokenIcon id={option.id} />
+            ) : (
+              <PairIcon base={option.token0} quote={option.token1} />
+            )}
             {parts.map((part, index) => (
               <span
                 key={index}
@@ -85,7 +94,7 @@ export default function Search() {
                 {part.text}
               </span>
             ))}
-          </div>
+          </Box>
         );
       }}
     />

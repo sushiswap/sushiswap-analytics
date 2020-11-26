@@ -11,19 +11,7 @@ import {
   TokenIcon,
   Transactions,
 } from "app/components";
-import {
-  Box,
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@material-ui/core";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import { Box, Grid, Paper, Typography } from "@material-ui/core";
 import {
   currencyFormatter,
   ethPriceQuery,
@@ -41,13 +29,11 @@ import {
   transactionsQuery,
   useInterval,
 } from "app/core";
-import { getUnixTime, startOfDay, subMonths } from "date-fns";
 
 import Head from "next/head";
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -70,36 +56,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TokenPage() {
-  const classes = useStyles();
-
   const router = useRouter();
 
+  if (router.isFallback) {
+    return <AppShell />;
+  }
+
+  const classes = useStyles();
+
   const { id } = router.query;
-
-  const [type, setType] = useState("liquidity");
-  const [chartType, setChartType] = useState("area");
-  const [timeframe, setTimeframe] = useState("ALL");
-
-  function handleTimeframe(event, timeframe) {
-    if (timeframe) {
-      setTimeframe(timeframe);
-    }
-  }
-
-  function handleType(event, type) {
-    if (type) {
-      if (type === "liquidity") {
-        setChartType("area");
-      }
-      if (type === "volume") {
-        setChartType("histogram");
-      }
-      if (type === "price") {
-        setChartType("area");
-      }
-      setType(type);
-    }
-  }
 
   const {
     data: { token },
@@ -120,28 +85,11 @@ function TokenPage() {
     await getOneDayEthPrice();
   }, 60000);
 
-  const start = new Date();
-
-  if (timeframe === "ALL") {
-    start.setTime(628021800000);
-  }
-
-  if (timeframe === "1W") {
-    start.setDate(start.getDate() - 7);
-    start.setUTCHours(0, 0, 0, 0);
-  }
-
-  if (timeframe === "1M") {
-    start.setDate(new Date().getDate() - 30);
-    start.setUTCHours(0, 0, 0, 0);
-  }
-
   const {
     data: { tokenDayDatas },
   } = useQuery(tokenDayDatasQuery, {
     variables: {
       tokens: [id],
-      date: getUnixTime(startOfDay(subMonths(Date.now(), 1))),
     },
     pollInterval: 60000,
   });
@@ -161,35 +109,28 @@ function TokenPage() {
     pollInterval: 60000,
   });
 
-  const chartDatas = tokenDayDatas
-    .filter((d) => d.date > getUnixTime(startOfDay(subMonths(Date.now(), 1))))
-    // .filter((tokenDayData) => tokenDayData.date > start.getTime() / 1000)
-    .reduce(
-      (previousValue, currentValue) => {
-        const time = new Date(currentValue.date * 1e3)
-          .toISOString()
-          .slice(0, 10);
-
-        previousValue["liquidity"].push({
-          time,
-          value: parseFloat(currentValue.liquidityUSD),
-        });
-        previousValue["volume"].push({
-          time,
-          value: parseFloat(currentValue.volumeUSD),
-        });
-        previousValue["price"].push({
-          time,
-          value: parseFloat(currentValue.priceUSD),
-        });
-        previousValue["fees"].push({
-          time,
-          value: parseFloat(currentValue.volumeUSD) * 0.003,
-        });
-        return previousValue;
-      },
-      { liquidity: [], volume: [], price: [], fees: [] }
-    );
+  const chartDatas = tokenDayDatas.reduce(
+    (previousValue, currentValue) => {
+      previousValue["liquidity"].push({
+        date: currentValue.date,
+        value: parseFloat(currentValue.liquidityUSD),
+      });
+      previousValue["volume"].push({
+        date: currentValue.date,
+        value: parseFloat(currentValue.volumeUSD),
+      });
+      previousValue["price"].push({
+        date: currentValue.date,
+        value: parseFloat(currentValue.priceUSD),
+      });
+      previousValue["fees"].push({
+        date: currentValue.date,
+        value: parseFloat(currentValue.volumeUSD) * 0.003,
+      });
+      return previousValue;
+    },
+    { liquidity: [], volume: [], price: [], fees: [] }
+  );
 
   const totalLiquidityUSD =
     parseFloat(token?.liquidity) *
@@ -226,7 +167,7 @@ function TokenPage() {
           Analytics
         </title>
       </Head>
-      <PageHeader mb={3}>
+      <PageHeader>
         <Grid
           container
           direction="row"
@@ -264,7 +205,7 @@ function TokenPage() {
       </PageHeader>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={6}>
           <Paper
             variant="outlined"
             style={{ height: 300, position: "relative" }}
@@ -278,7 +219,7 @@ function TokenPage() {
             />
           </Paper>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={6}>
           <Paper
             variant="outlined"
             style={{ height: 300, position: "relative" }}
@@ -358,7 +299,6 @@ export async function getStaticProps({ params: { id } }) {
     query: tokenDayDatasQuery,
     variables: {
       tokens: [id],
-      date: getUnixTime(startOfDay(subMonths(Date.now(), 1))),
     },
   });
 
@@ -389,23 +329,17 @@ export async function getStaticProps({ params: { id } }) {
 
 export async function getStaticPaths() {
   // Call an external API endpoint to get posts
-  const apollo = getApollo();
+  // const apollo = getApollo();
 
-  const { data } = await apollo.query({
-    query: tokenIdsQuery,
-  });
+  // const { data } = await apollo.query({
+  //   query: tokenIdsQuery,
+  // });
 
-  // Get the paths we want to pre-render based on tokens
-  const paths = data.tokens.map(({ id }) => ({
-    params: { id },
-  }));
+  // const paths = data.tokens.map(({ id }) => ({
+  //   params: { id },
+  // }));
 
-  // We'll pre-render only these paths at build time.
-  // { fallback: false } means other routes should 404.
-
-  return { paths, fallback: false };
-
-  // return { paths: [], fallback: false };
+  return { paths: [], fallback: true };
 }
 
 export default TokenPage;

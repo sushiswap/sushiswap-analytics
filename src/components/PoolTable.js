@@ -1,4 +1,5 @@
 import { Box, Divider, Typography } from "@material-ui/core";
+import { formatCurrency, formatDecimal } from "app/core";
 
 import Link from "./Link";
 import PairIcon from "./PairIcon";
@@ -6,13 +7,10 @@ import Percent from "./Percent";
 import React from "react";
 import SortableTable from "./SortableTable";
 import TokenIcon from "./TokenIcon";
-import { formatCurrency } from "app/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
+  root: {},
   small: {
     width: theme.spacing(3),
     height: theme.spacing(3),
@@ -37,10 +35,7 @@ export default function PoolTable({ pools, ...rest }) {
             key: "name",
             label: "Name",
             render: (row, index) => {
-              const name = `${row.liquidityPair?.token0?.symbol.replace(
-                "WETH",
-                "ETH"
-              )}-${row.liquidityPair?.token1?.symbol.replace("WETH", "ETH")}`;
+              const name = `${row.liquidityPair?.token0?.symbol}-${row.liquidityPair?.token1?.symbol}`;
               return (
                 <Box display="flex" alignItems="center">
                   <PairIcon
@@ -69,7 +64,6 @@ export default function PoolTable({ pools, ...rest }) {
           {
             key: "rewardPerThousand",
             label: "Reward per $1000",
-            align: "right",
             render: (row) =>
               `${Number(row.rewardPerThousand * 24 * 1000).toFixed(
                 2
@@ -77,24 +71,49 @@ export default function PoolTable({ pools, ...rest }) {
           },
           {
             key: "roi",
-            label: "ROI",
-            align: "right",
+            label: "Yearly / Monthly / Daily ROI",
             render: (row) => (
-              <div>
-                <Typography variant="subtitle2">
-                  Daily:{" "}
-                  <Percent
-                    percent={Number(row.roiPerDay * 3 * 100).toFixed(2)}
-                    display="inline"
-                  />
+              <Typography variant="subtitle2" noWrap>
+                <Percent
+                  percent={Number(row.roiPerYear * 3 * 100).toFixed(2)}
+                  display="inline"
+                />{" "}
+                / {Number(row.roiPerMonth * 3 * 100).toFixed(2)}% /{" "}
+                {Number(row.roiPerMonth * 3 * 100).toFixed(2)}%
+              </Typography>
+            ),
+          },
+
+          {
+            key: "reserve0",
+            label: "Base Reserve",
+            render: (row) => (
+              <Box display="flex">
+                <TokenIcon
+                  id={row.liquidityPair?.token0?.id}
+                  className={classes.small}
+                />
+                <Typography variant="subtitle2" noWrap>
+                  {formatDecimal(row.liquidityPair?.reserve0)}{" "}
+                  {row.liquidityPair?.token0?.symbol}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Monthly: {Number(row.roiPerMonth * 3 * 100).toFixed(2)}%
+              </Box>
+            ),
+          },
+          {
+            key: "reserve1",
+            label: "Quote Reserve",
+            render: (row) => (
+              <Box display="flex">
+                <TokenIcon
+                  id={row.liquidityPair?.token1?.id}
+                  className={classes.small}
+                />
+                <Typography variant="subtitle2" noWrap>
+                  {formatDecimal(row.liquidityPair?.reserve1)}{" "}
+                  {row.liquidityPair?.token1?.symbol}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Yearly: {Number(row.roiPerYear * 3 * 100).toFixed(2)}%
-                </Typography>
-              </div>
+              </Box>
             ),
           },
           {
@@ -102,35 +121,6 @@ export default function PoolTable({ pools, ...rest }) {
             label: "TVL",
             align: "right",
             render: (row) => formatCurrency(row.tvl),
-          },
-          {
-            key: "tokens",
-            label: "Reserves",
-            align: "left",
-            render: (row) => (
-              <div>
-                <Box display="flex" alignItems="center">
-                  <TokenIcon
-                    id={row.liquidityPair?.token0?.id}
-                    className={classes.small}
-                  />
-                  <Typography variant="subtitle2">
-                    {Number(row.liquidityPair?.reserve0).toFixed(2)}{" "}
-                    {row.liquidityPair?.token0?.symbol}
-                  </Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <TokenIcon
-                    id={row.liquidityPair?.token1?.id}
-                    className={classes.small}
-                  />
-                  <Typography variant="subtitle2">
-                    {Number(row.liquidityPair?.reserve1).toFixed(2)}{" "}
-                    {row.liquidityPair?.token1?.symbol}
-                  </Typography>
-                </Box>
-              </div>
-            ),
           },
         ]}
         rows={pools}

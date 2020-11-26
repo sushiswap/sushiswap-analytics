@@ -12,18 +12,12 @@ export const decimalFormatter = new Intl.NumberFormat(locales, {
   maximumSignificantDigits: 4,
 });
 
-export const dateTimeFormatter = new Intl.DateTimeFormat(locales, {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
-
 export function formatCurrency(value) {
   return currencyFormatter.format(value);
 }
 
-export function formatDecimal(value, decimals = 2) {
-  return value.toFixed(decimals);
+export function formatDecimal(value) {
+  return decimalFormatter.format(value);
 }
 
 export function formatAddress(value) {

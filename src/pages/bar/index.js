@@ -152,7 +152,7 @@ function PoolsPage() {
             variant="outlined"
             style={{ height: 300, position: "relative" }}
           >
-            <LineChart
+            <Lines
               title="xSushi Age & xSushi Age Destroyed"
               margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
               strokes={[
@@ -169,10 +169,10 @@ function PoolsPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <BrushChart
-              title="xSushi Total Supply"
-              data={xSushi}
+            <Curves
+              title="xSushi:Sushi & Sushi:xSushi"
               margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+              data={[xSushiSushi, xSushiPerSushi]}
             />
           </Paper>
         </Grid>
@@ -189,18 +189,7 @@ function PoolsPage() {
             />
           </Paper>
         </Grid>
-        <Grid item xs={12}>
-          <Paper
-            variant="outlined"
-            style={{ height: 400, position: "relative" }}
-          >
-            <Curves
-              title="xSushi:Sushi & Sushi:xSushi"
-              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-              data={[xSushiSushi, xSushiPerSushi]}
-            />
-          </Paper>
-        </Grid>
+
         <Grid item xs={12}>
           <Paper
             variant="outlined"
@@ -210,6 +199,19 @@ function PoolsPage() {
               title="xSushi Minted & xSushi Burned"
               margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
               data={[xSushiMinted, xSushiBurned]}
+            />
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{ height: 400, position: "relative" }}
+          >
+            <BrushChart
+              title="xSushi Total Supply"
+              data={xSushi}
+              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
             />
           </Paper>
         </Grid>

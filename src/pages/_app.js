@@ -9,8 +9,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Head from "next/head";
 import { ThemeProvider } from "@material-ui/core/styles";
 import fontTheme from "../styles/font";
-import mediaQuery from "css-mediaquery";
-import parser from "ua-parser-js";
 
 function MyApp({ Component, pageProps }) {
   const client = useApollo(pageProps.initialApolloState);

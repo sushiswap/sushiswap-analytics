@@ -46,10 +46,14 @@ body {
   border-color: #fff;
 }
 
+.MuiDrawer-paperAnchorDockedLeft {
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
 .dark-theme
   .MuiOutlinedInput-root.Mui-focused
   .MuiOutlinedInput-notchedOutline {
-  border-color: #7e57c2;
+  border-color: #b93cf6;
   border-width: 2px;
 }
 
@@ -62,7 +66,7 @@ body {
 }
 
 .dark-theme .MuiTableCell-root {
-  border-bottom: 1px solid hsla(0, 0%, 100%, 0.12);
+  border-bottom: 1px solid rgba(81, 81, 81, 1);
 }
 
 .dark-theme .MuiTableCell-body {
@@ -117,8 +121,6 @@ body {
 .dark-theme .MuiListItemIcon-root {
   color: #fff;
 }
-
-/* NOT */
 
 .MuiInputBase-root {
   background-color: #fff;

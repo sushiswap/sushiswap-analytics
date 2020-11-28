@@ -36,6 +36,7 @@ export default function BasicTable({ title, headCells, bodyCells, style }) {
             <TableRow key={Math.random()}>
               {bodyCells.map((cell, index) => (
                 <TableCell
+                  key={index}
                   {...(index === 0 ? { component: "th", scope: "row" } : {})}
                   align={headCells[index].align || "left"}
                   style={{ maxWidth: headCells[index].maxWidth || "initial" }}

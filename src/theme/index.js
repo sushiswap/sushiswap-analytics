@@ -69,6 +69,11 @@ const overrides = {
       "& > tbody > tr:last-child > *": { border: 0 },
     },
   },
+  MuiAvatarGroup: {
+    avatar: {
+      border: 0,
+    },
+  },
   // MuiTableCell: {}
 };
 

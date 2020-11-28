@@ -8,11 +8,26 @@ body {
   overflow-x: hidden;
 }
 
+/* DARK */
+
 .dark-theme body,
 .dark-theme .MuiInputBase-root,
 .dark-theme .MuiPaper-root {
   background: #050709;
   color: #fff;
+}
+
+.dark-theme .MuiAppBar-root {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.dark-theme .MuiAppBar-colorTransparent {
+  color: inherit;
+  background-color: transparent;
+}
+
+.dark-theme .MuiPaper-root {
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
 .dark-theme .MuiPaper-outlined {
@@ -21,24 +36,6 @@ body {
 
 .dark-theme .MuiFormLabel-root {
   color: rgba(255, 255, 255, 0.7);
-}
-
-.dark-theme .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(255, 255, 255, 0.23);
-}
-
-.dark-theme .MuiAppBar-colorTransparent {
-  color: inherit;
-  background-color: transparent;
-}
-
-.dark-theme body {
-  background-color: #050709;
-  color: #fff;
-}
-
-.MuiInputBase-root {
-  background-color: #fff;
 }
 
 .dark-theme .MuiOutlinedInput-notchedOutline {
@@ -54,12 +51,6 @@ body {
   .MuiOutlinedInput-notchedOutline {
   border-color: #7e57c2;
   border-width: 2px;
-}
-
-.dark-theme .MuiPaper-root {
-  color: #fff;
-  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  background-color: #050709;
 }
 
 .dark-theme .MuiTableCell-head {
@@ -125,4 +116,10 @@ body {
 
 .dark-theme .MuiListItemIcon-root {
   color: #fff;
+}
+
+/* NOT */
+
+.MuiInputBase-root {
+  background-color: #fff;
 }

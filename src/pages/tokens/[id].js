@@ -31,6 +31,7 @@ import {
 } from "app/core";
 
 import Head from "next/head";
+import { ParentSize } from "@visx/responsive";
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -111,25 +112,17 @@ function TokenPage() {
 
   const chartDatas = tokenDayDatas.reduce(
     (previousValue, currentValue) => {
-      previousValue["liquidity"].push({
+      previousValue["liquidity"].unshift({
         date: currentValue.date,
         value: parseFloat(currentValue.liquidityUSD),
       });
-      previousValue["volume"].push({
+      previousValue["volume"].unshift({
         date: currentValue.date,
         value: parseFloat(currentValue.volumeUSD),
       });
-      previousValue["price"].push({
-        date: currentValue.date,
-        value: parseFloat(currentValue.priceUSD),
-      });
-      previousValue["fees"].push({
-        date: currentValue.date,
-        value: parseFloat(currentValue.volumeUSD) * 0.003,
-      });
       return previousValue;
     },
-    { liquidity: [], volume: [], price: [], fees: [] }
+    { liquidity: [], volume: [] }
   );
 
   const totalLiquidityUSD =
@@ -210,13 +203,19 @@ function TokenPage() {
             variant="outlined"
             style={{ height: 300, position: "relative" }}
           >
-            <AreaChart
-              title="Liquidity"
-              data={chartDatas.liquidity.reverse()}
-              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
-              tooltipDisabled
-              overlayEnabled
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <AreaChart
+                  title="Liquidity"
+                  data={chartDatas.liquidity}
+                  width={width}
+                  height={height}
+                  margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+                  tooltipDisabled
+                  overlayEnabled
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={12} md={6}>
@@ -224,13 +223,19 @@ function TokenPage() {
             variant="outlined"
             style={{ height: 300, position: "relative" }}
           >
-            <BarChart
-              title="Volume"
-              data={chartDatas.volume.reverse()}
-              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
-              tooltipDisabled
-              overlayEnabled
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <BarChart
+                  title="Volume"
+                  data={chartDatas.volume}
+                  width={width}
+                  height={height}
+                  margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+                  tooltipDisabled
+                  overlayEnabled
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
 

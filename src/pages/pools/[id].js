@@ -31,6 +31,7 @@ import {
 
 import Head from "next/head";
 import { POOL_DENY } from "app/core/constants";
+import { ParentSize } from "@visx/responsive";
 import { deepPurple } from "@material-ui/core/colors";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -183,11 +184,17 @@ function PoolPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <Curves
-              title="SLP Age & SLP Age Removed"
-              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-              data={[slpAge, slpAgeRemoved]}
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  width={width}
+                  height={height}
+                  title="SLP Age & SLP Age Removed"
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[slpAge, slpAgeRemoved]}
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
         <Grid item xs={12}>
@@ -195,11 +202,17 @@ function PoolPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <Curves
-              title="SLP Deposited & SLP Withdrawn"
-              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-              data={[slpDeposited, slpWithdrawn]}
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  width={width}
+                  height={height}
+                  title="SLP Deposited & SLP Withdrawn"
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[slpDeposited, slpWithdrawn]}
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
         <Grid item xs={12}>
@@ -207,11 +220,17 @@ function PoolPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <BrushChart
-              title="~ SLP Age (Days)"
-              data={averageSlpAge}
-              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <BrushChart
+                  width={width}
+                  height={height}
+                  title="~ SLP Age (Days)"
+                  data={averageSlpAge}
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
 
@@ -220,11 +239,17 @@ function PoolPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <BrushChart
-              title="Users"
-              data={users}
-              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <BrushChart
+                  width={width}
+                  height={height}
+                  title="Users"
+                  data={users}
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
 
@@ -233,11 +258,17 @@ function PoolPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <BrushChart
-              title="SLP Balance"
-              data={slpBalance}
-              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <BrushChart
+                  width={width}
+                  height={height}
+                  title="SLP Balance"
+                  data={slpBalance}
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
       </Grid>

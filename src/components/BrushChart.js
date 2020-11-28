@@ -33,8 +33,6 @@ function BrushChart({
   data,
   width,
   height,
-  parentHeight,
-  parentWidth,
   margin = {
     top: 20,
     left: 50,
@@ -42,9 +40,6 @@ function BrushChart({
     right: 20,
   },
 }) {
-  width = parentWidth;
-  height = parentHeight;
-
   const [filteredStock, setFilteredStock] = useState(
     data.slice(data.length - 30, data.length - 1)
   );
@@ -190,8 +185,8 @@ function BrushChart({
         {title && (
           <Text
             y={margin.top / 2}
-            x={parentWidth / 2}
-            width={parentWidth}
+            x={width / 2}
+            width={width}
             verticalAnchor="start"
             textAnchor="middle"
             fill="currentColor"

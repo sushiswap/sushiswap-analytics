@@ -51,10 +51,10 @@ const useStyles = makeStyles((theme) => ({
   content: {
     // flexGrow: 1,
     // padding: theme.spacing(3),
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
+    // transition: theme.transitions.create("margin", {
+    //   easing: theme.transitions.easing.sharp,
+    //   duration: theme.transitions.duration.leavingScreen,
+    // }),
     // marginLeft: -drawerWidth,
 
     padding: theme.spacing(3, 0),
@@ -65,10 +65,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: -drawerWidth,
   },
   contentShift: {
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    // transition: theme.transitions.create("margin", {
+    //   easing: theme.transitions.easing.easeOut,
+    //   duration: theme.transitions.duration.enteringScreen,
+    // }),
     marginLeft: 0,
     width: `calc(100% - ${drawerWidth}px)`,
   },
@@ -103,7 +103,7 @@ function AppShell(props) {
       />
       <nav className={classes.drawer} aria-label="navigation">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="css">
+        <Hidden smUp implementation="js">
           <Drawer
             container={container}
             variant="temporary"
@@ -126,6 +126,7 @@ function AppShell(props) {
             variant="persistent"
             anchor="left"
             open={open}
+            transitionDuration={0}
             classes={{
               paper: classes.drawerPaper,
             }}

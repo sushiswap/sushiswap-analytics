@@ -26,6 +26,7 @@ import {
 } from "app/core";
 
 import Head from "next/head";
+import { ParentSize } from "@visx/responsive";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { toChecksumAddress } from "web3-utils";
@@ -120,20 +121,25 @@ function PairPage(props) {
 
   const volumeUSD =
     pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD;
+
   const oneDayVolumeUSD =
     pair?.oneDay?.volumeUSD === "0"
       ? pair?.oneDay?.untrackedVolumeUSD
       : pair?.oneDay?.volumeUSD;
+
   const twoDayVolumeUSD =
     pair?.twoDay?.volumeUSD === "0"
       ? pair?.twoDay?.untrackedVolumeUSD
       : pair?.twoDay?.volumeUSD;
 
   const volume = volumeUSD - oneDayVolumeUSD;
+
   const volumeYesterday = oneDayVolumeUSD - twoDayVolumeUSD;
+
   const volumeChange = ((volume - volumeYesterday) / volumeYesterday) * 100;
 
   const fees = volume * 0.003;
+
   const feesYesterday = volumeYesterday * 0.003;
 
   const chartDatas = pairDayDatas.reduce(
@@ -151,21 +157,17 @@ function PairPage(props) {
           ? untrackedVolumeUSD
           : currentValue?.volumeUSD;
 
-      previousValue["liquidity"].push({
+      previousValue["liquidity"].unshift({
         date: currentValue.date,
         value: parseFloat(currentValue.reserveUSD),
       });
-      previousValue["volume"].push({
+      previousValue["volume"].unshift({
         date: currentValue.date,
         value: parseFloat(volumeUSD),
       });
-      previousValue["fees"].push({
-        date: currentValue.date,
-        value: parseFloat(currentValue.volumeUSD) * 0.003,
-      });
       return previousValue;
     },
-    { liquidity: [], volume: [], fees: [] }
+    { liquidity: [], volume: [] }
   );
 
   return (
@@ -217,13 +219,19 @@ function PairPage(props) {
               variant="outlined"
               style={{ height: 300, position: "relative" }}
             >
-              <AreaChart
-                title="Liquidity"
-                data={chartDatas.liquidity.reverse()}
-                margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
-                tooltipDisabled
-                overlayEnabled
-              />
+              <ParentSize>
+                {({ width, height }) => (
+                  <AreaChart
+                    title="Liquidity"
+                    data={chartDatas.liquidity}
+                    margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+                    width={width}
+                    height={height}
+                    tooltipDisabled
+                    overlayEnabled
+                  />
+                )}
+              </ParentSize>
             </Paper>
           </Grid>
         ) : null}
@@ -234,13 +242,19 @@ function PairPage(props) {
               variant="outlined"
               style={{ height: 300, position: "relative" }}
             >
-              <BarChart
-                title="Volume"
-                data={chartDatas.volume.reverse()}
-                margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
-                tooltipDisabled
-                overlayEnabled
-              />
+              <ParentSize>
+                {({ width, height }) => (
+                  <BarChart
+                    title="Volume"
+                    data={chartDatas.volume}
+                    width={width}
+                    height={height}
+                    margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+                    tooltipDisabled
+                    overlayEnabled
+                  />
+                )}
+              </ParentSize>
             </Paper>
           </Grid>
         ) : null}

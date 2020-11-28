@@ -169,11 +169,17 @@ function PoolsPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <Curves
-              title="xSushi:Sushi & Sushi:xSushi"
-              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-              data={[xSushiSushi, xSushiPerSushi]}
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  width={width}
+                  height={height}
+                  title="xSushi:Sushi & Sushi:xSushi"
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[xSushiSushi, xSushiPerSushi]}
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
 
@@ -182,11 +188,17 @@ function PoolsPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <Curves
-              title="Sushi Staked (USD) & Sushi Harvested (USD)"
-              data={[sushiStakedUSD, sushiHarvestedUSD]}
-              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  width={width}
+                  height={height}
+                  title="Sushi Staked (USD) & Sushi Harvested (USD)"
+                  data={[sushiStakedUSD, sushiHarvestedUSD]}
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
 
@@ -195,11 +207,17 @@ function PoolsPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <Curves
-              title="xSushi Minted & xSushi Burned"
-              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-              data={[xSushiMinted, xSushiBurned]}
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  width={width}
+                  height={height}
+                  title="xSushi Minted & xSushi Burned"
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[xSushiMinted, xSushiBurned]}
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
 
@@ -208,11 +226,17 @@ function PoolsPage() {
             variant="outlined"
             style={{ height: 400, position: "relative" }}
           >
-            <BrushChart
-              title="xSushi Total Supply"
-              data={xSushi}
-              margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-            />
+            <ParentSize>
+              {({ width, height }) => (
+                <BrushChart
+                  width={width}
+                  height={height}
+                  title="xSushi Total Supply"
+                  data={xSushi}
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
       </Grid>

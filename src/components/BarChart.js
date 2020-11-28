@@ -55,9 +55,9 @@ const tooltipStyles = {
   zIndex: 1702,
 };
 
-export default withParentSize(function BarChart({
-  parentWidth,
-  parentHeight,
+export default function BarChart({
+  width,
+  height,
   margin = { top: 0, right: 0, bottom: 0, left: 0 },
   data,
   events = false,
@@ -97,8 +97,8 @@ export default withParentSize(function BarChart({
   });
 
   // bounds
-  const xMax = parentWidth - margin.left - margin.right;
-  const yMax = parentHeight - margin.top - margin.bottom;
+  const xMax = width - margin.left - margin.right;
+  const yMax = height - margin.top - margin.bottom;
 
   // scales, memoize for performance
   const xScale = useMemo(
@@ -122,7 +122,7 @@ export default withParentSize(function BarChart({
     [yMax, data]
   );
 
-  if (parentWidth < 10) {
+  if (width < 10) {
     return null;
   }
 
@@ -134,7 +134,7 @@ export default withParentSize(function BarChart({
         <ChartOverlay overlay={overlay} onTimespanChange={onTimespanChange} />
       )}
 
-      <svg ref={containerRef} width={parentWidth} height={parentHeight}>
+      <svg ref={containerRef} width={width} height={height}>
         <GradientTealBlue id="bar-gradient" />
         {/* <LinearGradient
           id="bar-gradient"
@@ -146,8 +146,8 @@ export default withParentSize(function BarChart({
           // toOpacity={0.1}
         /> */}
         <rect
-          width={parentWidth}
-          height={parentHeight}
+          width={width}
+          height={height}
           fill="transparent"
           // fill="url(#teal)"
           // rx={14}
@@ -285,4 +285,4 @@ export default withParentSize(function BarChart({
       )} */}
     </div>
   );
-});
+}

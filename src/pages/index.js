@@ -27,6 +27,7 @@ import {
 } from "app/core";
 
 import Head from "next/head";
+import { ParentSize } from "@visx/responsive";
 import { useQuery } from "@apollo/client";
 
 function IndexPage() {
@@ -67,11 +68,11 @@ function IndexPage() {
     .filter((d) => d.liquidityUSD !== "0")
     .reduce(
       (previousValue, currentValue) => {
-        previousValue[0].push({
+        previousValue[0].unshift({
           date: currentValue.date,
           value: parseFloat(currentValue.liquidityUSD),
         });
-        previousValue[1].push({
+        previousValue[1].unshift({
           date: currentValue.date,
           value: parseFloat(currentValue.volumeUSD),
         });
@@ -91,17 +92,20 @@ function IndexPage() {
 
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={6}>
-          <Paper
-            variant="outlined"
-            style={{ height: 300, position: "relative" }}
-          >
-            <AreaChart
-              title="Liquidity"
-              data={liquidity.reverse()}
-              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
-              tooltipDisabled
-              overlayEnabled
-            />
+          <Paper variant="outlined" style={{ height: 300 }}>
+            <ParentSize debounceTime={10}>
+              {({ width, height }) => (
+                <AreaChart
+                  title="Liquidity"
+                  width={width}
+                  height={height}
+                  data={liquidity}
+                  margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+                  tooltipDisabled
+                  overlayEnabled
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={12} md={6}>
@@ -109,13 +113,19 @@ function IndexPage() {
             variant="outlined"
             style={{ height: 300, position: "relative" }}
           >
-            <BarChart
-              title="Volume"
-              data={volume.reverse()}
-              margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
-              tooltipDisabled
-              overlayEnabled
-            />
+            <ParentSize debounceTime={10}>
+              {({ width, height }) => (
+                <BarChart
+                  title="Volume"
+                  width={width}
+                  height={height}
+                  data={volume}
+                  margin={{ top: 125, right: 0, bottom: 0, left: 0 }}
+                  tooltipDisabled
+                  overlayEnabled
+                />
+              )}
+            </ParentSize>
           </Paper>
         </Grid>
 

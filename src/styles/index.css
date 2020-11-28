@@ -50,6 +50,11 @@ body {
   border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+.dark-theme .MuiListItem-root.Mui-selected,
+.dark-theme .MuiListItem-root.Mui-selected:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
 .dark-theme
   .MuiOutlinedInput-root.Mui-focused
   .MuiOutlinedInput-notchedOutline {

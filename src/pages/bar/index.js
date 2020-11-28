@@ -6,6 +6,8 @@ import {
   getApollo,
   getBar,
   getBarHistories,
+  getSushiToken,
+  tokenQuery,
   useInterval,
 } from "app/core";
 
@@ -107,11 +109,9 @@ function PoolsPage() {
 
       return previousValue;
     },
-    [[], [], [], [], [], [], [], [], []]
+    [[], [], [], [], [], [], [], [], [], []]
   );
 
-  // console.log("xSushiAge", xSushiAge);
-  // console.log("xSushiAgeDestroyed", xSushiAgeDestroyed);
   return (
     <AppShell>
       <Head>

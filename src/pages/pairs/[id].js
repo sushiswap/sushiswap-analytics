@@ -11,7 +11,7 @@ import {
   Percent,
   Transactions,
 } from "app/components";
-import { Avatar, Box, Grid, Paper, Typography } from "@material-ui/core";
+import { Avatar, Box, Chip, Grid, Paper, Typography } from "@material-ui/core";
 import {
   currencyFormatter,
   decimalFormatter,
@@ -51,16 +51,6 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(4),
     },
   },
-  chips: {
-    margin: theme.spacing(0, 0, 4),
-    "& > div:first-of-type": {
-      marginRight: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-      [theme.breakpoints.up("sm")]: {
-        marginBottom: 0,
-      },
-    },
-  },
   avatar: {
     width: theme.spacing(3),
     height: theme.spacing(3),
@@ -74,6 +64,16 @@ const useStyles = makeStyles((theme) => ({
   },
   reserve: {
     marginRight: theme.spacing(1),
+  },
+  chips: {
+    // margin: theme.spacing(4, 0, 0, 0),
+    "& > div:first-of-type": {
+      marginRight: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+      [theme.breakpoints.up("sm")]: {
+        marginBottom: 0,
+      },
+    },
   },
 }));
 
@@ -188,7 +188,7 @@ function PairPage(props) {
             <Box display="flex" alignItems="center">
               <PairIcon base={pair.token0.id} quote={pair.token1.id} />
               <Typography variant="h5" component="h1">
-                {pair.token0.symbol}-{pair.token1.symbol}
+                {pair.token0.symbol}-{pair.token1.symbol} PAIR
               </Typography>
             </Box>
           </Grid>
@@ -288,7 +288,63 @@ function PairPage(props) {
 
       <Box my={4}>
         <Typography variant="h6" component="h2" gutterBottom>
-          Pair Balances
+          Tokens
+        </Typography>
+        <Grid container justify="flex-start" xs={12} className={classes.chips}>
+          <Grid item>
+            <Chip
+              color="primary"
+              avatar={
+                <Avatar
+                  style={{ backgroundColor: "transparent" }}
+                  alt="USDC"
+                  src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                    pair.token0.id
+                  )}/logo.png`}
+                />
+              }
+              clickable
+              onClick={() => {
+                router.push("/tokens/" + pair.token0.id);
+              }}
+              label={`1 ${pair.token0.symbol} = ${decimalFormatter.format(
+                pair.reserve1 / pair.reserve0
+              )} ${pair.token1.symbol} (${currencyFormatter.format(
+                pair.token0?.derivedETH * bundles[0].ethPrice
+              )})`}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item>
+            <Chip
+              color="primary"
+              avatar={
+                <Avatar
+                  style={{ backgroundColor: "transparent" }}
+                  alt="ETH"
+                  src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                    pair.token1.id
+                  )}/logo.png`}
+                />
+              }
+              clickable
+              onClick={() => {
+                router.push("/tokens/" + pair.token1.id);
+              }}
+              label={`1 ${pair.token1.symbol} = ${decimalFormatter.format(
+                pair.reserve0 / pair.reserve1
+              )} ${pair.token0.symbol} (${currencyFormatter.format(
+                pair.token1?.derivedETH * bundles[0].ethPrice
+              )})`}
+              variant="outlined"
+            />
+          </Grid>
+        </Grid>
+      </Box>
+
+      <Box my={4}>
+        <Typography variant="h6" component="h2" gutterBottom>
+          Reserves
         </Typography>
         <Grid container spacing={3}>
           <Grid item>
@@ -341,18 +397,23 @@ function PairPage(props) {
           title="Information"
           headCells={[
             {
-              key: "name",
-              label: "Name",
+              key: "id",
+              label: `${pair.token0.symbol}-${pair.token1.symbol} Address`,
+              maxWidth: "250px",
             },
-            { key: "id", label: "Address", maxWidth: "250px" },
-            { key: "token0", label: "Token 0", maxWidth: "250px" },
-            { key: "token1", label: "Token 1", maxWidth: "250px" },
+            {
+              key: "token0",
+              label: `${pair.token0.symbol} Address`,
+              maxWidth: "250px",
+            },
+            {
+              key: "token1",
+              label: `${pair.token1.symbol} Address`,
+              maxWidth: "250px",
+            },
             { key: "etherscan", label: "Etherscan", align: "right" },
           ]}
           bodyCells={[
-            <Typography variant="body2" noWrap>
-              {pair.token0.symbol}-{pair.token1.symbol}
-            </Typography>,
             <Typography variant="body2" noWrap>
               {pair.id}
             </Typography>,

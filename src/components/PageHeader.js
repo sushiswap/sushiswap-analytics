@@ -2,7 +2,8 @@ import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: theme.spacing(3),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(4),
   },
 }));
 

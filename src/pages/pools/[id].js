@@ -111,9 +111,22 @@ function PoolPage() {
         value: currentValue.slpAge,
       });
 
+      const slpAgeAverage =
+        parseFloat(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
+
+      previousValue.slpAgeAverage.push({
+        date,
+        value: !Number.isNaN(slpAgeAverage) ? slpAgeAverage : 0,
+      });
+
       previousValue.slpAgeRemoved.push({
         date,
         value: currentValue.slpAgeRemoved,
+      });
+
+      previousValue.slpBalance.push({
+        date,
+        value: parseFloat(currentValue.slpBalance),
       });
 
       previousValue.slpDeposited.push({
@@ -126,17 +139,12 @@ function PoolPage() {
         value: parseFloat(currentValue.slpWithdrawn),
       });
 
-      const slpAgeAverage =
-        parseFloat(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
-
-      previousValue.slpAgeAverage.push({
+      previousValue.tvl.push({
         date,
-        value: !Number.isNaN(slpAgeAverage) ? slpAgeAverage : 0,
-      });
-
-      previousValue.slpBalance.push({
-        date,
-        value: parseFloat(currentValue.slpBalance),
+        value:
+          (parseFloat(pool.liquidityPair.reserveUSD) /
+            parseFloat(pool.liquidityPair.totalSupply)) *
+          parseFloat(currentValue.slpBalance),
       });
 
       previousValue.userCount.push({
@@ -144,44 +152,17 @@ function PoolPage() {
         value: parseFloat(currentValue.userCount),
       });
 
-      // const sushiPending =
-      //   ((parseFloat(currentValue.slpBalance) *
-      //     parseFloat(currentValue.pool.accSushiPerShare)) /
-      //     1e12 /
-      //     1e18) *
-      //   sushiPrice;
-
-      const reserveUSD =
-        (parseFloat(pool.liquidityPair.reserveUSD) /
-          parseFloat(pool.liquidityPair.totalSupply)) *
-        parseFloat(currentValue.slpBalance);
-
-      // previousValue.profit.push({
-      //   date,
-      //   value:
-      //     parseFloat(currentValue.entryUSD) -
-      //     parseFloat(currentValue.exitUSD) +
-      //     parseFloat(reserveUSD) +
-      //     parseFloat(sushiPending) +
-      //     parseFloat(currentValue.sushiHarvestedUSD),
-      // });
-
-      previousValue.tvl.push({
-        date,
-        value: reserveUSD,
-      });
-
       return previousValue;
     },
     {
       slpAge: [],
+      slpAgeAverage: [],
       slpAgeRemoved: [],
-      userCount: [],
+      slpBalance: [],
       slpDeposited: [],
       slpWithdrawn: [],
-      slpAgeAverage: [],
-      slpBalance: [],
       tvl: [],
+      userCount: [],
     }
   );
 
@@ -199,7 +180,7 @@ function PoolPage() {
           />
           <Typography variant="h5" component="h1">
             {pool.liquidityPair.token0.symbol}-
-            {pool.liquidityPair.token1.symbol}
+            {pool.liquidityPair.token1.symbol} POOL
           </Typography>
         </Box>
       </PageHeader>

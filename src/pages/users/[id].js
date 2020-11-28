@@ -63,10 +63,6 @@ const useStyles = makeStyles((theme) => ({
 function UserPage() {
   const router = useRouter();
 
-  if (router.isFallback) {
-    return <AppShell />;
-  }
-
   const classes = useStyles();
 
   const { id } = router.query;
@@ -658,7 +654,7 @@ export async function getStaticProps({ params: { id } }) {
     },
   });
 
-  const poolData = await getPoolUser(id.toLowerCase(), client);
+  await getPoolUser(id.toLowerCase(), client);
 
   await getPairs(client);
 
@@ -675,7 +671,7 @@ export async function getStaticProps({ params: { id } }) {
 export async function getStaticPaths() {
   return {
     paths: [],
-    fallback: true,
+    fallback: "blocking",
   };
 }
 

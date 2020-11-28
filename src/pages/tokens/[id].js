@@ -59,10 +59,6 @@ const useStyles = makeStyles((theme) => ({
 function TokenPage() {
   const router = useRouter();
 
-  if (router.isFallback) {
-    return <AppShell />;
-  }
-
   const classes = useStyles();
 
   const { id } = router.query;
@@ -344,7 +340,7 @@ export async function getStaticPaths() {
   //   params: { id },
   // }));
 
-  return { paths: [], fallback: true };
+  return { paths: [], fallback: "blocking" };
 }
 
 export default TokenPage;

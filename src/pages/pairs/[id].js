@@ -80,10 +80,6 @@ const useStyles = makeStyles((theme) => ({
 function PairPage(props) {
   const router = useRouter();
 
-  if (router.isFallback) {
-    return <AppShell />;
-  }
-
   const classes = useStyles();
 
   const { id } = router.query;

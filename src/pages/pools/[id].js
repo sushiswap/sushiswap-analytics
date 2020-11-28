@@ -1,14 +1,11 @@
 import {
   AppShell,
-  AreaChart,
-  BrushChart,
+  Chart,
   Curves,
   KPI,
   LiquidityProviderList,
   PageHeader,
   PairIcon,
-  StackedBrushChart,
-  ThresholdChart,
 } from "app/components";
 import {
   Box,
@@ -75,63 +72,79 @@ function PoolPage() {
     },
   });
 
-  const [
+  const {
     slpAge,
     slpAgeRemoved,
-    users,
+    userCount,
     slpDeposited,
     slpWithdrawn,
-    averageSlpAge,
+    slpAgeAverage,
     slpBalance,
-    slpFlow,
-  ] = poolHistories.reduce(
+    pendingSushi,
+  } = poolHistories.reduce(
     (previousValue, currentValue) => {
-      const time = new Date(parseInt(currentValue.timestamp) * 1e3)
-        .toISOString()
-        .slice(0, 10);
+      const date = currentValue.timestamp;
 
-      previousValue[0].push({
-        time,
+      previousValue.slpAge.push({
+        date: currentValue.timestamp / 1000,
         value: currentValue.slpAge,
       });
 
-      previousValue[1].push({
-        time,
+      previousValue.slpAgeRemoved.push({
+        date: currentValue.timestamp / 1000,
         value: currentValue.slpAgeRemoved,
       });
 
-      // console.log({ userCount: parseFloat(currentValue.userCount) });
-
-      previousValue[2].push({
-        time,
-        value: parseFloat(currentValue.userCount),
-      });
-
-      previousValue[3].push({
-        time,
+      previousValue.slpDeposited.push({
+        date: currentValue.timestamp / 1000,
         value: parseFloat(currentValue.slpDeposited),
       });
 
-      previousValue[4].push({
-        time,
+      previousValue.slpWithdrawn.push({
+        date: currentValue.timestamp / 1000,
         value: parseFloat(currentValue.slpWithdrawn),
       });
 
       const average =
         parseFloat(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
 
-      previousValue[5].push({
-        time,
+      previousValue.slpAgeAverage.push({
+        date: currentValue.timestamp * 1000,
         value: !Number.isNaN(average) ? average : 0,
       });
 
-      previousValue[6].push({
-        time,
+      previousValue.slpBalance.push({
+        date: currentValue.timestamp * 1000,
         value: parseFloat(currentValue.slpBalance),
       });
+
+      previousValue.userCount.push({
+        date: currentValue.timestamp * 1000,
+        value: parseFloat(currentValue.userCount),
+      });
+
+      // const pendingSushi =
+      //   (currentValue.slpBalance * currentValue.pool.accSushiPerShare) /
+      //   1e12 /
+      //   1e18;
+
+      // previousValue.pendingSushi.push({
+      //   date,
+      //   value: parseFloat(pendingSushi),
+      // });
+
       return previousValue;
     },
-    [[], [], [], [], [], [], [], []]
+    {
+      slpAge: [],
+      slpAgeRemoved: [],
+      userCount: [],
+      slpDeposited: [],
+      slpWithdrawn: [],
+      slpAgeAverage: [],
+      slpBalance: [],
+      pendingSushi: [],
+    }
   );
 
   return (
@@ -179,10 +192,40 @@ function PoolPage() {
             )}
           />
         </Grid> */}
+        {/* 
         <Grid item xs={12}>
           <Paper
             variant="outlined"
-            style={{ height: 400, position: "relative" }}
+            style={{
+              display: "flex",
+              position: "relative",
+              height: 400,
+              flex: 1,
+            }}
+          >
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  width={width}
+                  height={height}
+                  title="Profitability"
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[pendingSushi]}
+                />
+              )}
+            </ParentSize>
+          </Paper>
+        </Grid> */}
+
+        <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{
+              display: "flex",
+              position: "relative",
+              height: 400,
+              flex: 1,
+            }}
           >
             <ParentSize>
               {({ width, height }) => (
@@ -200,7 +243,12 @@ function PoolPage() {
         <Grid item xs={12}>
           <Paper
             variant="outlined"
-            style={{ height: 400, position: "relative" }}
+            style={{
+              display: "flex",
+              position: "relative",
+              height: 400,
+              flex: 1,
+            }}
           >
             <ParentSize>
               {({ width, height }) => (
@@ -215,61 +263,38 @@ function PoolPage() {
             </ParentSize>
           </Paper>
         </Grid>
+
         <Grid item xs={12}>
-          <Paper
-            variant="outlined"
-            style={{ height: 400, position: "relative" }}
-          >
-            <ParentSize>
-              {({ width, height }) => (
-                <BrushChart
-                  width={width}
-                  height={height}
-                  title="~ SLP Age (Days)"
-                  data={averageSlpAge}
-                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                />
-              )}
-            </ParentSize>
-          </Paper>
+          <Chart
+            title="~ SLP Age (Days)"
+            data={slpAgeAverage}
+            height={400}
+            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
+            tooptip
+            brush
+          />
         </Grid>
 
         <Grid item xs={12}>
-          <Paper
-            variant="outlined"
-            style={{ height: 400, position: "relative" }}
-          >
-            <ParentSize>
-              {({ width, height }) => (
-                <BrushChart
-                  width={width}
-                  height={height}
-                  title="Users"
-                  data={users}
-                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                />
-              )}
-            </ParentSize>
-          </Paper>
+          <Chart
+            title="Users"
+            data={userCount}
+            height={400}
+            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
+            tooptip
+            brush
+          />
         </Grid>
 
         <Grid item xs={12}>
-          <Paper
-            variant="outlined"
-            style={{ height: 400, position: "relative" }}
-          >
-            <ParentSize>
-              {({ width, height }) => (
-                <BrushChart
-                  width={width}
-                  height={height}
-                  title="SLP Balance"
-                  data={slpBalance}
-                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                />
-              )}
-            </ParentSize>
-          </Paper>
+          <Chart
+            title="SLP Balance"
+            data={slpBalance}
+            height={400}
+            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
+            tooptip
+            brush
+          />
         </Grid>
       </Grid>
 

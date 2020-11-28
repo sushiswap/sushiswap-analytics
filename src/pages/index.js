@@ -2,7 +2,6 @@ import {
   AppShell,
   AreaChart,
   BarChart,
-  BrushChart,
   PairTable,
   PoolTable,
   Search,
@@ -93,7 +92,7 @@ function IndexPage() {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={6}>
           <Paper variant="outlined" style={{ height: 300 }}>
-            <ParentSize debounceTime={10}>
+            <ParentSize>
               {({ width, height }) => (
                 <AreaChart
                   title="Liquidity"
@@ -113,7 +112,7 @@ function IndexPage() {
             variant="outlined"
             style={{ height: 300, position: "relative" }}
           >
-            <ParentSize debounceTime={10}>
+            <ParentSize>
               {({ width, height }) => (
                 <BarChart
                   title="Volume"

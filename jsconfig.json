@@ -6,6 +6,7 @@
       "app/core": ["core/index.js"],
       "app/core/api": ["core/api/index.js"],
       "app/core/apollo": ["core/apollo/index.js"],
+      "app/core/chart": ["core/chart.js"],
       "app/core/constants": ["core/constants.js"],
       "app/core/conversions": ["core/conversions.js"],
       "app/core/format": ["core/format.js"],

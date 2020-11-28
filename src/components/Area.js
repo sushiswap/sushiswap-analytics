@@ -1,68 +1,56 @@
-import { AxisBottom, AxisLeft, AxisScale } from "@visx/axis";
-import { GradientTealBlue, LinearGradient } from "@visx/gradient";
+import { AxisBottom, AxisLeft } from "@visx/axis";
+import {
+  axisBottomTickLabelProps,
+  axisColor,
+  axisLeftTickLabelProps,
+  getX,
+  getY,
+} from "app/core";
+import { scaleLinear, scaleTime } from "@visx/scale";
 
-import { AppleStock } from "@visx/mock-data/lib/mocks/appleStock";
 import { AreaClosed } from "@visx/shape";
+import { GradientTealBlue } from "@visx/gradient";
 import { Group } from "@visx/group";
-import React from "react";
 import { curveMonotoneX } from "@visx/curve";
 import millify from "millify";
-
-// Initialize some variables
-const axisColor = "currentColor";
-const axisBottomTickLabelProps = {
-  textAnchor: "middle",
-  fontFamily: "Arial",
-  fontSize: 10,
-  fill: axisColor,
-};
-const axisLeftTickLabelProps = {
-  dx: "-0.25em",
-  dy: "0.25em",
-  fontFamily: "Arial",
-  fontSize: 10,
-  textAnchor: "end",
-  fill: axisColor,
-};
-
-// accessors
-const getDate = (d) => new Date(d.time);
-const getStockValue = (d) => d.value;
+import { useMemo } from "react";
 
 export default function AreaChart({
   data,
-  gradientColor,
   width,
-  yMax,
-  margin,
-  xScale,
-  yScale,
-  hideBottomAxis = false,
-  hideLeftAxis = false,
+  height,
+  margin = { top: 0, right: 0, bottom: 0, left: 0 },
   top,
   left,
+  hideBottomAxis = false,
+  hideLeftAxis = false,
   children,
+  onTouchStart,
+  onTouchMove,
+  onMouseMove,
+  onMouseLeave,
+  xScale,
+  yScale,
+  yMax,
 }) {
   if (width < 10) return null;
   return (
     <Group left={left || margin.left} top={top || margin.top}>
-      {/* <LinearGradient
-        id="gradient"
-        from={gradientColor}
-        fromOpacity={1}
-        to={gradientColor}
-        toOpacity={0.2}
-      /> */}
       <GradientTealBlue id="gradient" />
       <AreaClosed
         data={data}
-        x={(d) => xScale(getDate(d)) || 0}
-        y={(d) => yScale(getStockValue(d)) || 0}
+        x={(d) => xScale(getX(d)) || 0}
+        y={(d) => yScale(getY(d)) || 0}
         yScale={yScale}
+        xScale={xScale}
         strokeWidth={1}
         stroke="url(#gradient)"
         fill="url(#gradient)"
         curve={curveMonotoneX}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
       />
       {!hideBottomAxis && (
         <AxisBottom

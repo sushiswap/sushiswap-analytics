@@ -1,5 +1,5 @@
-import { AppShell, BrushChart, Curves, KPI, Lines } from "app/components";
-import { Grid, Paper, Typography, useTheme } from "@material-ui/core";
+import { AppShell, Curves, KPI } from "app/components";
+import { Grid, Paper, useTheme } from "@material-ui/core";
 import {
   barHistoriesQuery,
   barQuery,
@@ -9,6 +9,7 @@ import {
   useInterval,
 } from "app/core";
 
+import Chart from "../../components/Chart";
 import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
 import React from "react";
@@ -64,43 +65,43 @@ function PoolsPage() {
     xSushi,
   ] = histories.reduce(
     (previousValue, currentValue) => {
-      const time = new Date(currentValue.date * 1e3).toISOString().slice(0, 10);
+      const date = currentValue.date * 1000;
       previousValue[0].push({
-        time,
+        date,
         value: parseFloat(currentValue.sushiStakedUSD),
       });
       previousValue[1].push({
-        time,
+        date,
         value: parseFloat(currentValue.sushiHarvestedUSD),
       });
       previousValue[2].push({
-        time,
+        date,
         value: parseFloat(currentValue.ratio),
       });
       previousValue[3].push({
-        time,
+        date,
         value: 2 - parseFloat(currentValue.ratio),
       });
       previousValue[4].push({
-        time,
+        date,
         value: parseFloat(currentValue.xSushiMinted),
       });
       previousValue[5].push({
-        time,
+        date,
         value: parseFloat(currentValue.xSushiBurned),
       });
       previousValue[6].push({
-        time,
+        date,
         value: parseInt(currentValue.xSushiAge),
         stroke: theme.palette.positive.light,
       });
       previousValue[7].push({
-        time,
+        date,
         value: parseInt(currentValue.xSushiAgeDestroyed),
       });
 
       previousValue[8].push({
-        time,
+        date,
         value: parseFloat(currentValue.xSushiSupply),
       });
 
@@ -167,7 +168,7 @@ function PoolsPage() {
         <Grid item xs={12}>
           <Paper
             variant="outlined"
-            style={{ height: 400, position: "relative" }}
+            style={{ display: "flex", height: 400, flex: 1 }}
           >
             <ParentSize>
               {({ width, height }) => (
@@ -186,7 +187,7 @@ function PoolsPage() {
         <Grid item xs={12}>
           <Paper
             variant="outlined"
-            style={{ height: 400, position: "relative" }}
+            style={{ display: "flex", height: 400, flex: 1 }}
           >
             <ParentSize>
               {({ width, height }) => (
@@ -205,7 +206,7 @@ function PoolsPage() {
         <Grid item xs={12}>
           <Paper
             variant="outlined"
-            style={{ height: 400, position: "relative" }}
+            style={{ display: "flex", height: 400, flex: 1 }}
           >
             <ParentSize>
               {({ width, height }) => (
@@ -222,22 +223,14 @@ function PoolsPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <Paper
-            variant="outlined"
-            style={{ height: 400, position: "relative" }}
-          >
-            <ParentSize>
-              {({ width, height }) => (
-                <BrushChart
-                  width={width}
-                  height={height}
-                  title="xSushi Total Supply"
-                  data={xSushi}
-                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                />
-              )}
-            </ParentSize>
-          </Paper>
+          <Chart
+            title="xSushi Total Supply"
+            data={xSushi}
+            height={400}
+            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
+            tooptip
+            brush
+          />
         </Grid>
       </Grid>
 

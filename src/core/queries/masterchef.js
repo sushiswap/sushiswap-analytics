@@ -52,6 +52,7 @@ export const poolHistoryQuery = gql`
       id
       pool {
         id
+        accSushiPerShare
       }
       slpBalance
       slpAge

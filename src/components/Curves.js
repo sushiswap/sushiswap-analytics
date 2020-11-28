@@ -1,6 +1,5 @@
-import { AreaClosed, LinePath } from "@visx/shape";
 import { AxisBottom, AxisLeft } from "@visx/axis";
-import { GradientTealBlue, LinearGradient } from "@visx/gradient";
+import { Grid, GridColumns, GridRows } from "@visx/grid";
 import {
   MarkerArrow,
   MarkerCircle,
@@ -8,9 +7,8 @@ import {
   MarkerLine,
   MarkerX,
 } from "@visx/marker";
-import { bisector, extent, max } from "d3-array";
-import { curveMonotoneX, curveNatural } from "@visx/curve";
 import { deepPurple, green, red } from "@material-ui/core/colors";
+import { getX, getY } from "app/core";
 import { scaleLinear, scaleTime, scaleUtc } from "@visx/scale";
 import { timeFormat, timeParse } from "d3-time-format";
 import { useMemo, useState } from "react";
@@ -18,33 +16,33 @@ import { useMemo, useState } from "react";
 import { Brush } from "@visx/brush";
 import Curve from "./Curve";
 import { Group } from "@visx/group";
+import { LinearGradient } from "@visx/gradient";
 import { PatternLines } from "@visx/pattern";
 import React from "react";
 import { Text } from "@visx/text";
+import { curveNatural } from "@visx/curve";
+import { extent } from "d3-array";
 import millify from "millify";
-import { withParentSize } from "@visx/responsive";
 
 const brushMargin = { top: 10, bottom: 15, left: 50, right: 20 };
 const chartSeparation = 30;
 const PATTERN_ID = "brush_pattern";
-const GRADIENT_ID = "brush_gradient";
-export const accentColor = deepPurple[400];
-export const background = "#584153";
-export const background2 = "#af8baf";
+
+const accentColor = deepPurple[400];
+
 const selectedBrushStyle = {
   fill: `url(#${PATTERN_ID})`,
   stroke: "currentColor",
 };
 
 const parseDate = timeParse("%Y-%m-%d");
+
 const format = timeFormat("%b %d");
+
 const formatDate = (date) => format(parseDate(date));
 
-// data accessors
-const getX = (d) => new Date(d.time);
-const getY = (d) => d.value;
-
 const axisColor = "currentColor";
+
 const axisBottomTickLabelProps = {
   textAnchor: "middle",
   fontFamily: "Arial",
@@ -91,20 +89,18 @@ const Curves = ({
   };
 
   const innerHeight = height - margin.top - margin.bottom;
+
   const topChartBottomMargin = compact
     ? chartSeparation / 2
     : chartSeparation + 10;
+
   const topChartHeight = 0.8 * innerHeight - topChartBottomMargin;
+
   const bottomChartHeight = innerHeight - topChartHeight - chartSeparation;
 
-  // bounds
+  // Max
   const xMax = Math.max(width - margin.left - margin.right, 0);
   const yMax = Math.max(topChartHeight, 0);
-  const xBrushMax = Math.max(width - brushMargin.left - brushMargin.right, 0);
-  const yBrushMax = Math.max(
-    bottomChartHeight - brushMargin.top - brushMargin.bottom,
-    0
-  );
 
   // scales
   const xScale = useMemo(
@@ -151,6 +147,12 @@ const Curves = ({
     [yMax, filteredData]
   );
 
+  const xBrushMax = Math.max(width - brushMargin.left - brushMargin.right, 0);
+  const yBrushMax = Math.max(
+    bottomChartHeight - brushMargin.top - brushMargin.bottom,
+    0
+  );
+
   const brushXScale = useMemo(
     () =>
       scaleTime({
@@ -163,15 +165,10 @@ const Curves = ({
     () =>
       scaleLinear({
         range: [yBrushMax, 0],
-        // domain: [
-        //   Math.min(...allData.map((d) => getY(d))),
-        //   Math.max(...allData.map((d) => getY(d))),
-        // ],
         domain: [
           Math.min(...allData.map((d) => getY(d))),
           Math.max(...allData.map((d) => getY(d))),
         ],
-        // nice: true,
         nice: true,
       }),
     [yBrushMax]
@@ -189,33 +186,37 @@ const Curves = ({
     [brushXScale]
   );
 
-  // const xMax = width - margin.left - margin.right;
-
-  // const yMax = height - margin.top - margin.bottom;
-
-  // // scales
-  // const xScale = scaleUtc({
-  //   range: [0, xMax],
-  //   // domain: extent(allData, getX),
-  //   // domain: extent(data, getDate),
-  //   domain: [Math.min(...allData.map(getX)), Math.max(...allData.map(getX))],
-  // });
-
-  // const yScale = scaleLinear({
-  //   range: [yMax, 0],
-  //   // domain: [0, max(allData, getY)],
-  //   domain: [
-  //     Math.min(...allData.map((d) => getY(d))),
-  //     Math.max(...allData.map((d) => getY(d))),
-  //   ],
-  //   nice: true,
-  // });
+  if (width < 10) {
+    return null;
+  }
 
   return (
     <div>
       <svg width={width} height={height}>
+        <rect x={0} y={0} width={width} height={height} fill="transparent" />
         <LinearGradient id="positive" from="#43e97b" to="#43e97b" rotate="0" />
         <LinearGradient id="negative" from="#ff0844" to="#ffb199" rotate="0" />
+        <GridRows
+          top={margin.top}
+          left={margin.left}
+          scale={yScale}
+          width={xMax}
+          height={yMax}
+          strokeDasharray="1,3"
+          stroke="currentColor"
+          strokeOpacity={0.2}
+          pointerEvents="none"
+        />
+        <GridColumns
+          top={margin.top}
+          left={margin.left}
+          scale={xScale}
+          height={yMax}
+          strokeDasharray="1,3"
+          stroke="currentColor"
+          strokeOpacity={0.2}
+          pointerEvents="none"
+        />
         <Group
           top={margin.top}
           left={margin.left}
@@ -325,15 +326,11 @@ const Curves = ({
               : "url(#marker-arrow-odd)";
             return (
               <Curve
-                key={`brush-${i}`}
                 curve={curveNatural}
                 stroke={even ? green[400] : red[400]}
                 strokeWidth={even ? 2 : 1}
                 strokeOpacity={even ? 0.8 : 1}
                 shapeRendering="geometricPrecision"
-                // markerMid="url(#marker-circle)"
-                // markerStart={markerStart}
-                // markerEnd={markerEnd}
                 hideBottomAxis
                 hideLeftAxis
                 data={brushData}

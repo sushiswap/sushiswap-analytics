@@ -1,7 +1,5 @@
-import { Area, AreaClosed, Bar, Line } from "@visx/shape";
+import { AreaClosed, Bar } from "@visx/shape";
 import { AxisBottom, AxisLeft, AxisRight } from "@visx/axis";
-import { GradientOrangeRed, LinearGradient } from "@visx/gradient";
-import { GradientPurpleTeal, GradientTealBlue } from "@visx/gradient";
 import { Grid, GridColumns, GridRows } from "@visx/grid";
 import {
   Tooltip,
@@ -9,27 +7,22 @@ import {
   defaultStyles,
   withTooltip,
 } from "@visx/tooltip";
-import { bisector, extent, max } from "d3-array";
 import { currencyFormatter, oneMonth, oneWeek } from "app/core";
 import { scaleLinear, scaleTime } from "@visx/scale";
 import { useCallback, useMemo, useState } from "react";
 
 import ChartOverlay from "./ChartOverlay";
+import { GradientTealBlue } from "@visx/gradient";
 import { Group } from "@visx/group";
-import { curveMonotoneX } from "@visx/curve";
+import { bisector } from "d3-array";
 import { deepPurple } from "@material-ui/core/colors";
 import { localPoint } from "@visx/event";
 import millify from "millify";
 import { timeFormat } from "d3-time-format";
 
-export const background = "#fff";
-export const background2 = "#e2ebf0";
-export const accentColor = "#a18cd1";
-export const accentColor2 = "#fbc2eb";
-
 const tooltipStyles = {
   ...defaultStyles,
-  background,
+  background: "#fff",
   border: "1px solid white",
   color: "inherit",
   zIndex: 1702,
@@ -41,7 +34,7 @@ const getValue = (d) => d.value;
 
 const formatDate = timeFormat("%b %d, '%y");
 
-export default withTooltip(function BarChart({
+function AreaChart({
   data,
   tooltipDisabled = false,
   overlayEnabled = false,
@@ -91,7 +84,6 @@ export default withTooltip(function BarChart({
     () =>
       scaleTime({
         range: [0, xMax],
-        // domain: extent(data, getDate),
         domain: [
           Math.min(...data.map(getDate)),
           Math.max(...data.map(getDate)),
@@ -103,7 +95,6 @@ export default withTooltip(function BarChart({
     () =>
       scaleLinear({
         range: [yMax, 0],
-        // domain: [0, (max(data, getValue) || 0) + yMax / 3],
         domain: [
           Math.min(...data.map((d) => getValue(d))),
           Math.max(...data.map((d) => getValue(d))),
@@ -152,28 +143,8 @@ export default withTooltip(function BarChart({
         <ChartOverlay overlay={overlay} onTimespanChange={onTimespanChange} />
       )}
       <svg width={width} height={height}>
-        <GradientPurpleTeal id="purple" />
         <GradientTealBlue id="teal" fromOffset={0.5} />
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          fill="transparent"
-          // fill="url(#purple)"
-          // rx={14}
-        />
-        <LinearGradient
-          id="area-background-gradient"
-          from={background}
-          to={background2}
-        />
-        <LinearGradient
-          id="gradient"
-          // from={accentColor}
-          // to={accentColor2}
-          // toOpacity={0.1}
-        />
+        <rect x={0} y={0} width={width} height={height} fill="transparent" />
 
         <Group top={margin.top} left={margin.left}>
           <AreaClosed
@@ -181,7 +152,6 @@ export default withTooltip(function BarChart({
             x={(d) => xScale(getDate(d))}
             y={(d) => yScale(getValue(d))}
             yScale={yScale}
-            // fill="url(#gradient)"
             fill="url(#teal)"
           />
         </Group>
@@ -207,14 +177,6 @@ export default withTooltip(function BarChart({
 
         {tooltipData && (
           <Group top={margin.top} left={margin.left}>
-            {/* <Line
-                from={{ x: tooltipLeft, y: -margin.top }}
-                to={{ x: tooltipLeft, y: yMax }}
-                stroke={deepPurple[400]}
-                strokeWidth={2}
-                pointerEvents="none"
-                strokeDasharray="5,2"
-              /> */}
             <circle
               cx={tooltipLeft}
               cy={tooltipTop + 1}
@@ -263,4 +225,6 @@ export default withTooltip(function BarChart({
       )}
     </div>
   );
-});
+}
+
+export default withTooltip(AreaChart);

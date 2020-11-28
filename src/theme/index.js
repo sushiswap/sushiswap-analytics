@@ -74,7 +74,6 @@ const overrides = {
       border: 0,
     },
   },
-  // MuiTableCell: {}
 };
 
 export const darkTheme = responsiveFontSizes(

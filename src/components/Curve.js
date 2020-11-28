@@ -27,7 +27,7 @@ const axisLeftTickLabelProps = {
 };
 
 // accessors
-const getX = (d) => new Date(d.time);
+const getX = (d) => new Date(d.date);
 const getY = (d) => Number(d.value);
 
 export default function CurveChart({

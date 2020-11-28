@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     }),
     // marginLeft: -drawerWidth,
 
-    padding: theme.spacing(3),
+    padding: theme.spacing(3, 0),
     flexGrow: 1,
 
     width: "100%",
@@ -93,8 +93,6 @@ function AppShell(props) {
       setOpen(!open);
     }
   };
-
-  console.log({ matches, open, mobileOpen });
 
   return (
     <div className={classes.root}>

@@ -83,25 +83,25 @@ function PoolPage() {
     pendingSushi,
   } = poolHistories.reduce(
     (previousValue, currentValue) => {
-      const date = currentValue.timestamp;
+      const date = currentValue.timestamp * 1000;
 
       previousValue.slpAge.push({
-        date: currentValue.timestamp / 1000,
+        date,
         value: currentValue.slpAge,
       });
 
       previousValue.slpAgeRemoved.push({
-        date: currentValue.timestamp / 1000,
+        date,
         value: currentValue.slpAgeRemoved,
       });
 
       previousValue.slpDeposited.push({
-        date: currentValue.timestamp / 1000,
+        date,
         value: parseFloat(currentValue.slpDeposited),
       });
 
       previousValue.slpWithdrawn.push({
-        date: currentValue.timestamp / 1000,
+        date,
         value: parseFloat(currentValue.slpWithdrawn),
       });
 
@@ -109,17 +109,17 @@ function PoolPage() {
         parseFloat(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
 
       previousValue.slpAgeAverage.push({
-        date: currentValue.timestamp * 1000,
+        date,
         value: !Number.isNaN(average) ? average : 0,
       });
 
       previousValue.slpBalance.push({
-        date: currentValue.timestamp * 1000,
+        date,
         value: parseFloat(currentValue.slpBalance),
       });
 
       previousValue.userCount.push({
-        date: currentValue.timestamp * 1000,
+        date,
         value: parseFloat(currentValue.userCount),
       });
 

@@ -79,7 +79,7 @@ export default function PoolTable({ pools, ...rest }) {
                   display="inline"
                 />{" "}
                 / {Number(row.roiPerMonth * 3 * 100).toFixed(2)}% /{" "}
-                {Number(row.roiPerMonth * 3 * 100).toFixed(2)}%
+                {Number(row.roiPerDay * 3 * 100).toFixed(2)}%
               </Typography>
             ),
           },

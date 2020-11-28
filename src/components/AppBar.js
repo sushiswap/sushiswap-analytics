@@ -22,6 +22,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Sushi from "./Sushi";
 import clsx from "clsx";
 import { darkModeVar } from "app/core";
+import useDetect from "../core/hooks/useDetect";
 import { useReactiveVar } from "@apollo/client";
 import { useRouter } from "next/router";
 
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
     flexGrow: 1,
     // margin: "0 auto",
     justifyContent: "flex-start",
@@ -52,11 +54,12 @@ const useStyles = makeStyles((theme) => ({
     // [theme.breakpoints.up("sm")]: {
     //   justifyContent: "flex-center",
     // },
+    [theme.breakpoints.up("sm")]: {
+      justifyContent: "start",
+    },
   },
 
   logoCentered: {
-    display: "flex",
-    alignItems: "center",
     justifyContent: "center",
   },
 
@@ -100,7 +103,7 @@ export default function AppBar({
 
   const page =
     router.pathname === "/" ? "Dashboard" : router.pathname.split("/")[1];
-
+  const { isDesktop } = useDetect();
   return (
     <MuiAppBar
       position="fixed"
@@ -117,7 +120,7 @@ export default function AppBar({
           onClick={onToggleSidebar}
           className={classes.menuButton}
         >
-          {(matches && open) || (!matches && mobileOpen) ? (
+          {(open && isDesktop) || (mobileOpen && !matches) ? (
             <CloseOutlined />
           ) : (
             <Menu />
@@ -126,7 +129,7 @@ export default function AppBar({
         </IconButton>
         <div
           className={clsx(classes.logo, {
-            [classes.logoCentered]: (matches && !open) || !matches,
+            [classes.logoCentered]: !open && matches,
           })}
         >
           <Hidden xsDown implementation="css">

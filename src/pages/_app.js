@@ -9,7 +9,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Head from "next/head";
 import { ThemeProvider } from "@material-ui/core/styles";
 import fontTheme from "../styles/font";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import mediaQuery from "css-mediaquery";
+import parser from "ua-parser-js";
 
 function MyApp({ Component, pageProps }) {
   const client = useApollo(pageProps.initialApolloState);
@@ -20,54 +21,47 @@ function MyApp({ Component, pageProps }) {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
-  }, []);
-
-  useEffect(() => {
+    // Add JS
     document.body.className = (document.body.className ?? "").replace(
       "no-js",
       "js"
     );
   }, []);
 
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  // const deviceType = parser(req.headers["user-agent"]).device.type || "desktop";
 
-  // if (prefersDarkMode) {
-  //   if (!document.documentElement.classList.contains("dark-theme")) {
-  //     document.documentElement.classList.add(["dark-theme"]);
-  //   }
-  //   localStorage.setItem("darkMode", "true");
-  // }
+  // const ssrMatchMedia = (query) => ({
+  //   matches: mediaQuery.match(query, {
+  //     // The estimated CSS width of the browser.
+  //     width: deviceType === "mobile" ? "0px" : "1024px",
+  //   }),
+  // });
 
   const darkMode = useReactiveVar(darkModeVar);
 
-  // if ((prefersDarkMode && darkMode === null) || darkMode === "true") {
-  //   document.documentElement.classList.add(["dark-theme"]);
-  //   localStorage.setItem("darkMode", "true");
-  // } else {
-  //   document.documentElement.classList.remove(["dark-theme"]);
-  //   localStorage.setItem("darkMode", "false");
-  // }
-
-  // const theme = React.useMemo(
-  //   () => (darkMode && prefersDarkMode ? darkTheme : lightTheme),
-  //   [prefersDarkMode, darkMode]
-  // );
+  const theme = React.useMemo(() => (darkMode ? darkTheme : lightTheme), [
+    darkMode,
+  ]);
 
   return (
     <>
       <Head>
         <title>{process.env.NEXT_PUBLIC_APP_NAME}</title>
-        {/* <meta
-          name="viewport"
-          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
-        /> */}
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
       <ApolloProvider client={client}>
-        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+        <ThemeProvider
+          theme={{
+            ...theme,
+            // props: {
+            //   // Change the default options of useMediaQuery
+            //   MuiUseMediaQuery: { ssrMatchMedia },
+            // },
+          }}
+        >
           <CssBaseline />
           <Component {...pageProps} />
         </ThemeProvider>

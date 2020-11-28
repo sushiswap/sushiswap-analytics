@@ -335,9 +335,9 @@ export function Chart({
             left={tooltipLeft + 12}
             style={tooltipStyles}
           >
-            <Typography variant="subtitle2">{`$${millify(
-              getY(tooltipData)
-            )}`}</Typography>
+            <Typography variant="subtitle2">
+              {millify(getY(tooltipData))}
+            </Typography>
             <Typography variant="body2">
               {formatDate(getX(tooltipData))}
             </Typography>

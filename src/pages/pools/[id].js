@@ -102,6 +102,8 @@ function PoolPage() {
     slpAgeAverage,
     slpBalance,
     profit,
+    sushiHarvestedUSD,
+    sushiPendingUSD,
   } = poolHistories.reduce(
     (previousValue, currentValue) => {
       const date = currentValue.timestamp * 1000;
@@ -144,7 +146,7 @@ function PoolPage() {
         value: parseFloat(currentValue.userCount),
       });
 
-      const pendingSushiUSD =
+      const sushiPending =
         ((parseFloat(currentValue.slpBalance) *
           parseFloat(currentValue.pool.accSushiPerShare)) /
           1e12 /
@@ -152,8 +154,8 @@ function PoolPage() {
         sushiPrice;
 
       const reserveUSD =
-        (parseFloat(pool.liquidityPair.reserveUSD) /
-          parseFloat(pool.liquidityPair.totalSupply)) *
+        (parseFloat(pool.liquidityPair.reserveUSD) *
+          parseFloat(pool.liquidityPair.totalSupply)) /
         parseFloat(currentValue.slpBalance);
 
       previousValue.profit.push({
@@ -162,8 +164,18 @@ function PoolPage() {
           parseFloat(currentValue.entryUSD) -
           parseFloat(currentValue.exitUSD) +
           parseFloat(reserveUSD) +
-          parseFloat(pendingSushiUSD) +
+          parseFloat(sushiPending) +
           parseFloat(currentValue.sushiHarvestedUSD),
+      });
+
+      previousValue.sushiPendingUSD.push({
+        date,
+        value: parseFloat(sushiPending),
+      });
+
+      previousValue.sushiHarvestedUSD.push({
+        date,
+        value: parseFloat(currentValue.sushiHarvestedUSD),
       });
 
       return previousValue;
@@ -177,6 +189,8 @@ function PoolPage() {
       slpAgeAverage: [],
       slpBalance: [],
       profit: [],
+      sushiPendingUSD: [],
+      sushiHarvestedUSD: [],
     }
   );
 
@@ -310,17 +324,6 @@ function PoolPage() {
 
         <Grid item xs={12}>
           <Chart
-            title="Virtual Profit/Loss USD"
-            data={profit}
-            height={400}
-            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
-            tooptip
-            brush
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Chart
             title="Users"
             data={userCount}
             height={400}
@@ -334,6 +337,39 @@ function PoolPage() {
           <Chart
             title="SLP Balance"
             data={slpBalance}
+            height={400}
+            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
+            tooptip
+            brush
+          />
+        </Grid>
+
+        {/* <Grid item xs={12}>
+          <Chart
+            title="Virtual Profit/Loss USD"
+            data={profit}
+            height={400}
+            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
+            tooptip
+            brush
+          />
+        </Grid> */}
+
+        <Grid item xs={12}>
+          <Chart
+            title="Sushi Pending USD"
+            data={sushiPendingUSD}
+            height={400}
+            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
+            tooptip
+            brush
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Chart
+            title="Sushi Harvested USD"
+            data={sushiHarvestedUSD}
             height={400}
             margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
             tooptip

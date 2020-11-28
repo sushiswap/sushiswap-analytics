@@ -126,7 +126,7 @@ export default function AppBar({
         </IconButton>
         <div
           className={clsx(classes.logo, {
-            [classes.logoCentered]: !matches && !open,
+            [classes.logoCentered]: (matches && !open) || !matches,
           })}
         >
           <Hidden xsDown implementation="css">

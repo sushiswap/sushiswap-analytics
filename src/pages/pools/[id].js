@@ -43,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
 function PoolPage() {
   const router = useRouter();
 
+  if (router.isFallback) {
+    return <AppShell />;
+  }
+
   const classes = useStyles();
 
   const theme = useTheme();
@@ -297,7 +301,7 @@ export async function getStaticPaths() {
   // const paths = pools.map((pool) => ({
   //   params: { id: pool.id },
   // }));
-  return { paths: [], fallback: "blocking" };
+  return { paths: [], fallback: true };
 }
 
 export default PoolPage;

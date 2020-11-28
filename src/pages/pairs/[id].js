@@ -80,6 +80,10 @@ const useStyles = makeStyles((theme) => ({
 function PairPage(props) {
   const router = useRouter();
 
+  if (router.isFallback) {
+    return <AppShell />;
+  }
+
   const classes = useStyles();
 
   const { id } = router.query;
@@ -410,7 +414,7 @@ export async function getStaticPaths() {
   //   params: { id: pair.id },
   // }));
 
-  return { paths: [], fallback: "blocking" };
+  return { paths: [], fallback: true };
 }
 
 export default PairPage;

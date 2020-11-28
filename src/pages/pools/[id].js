@@ -17,13 +17,17 @@ import {
 } from "@material-ui/core";
 import {
   currencyFormatter,
+  ethPriceQuery,
   getApollo,
+  getEthPrice,
   getPool,
   getPoolHistories,
   getPoolIds,
   getPools,
+  getSushiToken,
   poolHistoryQuery,
   poolQuery,
+  tokenQuery,
 } from "app/core";
 
 import Head from "next/head";
@@ -73,6 +77,23 @@ function PoolPage() {
   });
 
   const {
+    data: { bundles },
+  } = useQuery(ethPriceQuery, {
+    pollInterval: 60000,
+  });
+
+  const {
+    data: { token },
+  } = useQuery(tokenQuery, {
+    variables: {
+      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+    },
+  });
+
+  const sushiPrice =
+    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+
+  const {
     slpAge,
     slpAgeRemoved,
     userCount,
@@ -80,7 +101,7 @@ function PoolPage() {
     slpWithdrawn,
     slpAgeAverage,
     slpBalance,
-    pendingSushi,
+    profit,
   } = poolHistories.reduce(
     (previousValue, currentValue) => {
       const date = currentValue.timestamp * 1000;
@@ -123,15 +144,27 @@ function PoolPage() {
         value: parseFloat(currentValue.userCount),
       });
 
-      // const pendingSushi =
-      //   (currentValue.slpBalance * currentValue.pool.accSushiPerShare) /
-      //   1e12 /
-      //   1e18;
+      const pendingSushiUSD =
+        ((parseFloat(currentValue.slpBalance) *
+          parseFloat(currentValue.pool.accSushiPerShare)) /
+          1e12 /
+          1e18) *
+        sushiPrice;
 
-      // previousValue.pendingSushi.push({
-      //   date,
-      //   value: parseFloat(pendingSushi),
-      // });
+      const reserveUSD =
+        (parseFloat(pool.liquidityPair.reserveUSD) /
+          parseFloat(pool.liquidityPair.totalSupply)) *
+        parseFloat(currentValue.slpBalance);
+
+      previousValue.profit.push({
+        date,
+        value:
+          parseFloat(currentValue.entryUSD) -
+          parseFloat(currentValue.exitUSD) +
+          parseFloat(reserveUSD) +
+          parseFloat(pendingSushiUSD) +
+          parseFloat(currentValue.sushiHarvestedUSD),
+      });
 
       return previousValue;
     },
@@ -143,7 +176,7 @@ function PoolPage() {
       slpWithdrawn: [],
       slpAgeAverage: [],
       slpBalance: [],
-      pendingSushi: [],
+      profit: [],
     }
   );
 
@@ -277,6 +310,17 @@ function PoolPage() {
 
         <Grid item xs={12}>
           <Chart
+            title="Virtual Profit/Loss USD"
+            data={profit}
+            height={400}
+            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
+            tooptip
+            brush
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Chart
             title="Users"
             data={userCount}
             height={400}
@@ -310,6 +354,8 @@ function PoolPage() {
 
 export async function getStaticProps({ params: { id } }) {
   const client = getApollo();
+  await getEthPrice(client);
+  await getSushiToken(client);
   await getPool(id, client);
   await getPoolHistories(id, client);
   return {

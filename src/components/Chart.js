@@ -295,7 +295,7 @@ export function Chart({
               brushDirection="horizontal"
               initialBrushPosition={initialBrushPosition}
               onChange={onBrushChange}
-              onClick={() => setFilteredStock(data)}
+              onClick={() => setFilteredData(data)}
               selectedBoxStyle={selectedBrushStyle}
             />
           </Area>

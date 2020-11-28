@@ -32,8 +32,6 @@ const poolUserFragment = gql`
     sushiHarvestedUSD
     sushiHarvestedSinceLockup
     sushiHarvestedSinceLockupUSD
-    entryUSD
-    exitUSD
   }
 `;
 
@@ -59,6 +57,9 @@ export const poolHistoryQuery = gql`
       slpAgeRemoved
       slpDeposited
       slpWithdrawn
+      entryUSD
+      exitUSD
+      sushiHarvestedUSD
       userCount
       timestamp
       block
@@ -90,6 +91,8 @@ export const poolQuery = gql`
       slpAge
       liquidityPair @client
       timestamp
+      entryUSD
+      exitUSD
     }
   }
 `;

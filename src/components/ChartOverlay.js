@@ -22,7 +22,7 @@ export default function ChartOverlay({ overlay, onTimespanChange }) {
           {formatDate(date * 1e3)}
         </Typography>
       </div>
-      <div style={{ position: "absolute", top: 24, right: 24 }}>
+      <div style={{ position: "absolute", top: 20, right: 12 }}>
         <Box display="flex" flexDirection={matches ? "row" : "column"}>
           <Button
             type="button"

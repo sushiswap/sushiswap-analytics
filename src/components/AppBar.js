@@ -65,7 +65,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AppBar({ children, onToggleSidebar, open }) {
+export default function AppBar({
+  children,
+  onToggleSidebar,
+  open,
+  mobileOpen,
+}) {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
@@ -112,7 +117,12 @@ export default function AppBar({ children, onToggleSidebar, open }) {
           onClick={onToggleSidebar}
           className={classes.menuButton}
         >
-          {open ? <CloseOutlined /> : <Menu />}
+          {(matches && open) || (!matches && mobileOpen) ? (
+            <CloseOutlined />
+          ) : (
+            <Menu />
+          )}
+          {/* {!matches && open ? <CloseOutlined /> : <Menu />} */}
         </IconButton>
         <div
           className={clsx(classes.logo, {

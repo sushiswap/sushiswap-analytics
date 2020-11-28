@@ -101,9 +101,7 @@ function PoolPage() {
     slpWithdrawn,
     slpAgeAverage,
     slpBalance,
-    profit,
-    sushiHarvestedUSD,
-    sushiPendingUSD,
+    tvl,
   } = poolHistories.reduce(
     (previousValue, currentValue) => {
       const date = currentValue.timestamp * 1000;
@@ -128,12 +126,12 @@ function PoolPage() {
         value: parseFloat(currentValue.slpWithdrawn),
       });
 
-      const average =
+      const slpAgeAverage =
         parseFloat(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
 
       previousValue.slpAgeAverage.push({
         date,
-        value: !Number.isNaN(average) ? average : 0,
+        value: !Number.isNaN(slpAgeAverage) ? slpAgeAverage : 0,
       });
 
       previousValue.slpBalance.push({
@@ -146,36 +144,31 @@ function PoolPage() {
         value: parseFloat(currentValue.userCount),
       });
 
-      const sushiPending =
-        ((parseFloat(currentValue.slpBalance) *
-          parseFloat(currentValue.pool.accSushiPerShare)) /
-          1e12 /
-          1e18) *
-        sushiPrice;
+      // const sushiPending =
+      //   ((parseFloat(currentValue.slpBalance) *
+      //     parseFloat(currentValue.pool.accSushiPerShare)) /
+      //     1e12 /
+      //     1e18) *
+      //   sushiPrice;
 
       const reserveUSD =
-        (parseFloat(pool.liquidityPair.reserveUSD) *
-          parseFloat(pool.liquidityPair.totalSupply)) /
+        (parseFloat(pool.liquidityPair.reserveUSD) /
+          parseFloat(pool.liquidityPair.totalSupply)) *
         parseFloat(currentValue.slpBalance);
 
-      previousValue.profit.push({
-        date,
-        value:
-          parseFloat(currentValue.entryUSD) -
-          parseFloat(currentValue.exitUSD) +
-          parseFloat(reserveUSD) +
-          parseFloat(sushiPending) +
-          parseFloat(currentValue.sushiHarvestedUSD),
-      });
+      // previousValue.profit.push({
+      //   date,
+      //   value:
+      //     parseFloat(currentValue.entryUSD) -
+      //     parseFloat(currentValue.exitUSD) +
+      //     parseFloat(reserveUSD) +
+      //     parseFloat(sushiPending) +
+      //     parseFloat(currentValue.sushiHarvestedUSD),
+      // });
 
-      previousValue.sushiPendingUSD.push({
+      previousValue.tvl.push({
         date,
-        value: parseFloat(sushiPending),
-      });
-
-      previousValue.sushiHarvestedUSD.push({
-        date,
-        value: parseFloat(currentValue.sushiHarvestedUSD),
+        value: reserveUSD,
       });
 
       return previousValue;
@@ -188,9 +181,7 @@ function PoolPage() {
       slpWithdrawn: [],
       slpAgeAverage: [],
       slpBalance: [],
-      profit: [],
-      sushiPendingUSD: [],
-      sushiHarvestedUSD: [],
+      tvl: [],
     }
   );
 
@@ -357,19 +348,8 @@ function PoolPage() {
 
         <Grid item xs={12}>
           <Chart
-            title="Sushi Pending USD"
-            data={sushiPendingUSD}
-            height={400}
-            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
-            tooptip
-            brush
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Chart
-            title="Sushi Harvested USD"
-            data={sushiHarvestedUSD}
+            title="TVL USD"
+            data={tvl}
             height={400}
             margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
             tooptip

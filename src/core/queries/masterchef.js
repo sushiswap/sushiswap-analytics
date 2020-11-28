@@ -28,6 +28,8 @@ const poolUserFragment = gql`
     }
     amount
     rewardDebt
+    entryUSD
+    exitUSD
     sushiHarvested
     sushiHarvestedUSD
     sushiHarvestedSinceLockup

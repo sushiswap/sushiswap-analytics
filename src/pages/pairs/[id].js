@@ -53,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   links: {
-    textAlign: "right",
     "& > a:first-of-type": {
       marginRight: theme.spacing(3),
     },
@@ -88,11 +87,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   reserves: {
+    marginBottom: theme.spacing(2),
     "& > div:first-of-type": {
       marginRight: theme.spacing(2),
     },
     [theme.breakpoints.up("sm")]: {
       display: "flex",
+      marginBottom: 0,
     },
   },
 }));
@@ -276,7 +277,7 @@ function PairPage(props) {
           </Grid>
 
           <Grid container item xs={12} alignItems="center">
-            <Grid item xs={6} className={classes.reserves}>
+            <Grid item xs={12} sm={6} className={classes.reserves}>
               <Box display="flex" alignItems="center">
                 <TokenIcon className={classes.avatar} id={pair.token0.id} />
                 <Typography
@@ -307,7 +308,7 @@ function PairPage(props) {
               </Box>
             </Grid>
 
-            <Grid item xs={6} className={classes.links}>
+            <Grid item xs={12} sm={6} className={classes.links}>
               <Link
                 href={`https://exchange.sushiswapclassic.org/#/add/${pair.token0.id}/${pair.token1.id}`}
                 target="_blank"

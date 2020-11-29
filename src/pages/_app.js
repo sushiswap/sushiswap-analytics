@@ -26,15 +26,6 @@ function MyApp({ Component, pageProps }) {
     );
   }, []);
 
-  // const deviceType = parser(req.headers["user-agent"]).device.type || "desktop";
-
-  // const ssrMatchMedia = (query) => ({
-  //   matches: mediaQuery.match(query, {
-  //     // The estimated CSS width of the browser.
-  //     width: deviceType === "mobile" ? "0px" : "1024px",
-  //   }),
-  // });
-
   const darkMode = useReactiveVar(darkModeVar);
 
   const theme = React.useMemo(() => (darkMode ? darkTheme : lightTheme), [

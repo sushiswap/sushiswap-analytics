@@ -9,13 +9,14 @@ import {
   PageHeader,
   PairIcon,
   Percent,
+  TokenIcon,
   Transactions,
 } from "app/components";
 import { Avatar, Box, Chip, Grid, Paper, Typography } from "@material-ui/core";
 import {
-  currencyFormatter,
-  decimalFormatter,
   ethPriceQuery,
+  formatCurrency,
+  formatDecimal,
   getApollo,
   getPair,
   pairDayDatasQuery,
@@ -41,14 +42,23 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(4),
   },
   title: {
-    marginBottom: theme.spacing(4),
+    marginBottom: 0,
+    display: "flex",
+    flexDirection: "column",
     [theme.breakpoints.up("sm")]: {
-      marginBottom: 0,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      flex: 1,
+      marginBottom: theme.spacing(3),
     },
   },
   links: {
+    textAlign: "right",
     "& > a:first-of-type": {
-      marginRight: theme.spacing(4),
+      marginRight: theme.spacing(3),
+    },
+    [theme.breakpoints.up("sm")]: {
+      textAlign: "right",
     },
   },
   avatar: {
@@ -67,12 +77,22 @@ const useStyles = makeStyles((theme) => ({
   },
   chips: {
     // margin: theme.spacing(4, 0, 0, 0),
+    margin: theme.spacing(3, 0),
+    overflowY: "hidden",
+    overflowX: "auto",
     "& > div:first-of-type": {
       marginRight: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-      [theme.breakpoints.up("sm")]: {
-        marginBottom: 0,
-      },
+    },
+    [theme.breakpoints.up("sm")]: {
+      margin: 0,
+    },
+  },
+  reserves: {
+    "& > div:first-of-type": {
+      marginRight: theme.spacing(2),
+    },
+    [theme.breakpoints.up("sm")]: {
+      display: "flex",
     },
   },
 }));
@@ -142,6 +162,21 @@ function PairPage(props) {
 
   const feesYesterday = volumeYesterday * 0.003;
 
+  const avgTradePrice = volume / (pair?.txCount - pair?.oneDay?.txCount);
+
+  const avgTradePriceYesturday =
+    volumeYesterday / (pair?.oneDay?.txCount - pair?.twoDay?.txCount);
+
+  const avgTradePriceChange =
+    ((avgTradePrice - avgTradePriceYesturday) / avgTradePriceYesturday) * 100;
+
+  const utilisation = volume / pair.reserveUSD;
+
+  const utilisationYesterday = volumeYesterday / pair.oneDay.reserveUSD;
+
+  const utilisationChange =
+    ((utilisation - utilisationYesterday) / utilisationYesterday) * 100;
+
   const chartDatas = pairDayDatas.reduce(
     (previousValue, currentValue) => {
       const untrackedVolumeUSD =
@@ -178,36 +213,116 @@ function PairPage(props) {
         </title>
       </Head>
       <PageHeader>
-        <Grid
-          container
-          alignItems="center"
-          justify="space-between"
-          className={classes.top}
-        >
-          <Grid item xs={12} sm="auto" className={classes.title}>
-            <Box display="flex" alignItems="center">
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item xs={12} className={classes.title}>
+            <Box
+              display="flex"
+              alignItems="center"
+              className={classes.titleText}
+            >
               <PairIcon base={pair.token0.id} quote={pair.token1.id} />
-              <Typography variant="h5" component="h1">
-                {pair.token0.symbol}-{pair.token1.symbol} PAIR
+              <Typography variant="h5" component="h1" noWrap>
+                {pair.token0.symbol}-{pair.token1.symbol}
               </Typography>
+            </Box>
+            <Box display="flex" alignItems="center" className={classes.chips}>
+              <Chip
+                size="small"
+                color="primary"
+                avatar={
+                  <Avatar
+                    style={{ backgroundColor: "transparent" }}
+                    alt="USDC"
+                    src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                      pair.token0.id
+                    )}/logo.png`}
+                  />
+                }
+                clickable
+                onClick={() => {
+                  router.push("/tokens/" + pair.token0.id);
+                }}
+                label={`1 ${pair.token0.symbol} = ${formatDecimal(
+                  pair.reserve1 / pair.reserve0
+                )} ${pair.token1.symbol} (${formatCurrency(
+                  pair.token0?.derivedETH * bundles[0].ethPrice
+                )})`}
+                variant="outlined"
+              />
+              <Chip
+                size="small"
+                color="primary"
+                avatar={
+                  <Avatar
+                    style={{ backgroundColor: "transparent" }}
+                    alt="ETH"
+                    src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                      pair.token1.id
+                    )}/logo.png`}
+                  />
+                }
+                clickable
+                onClick={() => {
+                  router.push("/tokens/" + pair.token1.id);
+                }}
+                label={`1 ${pair.token1.symbol} = ${formatDecimal(
+                  pair.reserve0 / pair.reserve1
+                )} ${pair.token0.symbol} (${formatCurrency(
+                  pair.token1?.derivedETH * bundles[0].ethPrice
+                )})`}
+                variant="outlined"
+              />
             </Box>
           </Grid>
 
-          <Grid item xs={12} sm="auto" className={classes.links}>
-            <Link
-              href={`https://exchange.sushiswapclassic.org/#/add/${pair.token0.id}/${pair.token1.id}`}
-              target="_blank"
-              variant="body1"
-            >
-              Add Liquidity
-            </Link>
-            <Link
-              href={`https://exchange.sushiswapclassic.org/#/swap?inputCurrency=${pair.token0.id}&outputCurrency=${pair.token1.id}`}
-              target="_blank"
-              variant="body1"
-            >
-              Trade
-            </Link>
+          <Grid container item xs={12} alignItems="center">
+            <Grid item xs={6} className={classes.reserves}>
+              <Box display="flex" alignItems="center">
+                <TokenIcon className={classes.avatar} id={pair.token0.id} />
+                <Typography
+                  variant="h6"
+                  color="textPrimary"
+                  noWrap
+                  className={classes.reserve}
+                >
+                  {formatDecimal(pair.reserve0)}
+                </Typography>
+                <Typography variant="subtitle2" color="textSecondary" noWrap>
+                  {pair.token0.symbol}
+                </Typography>
+              </Box>
+              <Box display="flex" alignItems="center">
+                <TokenIcon className={classes.avatar} id={pair.token1.id} />
+                <Typography
+                  variant="h6"
+                  color="textPrimary"
+                  noWrap
+                  className={classes.reserve}
+                >
+                  {formatDecimal(pair.reserve1)}
+                </Typography>
+                <Typography variant="subtitle2" color="textSecondary" noWrap>
+                  {pair.token1.symbol}
+                </Typography>
+              </Box>
+            </Grid>
+
+            <Grid item xs={6} className={classes.links}>
+              <Link
+                href={`https://exchange.sushiswapclassic.org/#/add/${pair.token0.id}/${pair.token1.id}`}
+                target="_blank"
+                variant="body1"
+              >
+                Add Liquidity
+              </Link>
+              <Link
+                href={`https://exchange.sushiswapclassic.org/#/swap?inputCurrency=${pair.token0.id}&outputCurrency=${pair.token1.id}`}
+                target="_blank"
+                variant="body1"
+              >
+                Trade
+              </Link>
+            </Grid>
           </Grid>
         </Grid>
       </PageHeader>
@@ -235,7 +350,6 @@ function PairPage(props) {
             </Paper>
           </Grid>
         ) : null}
-
         {chartDatas.liquidity.length > 1 ? (
           <Grid item xs={12} md={6}>
             <Paper
@@ -258,139 +372,46 @@ function PairPage(props) {
             </Paper>
           </Grid>
         ) : null}
-
-        <Grid item xs={12} md={4}>
+        {/* <Grid item xs={12} sm={6} md={3}>
           <KPI
             title="Liquidity (24h)"
-            value={currencyFormatter.format(pair?.reserveUSD || 0)}
+            value={formatCurrency(pair?.reserveUSD || 0)}
             difference={(
               ((pair?.reserveUSD - pair?.oneDay?.reserveUSD) /
                 pair?.oneDay?.reserveUSD) *
               100
             ).toFixed(2)}
           />
-        </Grid>
-        <Grid item xs={12} md={4}>
+        </Grid> */}
+        <Grid item xs={12} sm={6} md={3}>
           <KPI
             title="Volume (24h)"
-            value={currencyFormatter.format(volume || 0)}
+            value={formatCurrency(volume || 0)}
             difference={volumeChange}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} sm={6} md={3}>
           <KPI
             title="Fees (24h)"
-            value={currencyFormatter.format(fees)}
+            value={formatCurrency(fees)}
             difference={((fees - feesYesterday) / feesYesterday) * 100}
           />
         </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <KPI
+            title="Avg. Trade (24h)"
+            value={formatCurrency(avgTradePrice)}
+            difference={avgTradePriceChange}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <KPI
+            title="Utilisation % (24h)"
+            value={formatDecimal(utilisation)}
+            difference={utilisationChange}
+          />
+        </Grid>
       </Grid>
-
-      <Box my={4}>
-        <Typography variant="h6" component="h2" gutterBottom>
-          Tokens
-        </Typography>
-        <Grid container justify="flex-start" xs={12} className={classes.chips}>
-          <Grid item>
-            <Chip
-              color="primary"
-              avatar={
-                <Avatar
-                  style={{ backgroundColor: "transparent" }}
-                  alt="USDC"
-                  src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                    pair.token0.id
-                  )}/logo.png`}
-                />
-              }
-              clickable
-              onClick={() => {
-                router.push("/tokens/" + pair.token0.id);
-              }}
-              label={`1 ${pair.token0.symbol} = ${decimalFormatter.format(
-                pair.reserve1 / pair.reserve0
-              )} ${pair.token1.symbol} (${currencyFormatter.format(
-                pair.token0?.derivedETH * bundles[0].ethPrice
-              )})`}
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item>
-            <Chip
-              color="primary"
-              avatar={
-                <Avatar
-                  style={{ backgroundColor: "transparent" }}
-                  alt="ETH"
-                  src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                    pair.token1.id
-                  )}/logo.png`}
-                />
-              }
-              clickable
-              onClick={() => {
-                router.push("/tokens/" + pair.token1.id);
-              }}
-              label={`1 ${pair.token1.symbol} = ${decimalFormatter.format(
-                pair.reserve0 / pair.reserve1
-              )} ${pair.token0.symbol} (${currencyFormatter.format(
-                pair.token1?.derivedETH * bundles[0].ethPrice
-              )})`}
-              variant="outlined"
-            />
-          </Grid>
-        </Grid>
-      </Box>
-
-      <Box my={4}>
-        <Typography variant="h6" component="h2" gutterBottom>
-          Reserves
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item>
-            <Box display="flex" alignItems="center">
-              <Avatar
-                className={classes.avatar}
-                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                  pair.token0.id
-                )}/logo.png`}
-              />
-              <Typography
-                variant="h6"
-                color="textPrimary"
-                noWrap
-                className={classes.reserve}
-              >
-                {decimalFormatter.format(pair.reserve0)}
-              </Typography>
-              <Typography variant="subtitle2" color="textSecondary" noWrap>
-                {pair.token0.symbol}
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item>
-            <Box display="flex" alignItems="center">
-              <Avatar
-                className={classes.avatar}
-                src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                  pair.token1.id
-                )}/logo.png`}
-              />
-              <Typography
-                variant="h6"
-                color="textPrimary"
-                noWrap
-                className={classes.reserve}
-              >
-                {decimalFormatter.format(pair.reserve1)}
-              </Typography>
-              <Typography variant="subtitle2" color="textSecondary" noWrap>
-                {pair.token1.symbol}
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Box>
 
       <Box my={4}>
         <BasicTable

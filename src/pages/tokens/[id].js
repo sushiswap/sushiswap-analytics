@@ -38,9 +38,16 @@ import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   title: {
-    marginBottom: theme.spacing(4),
+    display: "flex",
+    flexDirection: "column",
+    // marginBottom: theme.spacing(1),
     [theme.breakpoints.up("sm")]: {
+      flexDirection: "row",
+      justifyContent: "flex-start",
       marginBottom: 0,
+      "& > div:first-of-type": {
+        marginRight: theme.spacing(1),
+      },
     },
   },
   links: {
@@ -53,6 +60,12 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
+  },
+  price: {
+    margin: theme.spacing(2, 0),
+    [theme.breakpoints.up("sm")]: {
+      margin: 0,
+    },
   },
 }));
 
@@ -166,13 +179,16 @@ function TokenPage() {
           direction="row"
           justify="space-between"
           alignItems="center"
-          // className={classes.top}
         >
           <Grid item xs={12} sm="auto" className={classes.title}>
             <Box display="flex" alignItems="center">
               <TokenIcon id={token.id} />
               <Typography variant="h5" component="h1" noWrap>
                 {token.name} ({token.symbol}){" "}
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="center" className={classes.price}>
+              <Typography variant="h6" component="div">
                 {currencyFormatter.format(price || 0)}
               </Typography>
               <Percent percent={priceChange} ml={1} />

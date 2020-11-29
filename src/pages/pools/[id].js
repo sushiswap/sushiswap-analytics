@@ -3,6 +3,7 @@ import {
   Chart,
   Curves,
   KPI,
+  Link,
   LiquidityProviderList,
   PageHeader,
   PairIcon,
@@ -155,6 +156,8 @@ function PoolPage() {
       return previousValue;
     },
     {
+      entries: [],
+      exits: [],
       slpAge: [],
       slpAgeAverage: [],
       slpAgeRemoved: [],
@@ -173,7 +176,42 @@ function PoolPage() {
       </Head>
 
       <PageHeader mb={3}>
-        <Box display="flex" alignItems="center">
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="center"
+          // className={classes.top}
+        >
+          <Grid item xs={12} sm="auto" className={classes.title}>
+            <Box display="flex" alignItems="center">
+              <PairIcon
+                base={pool.liquidityPair.token0.id}
+                quote={pool.liquidityPair.token1.id}
+              />
+              <Typography variant="h5" component="h1">
+                {pool.liquidityPair.token0.symbol}-
+                {pool.liquidityPair.token1.symbol} POOL
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm="auto" className={classes.links}>
+            <Link
+              href={`https://sushiswapclassic.org/farms/${
+                pool.liquidityPair.token0.symbol
+              }-${pool.liquidityPair.token1.symbol.replace(
+                "WETH",
+                "ETH"
+              )}%20SLP`}
+              target="_blank"
+              variant="body1"
+            >
+              Stake SLP
+            </Link>
+          </Grid>
+        </Grid>
+
+        {/* <Box display="flex" alignItems="center">
           <PairIcon
             base={pool.liquidityPair.token0.id}
             quote={pool.liquidityPair.token1.id}
@@ -182,7 +220,7 @@ function PoolPage() {
             {pool.liquidityPair.token0.symbol}-
             {pool.liquidityPair.token1.symbol} POOL
           </Typography>
-        </Box>
+        </Box> */}
       </PageHeader>
 
       <Grid container spacing={3}>

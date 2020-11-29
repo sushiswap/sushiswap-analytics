@@ -147,11 +147,13 @@ export async function getPair(id, client = getApollo()) {
           untrackedVolumeUSD: String(oneDayPair?.untrackedVolumeUSD),
           volumeUSD: String(oneDayPair?.volumeUSD),
           reserveUSD: String(oneDayPair?.reserveUSD),
+          txCount: String(oneDayPair?.txCount),
         },
         twoDay: {
           untrackedVolumeUSD: String(twoDayPair?.untrackedVolumeUSD),
           volumeUSD: String(twoDayPair?.volumeUSD),
           reserveUSD: String(twoDayPair?.reserveUSD),
+          txCount: String(twoDayPair?.txCount),
         },
       },
     },
@@ -212,11 +214,13 @@ export async function getPairs(client = getApollo()) {
             untrackedVolumeUSD: String(oneDayPair?.untrackedVolumeUSD),
             volumeUSD: String(oneDayPair?.volumeUSD),
             reserveUSD: String(oneDayPair?.reserveUSD),
+            txCount: String(oneDayPair?.txCount),
           },
           sevenDay: {
             untrackedVolumeUSD: String(sevenDayPair?.untrackedVolumeUSD),
             volumeUSD: String(sevenDayPair?.volumeUSD),
             reserveUSD: String(sevenDayPair?.reserveUSD),
+            txCount: String(oneDayPair?.txCount),
           },
         };
       }),

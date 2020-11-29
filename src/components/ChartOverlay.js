@@ -1,13 +1,28 @@
-import { Box, Button, Typography, useMediaQuery } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Typography,
+  makeStyles,
+  useMediaQuery,
+} from "@material-ui/core";
 import { timeFormat, timeParse } from "d3-time-format";
 
 import { useTheme } from "@material-ui/core/styles";
 
 const formatDate = timeFormat("%b %d, '%y");
-
+const useStyles = makeStyles((theme) => ({
+  filter: {
+    display: "flex",
+    flexDirection: "column",
+    [theme.breakpoints.up("md")]: {
+      flexDirection: "row",
+    },
+  },
+}));
 export default function ChartOverlay({ overlay, onTimespanChange }) {
   const { title, value, date } = overlay;
   const theme = useTheme();
+  const classes = useStyles();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   return (
     <>
@@ -23,7 +38,7 @@ export default function ChartOverlay({ overlay, onTimespanChange }) {
         </Typography>
       </div>
       <div style={{ position: "absolute", top: 20, right: 12 }}>
-        <Box display="flex" flexDirection={matches ? "row" : "column"}>
+        <div className={classes.filter}>
           <Button
             type="button"
             value="1W"
@@ -57,7 +72,7 @@ export default function ChartOverlay({ overlay, onTimespanChange }) {
           >
             ALL
           </Button>
-        </Box>
+        </div>
       </div>
     </>
   );

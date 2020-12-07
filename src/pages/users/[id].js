@@ -72,7 +72,7 @@ function UserPage() {
   const { id } = router.query;
 
   const {
-    data: { bundles },
+    data: { bundles } = {},
   } = useQuery(ethPriceQuery, {
     pollInterval: 60000,
   });
@@ -112,7 +112,7 @@ function UserPage() {
   );
 
   const {
-    data: { token },
+    data: { token } = {},
   } = useQuery(tokenQuery, {
     variables: {
       id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
@@ -124,7 +124,7 @@ function UserPage() {
   // console.log("pairAddresses", pairAddresses);
 
   const {
-    data: { pairs },
+    data: { pairs } = {},
   } = useQuery(pairsQuery);
 
   // console.log("pairs", pairs);
@@ -142,7 +142,7 @@ function UserPage() {
   // );
 
   const sushiPrice =
-    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+    parseFloat(token?.derivedETH) * parseFloat(bundles?.[0].ethPrice);
 
   const xSushi = parseFloat(barData?.user?.xSushi);
 
@@ -186,7 +186,7 @@ function UserPage() {
 
   const farmingStaked = poolUsers?.reduce((previousValue, currentValue) => {
     // console.log(currentValue);
-    const pair = pairs.find((pair) => pair.id == currentValue?.pool?.pair);
+    const pair = pairs?.find((pair) => pair.id == currentValue?.pool?.pair);
     if (!pair) {
       return previousValue;
     }
@@ -240,7 +240,7 @@ function UserPage() {
 
   const blockDifference =
     parseInt(blocksData?.blocks[0].number) -
-    parseInt(barData.user.createdAtBlock);
+    parseInt(barData?.user.createdAtBlock);
 
   const barRoiDailySushi =
     ((barPending + barRoiSushi - barStaked) / blockDifference) * 6440;

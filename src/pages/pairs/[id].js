@@ -158,7 +158,6 @@ function PairPage(props) {
 
   const chartDatas = pairDayDatas.reduce(
     (previousValue, currentValue) => {
-      console.log(currentValue);
       const untrackedVolumeUSD =
         currentValue?.token0.derivedETH * currentValue?.volumeToken0 +
         currentValue?.token1.derivedETH *
@@ -176,7 +175,7 @@ function PairPage(props) {
       });
       previousValue["volume"].unshift({
         date: currentValue.date,
-        value: parseFloat(currentValue?.volumeUSD),
+        value: parseFloat(volumeUSD),
       });
       return previousValue;
     },

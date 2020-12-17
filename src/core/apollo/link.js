@@ -26,18 +26,10 @@ export const masterchef = from([
   }),
 ]);
 
-// export const exchange = from([
-//   new RetryLink(),
-//   new HttpLink({
-//     uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/exchange",
-//     shouldBatch: true,
-//   }),
-// ]);
-
 export const exchange = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/exchange",
+    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/exchange",
     shouldBatch: true,
   }),
 ]);

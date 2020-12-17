@@ -26,10 +26,12 @@ export default function PairTable({ pairs, title, ...rest }) {
 
       const volumeUSD =
         pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD;
+
       const oneDayVolumeUSD =
         pair?.oneDay?.volumeUSD === "0"
           ? pair?.oneDay?.untrackedVolumeUSD
           : pair?.oneDay?.volumeUSD;
+
       const sevenDayVolumeUSD =
         pair?.sevenDay?.volumeUSD === "0"
           ? pair?.sevenDay?.untrackedVolumeUSD

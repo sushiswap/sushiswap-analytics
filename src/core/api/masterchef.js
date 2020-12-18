@@ -38,8 +38,6 @@ export async function getPoolIds(client = getApollo()) {
 }
 
 export async function getPoolUser(id, client = getApollo()) {
-  console.log("GET POOL USER", id);
-
   const { data } = await client.query({
     query: poolUserQuery,
     fetchPolicy: "network-only",
@@ -50,8 +48,6 @@ export async function getPoolUser(id, client = getApollo()) {
       clientName: "masterchef",
     },
   });
-
-  console.log("POOL USER DATA", data);
 
   await client.cache.writeQuery({
     query: poolUserQuery,
@@ -133,8 +129,9 @@ export async function getPools(client = getApollo()) {
   });
 
   const pairAddresses = pools
+    .filter((pool) => !pool?.pair)
     .map((pool) => {
-      return pool.pair;
+      return pool?.pair;
     })
     .sort();
 
@@ -170,6 +167,8 @@ export async function getPools(client = getApollo()) {
     query: liquidityPositionSubsetQuery,
     variables: { user: "0xc2edad668740f1aa35e4d8f227fb8e17dca888cd" },
   });
+
+  // console.log();
 
   await client.cache.writeQuery({
     query: poolsQuery,

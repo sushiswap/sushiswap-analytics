@@ -9,19 +9,20 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: "100%",
   },
-  content: {
-    alignItems: "center",
-    justifyContent: "center",
-    display: "flex",
+
+  cardContent: {
+    // textAlign: "center",
+    "&:last-child": {
+      paddingBottom: 16,
+    },
   },
   title: {
     fontWeight: 500,
   },
-  cardContent: {
-    textAlign: "center",
-    "&:last-child": {
-      paddingBottom: 16,
-    },
+  content: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
 }));
 
@@ -47,10 +48,11 @@ function KPI({
           color="textSecondary"
           gutterBottom
           noWrap
+          className={classes.title}
         >
           {title}
         </Typography>
-        <Box display="flex" alignItems="center" justifyContent="center">
+        <div className={classes.content}>
           <Typography variant="h6" color="textPrimary" noWrap>
             {!Number.isNaN(value) ? value : 0}
           </Typography>
@@ -59,7 +61,7 @@ function KPI({
               <Percent marginLeft={1} percent={difference} />
             ) : null}
           </Typography>
-        </Box>
+        </div>
       </CardContent>
     </Card>
   );

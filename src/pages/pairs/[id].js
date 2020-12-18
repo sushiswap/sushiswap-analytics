@@ -396,7 +396,9 @@ function PairPage(props) {
         <Typography variant="h6" component="h2" gutterBottom>
           IntoTheBlock
         </Typography>
-        <IntoTheBlock pairAddress={pair.id} />
+        <div style={{ position: "relative" }}>
+          <IntoTheBlock pairAddress={pair.id} />
+        </div>
       </Box>
       <Box my={4}>
         <Transactions transactions={transactions} txCount={pair.txCount} />

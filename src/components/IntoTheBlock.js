@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const IntoTheBlock = (props) => {
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    if (window.itbWidgetInit) {
+    if (window.itbWidgetInit && !loaded) {
       window.itbWidgetInit({
         apiKey: "IXlsoP7uCH5tjojovmac53V8xlOh8Qa31yOgozMG",
         options: {
@@ -21,6 +22,7 @@ const IntoTheBlock = (props) => {
           },
         },
       });
+      setLoaded(true);
     }
   }, [props.pairAddress]);
 

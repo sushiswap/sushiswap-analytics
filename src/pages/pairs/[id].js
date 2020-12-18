@@ -4,6 +4,7 @@ import {
   BarChart,
   BasicTable,
   Chart,
+  IntoTheBlock,
   KPI,
   Link,
   PageHeader,
@@ -54,6 +55,18 @@ const useStyles = makeStyles((theme) => ({
   },
   firstLink: {
     marginRight: theme.spacing(2),
+  },
+  pageHeader: {
+    display: "block",
+    [theme.breakpoints.up("sm")]: {
+      display: "flex",
+    },
+  },
+  links: {
+    margin: theme.spacing(2, 0),
+    [theme.breakpoints.up("sm")]: {
+      margin: 0,
+    },
   },
 }));
 
@@ -137,6 +150,12 @@ function PairPage(props) {
   const utilisationChange =
     ((utilisation - utilisationYesterday) / utilisationYesterday) * 100;
 
+  const tx = pair.txCount - pair.oneDay.txCount;
+
+  const txYesterday = pair.oneDay.txCount - pair.twoDay.txCount;
+
+  const txChange = ((tx - txYesterday) / txYesterday) * 100;
+
   const chartDatas = pairDayDatas.reduce(
     (previousValue, currentValue) => {
       const untrackedVolumeUSD =
@@ -144,8 +163,6 @@ function PairPage(props) {
         currentValue?.token1.derivedETH *
           currentValue?.volumeToken1 *
           bundles[0].ethPrice;
-
-      // console.log("untrackedVolumeUSD", untrackedVolumeUSD)
 
       const volumeUSD =
         currentValue?.volumeUSD === "0"
@@ -173,17 +190,14 @@ function PairPage(props) {
         </title>
       </Head>
       <PageHeader>
-        <Grid container spacing={3} alignItems="center">
-          <Grid item xs={12} sm>
-            <Box display="flex" alignItems="center">
-              <PairIcon base={pair.token0.id} quote={pair.token1.id} />
-              <Typography variant="h5" component="h1" noWrap>
-                {pair.token0.symbol}-{pair.token1.symbol}
-              </Typography>
-            </Box>
-          </Grid>
-
-          <Grid item xs={12} sm="auto">
+        <Box display="flex" alignItems="center" className={classes.pageHeader}>
+          <Box display="flex" alignItems="center" flex={1} flexWrap="nowrap">
+            <PairIcon base={pair.token0.id} quote={pair.token1.id} />
+            <Typography variant="h5" component="h1" noWrap>
+              {pair.token0.symbol}-{pair.token1.symbol}
+            </Typography>
+          </Box>
+          <Box display="flex" alignItems="center" className={classes.links}>
             <Link
               href={`https://exchange.sushiswapclassic.org/#/add/${pair.token0.id}/${pair.token1.id}`}
               target="_blank"
@@ -199,10 +213,13 @@ function PairPage(props) {
             >
               Trade
             </Link>
-          </Grid>
-        </Grid>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm="auto">
+          </Box>
+        </Box>
+      </PageHeader>
+
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <Paper variant="outlined" className={classes.paper}>
             <Box display="flex" alignItems="center">
               <TokenIcon className={classes.avatar} id={pair.token0.id} />
               <Typography
@@ -224,8 +241,10 @@ function PairPage(props) {
                 pair.token0?.derivedETH * bundles[0].ethPrice
               )})`}
             </Typography>
-          </Grid>
-          <Grid item xs={12} sm="auto">
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Paper variant="outlined" className={classes.paper}>
             <Box display="flex" alignItems="center">
               <TokenIcon className={classes.avatar} id={pair.token1.id} />
               <Typography
@@ -247,11 +266,9 @@ function PairPage(props) {
                 pair.token1?.derivedETH * bundles[0].ethPrice
               )})`}
             </Typography>
-          </Grid>
+          </Paper>
         </Grid>
-      </PageHeader>
 
-      <Grid container spacing={3}>
         {chartDatas.liquidity.length > 1 ? (
           <Grid item xs={12} md={6}>
             <Paper
@@ -296,7 +313,7 @@ function PairPage(props) {
             </Paper>
           </Grid>
         ) : null}
-        {/* <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
           <KPI
             title="Liquidity (24h)"
             value={formatCurrency(pair?.reserveUSD || 0)}
@@ -306,29 +323,32 @@ function PairPage(props) {
               100
             ).toFixed(2)}
           />
-        </Grid> */}
-        <Grid item xs={12} sm={6} md={3}>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
           <KPI
             title="Volume (24h)"
             value={formatCurrency(volume || 0)}
             difference={volumeChange}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
           <KPI
             title="Fees (24h)"
             value={formatCurrency(fees)}
             difference={((fees - feesYesterday) / feesYesterday) * 100}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
+          <KPI title="Tx (24h)" value={tx} difference={txChange} />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
           <KPI
             title="Avg. Trade (24h)"
             value={formatCurrency(avgTradePrice)}
             difference={avgTradePriceChange}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
           <KPI
             title="Utilisation % (24h)"
             value={formatDecimal(utilisation)}
@@ -372,7 +392,15 @@ function PairPage(props) {
           ]}
         />
       </Box>
-      <Transactions transactions={transactions} txCount={pair.txCount} />
+      <Box my={4} mb={6}>
+        <Typography variant="h6" component="h2" gutterBottom>
+          IntoTheBlock
+        </Typography>
+        <IntoTheBlock pairAddress={pair.id} />
+      </Box>
+      <Box my={4}>
+        <Transactions transactions={transactions} txCount={pair.txCount} />
+      </Box>
     </AppShell>
   );
 }

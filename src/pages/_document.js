@@ -100,6 +100,11 @@ export default class MyDocument extends Document {
           <meta property="og:site_name" content={process.env.APP_NAME} />
           <meta property="og:url" content={process.env.APP_URL} />
           <meta property="og:image" content="/apple-touch-icon.png" />
+
+          <script
+            type="text/javascript"
+            src="https://app.intotheblock.com/widget.js"
+          ></script>
         </Head>
         <body className="no-js">
           <script

@@ -187,7 +187,6 @@ export async function getPools(client = getApollo()) {
             pool.pair,
             pool
           );
-
           const pair = pairs.find((pair) => pair.id === pool.pair);
 
           const liquidityPosition = liquidityPositions.find(

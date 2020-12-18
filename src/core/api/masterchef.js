@@ -182,11 +182,6 @@ export async function getPools(client = getApollo()) {
             pool.accSushiPerShare !== "0"
         )
         .map((pool) => {
-          console.log(
-            pairs.find((pair) => pair.id === pool.pair),
-            pool.pair,
-            pool
-          );
           const pair = pairs.find((pair) => pair.id === pool.pair);
 
           const liquidityPosition = liquidityPositions.find(

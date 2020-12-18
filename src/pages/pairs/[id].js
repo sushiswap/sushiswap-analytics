@@ -4,7 +4,6 @@ import {
   BarChart,
   BasicTable,
   Chart,
-  IntoTheBlock,
   KPI,
   Link,
   PageHeader,
@@ -396,9 +395,7 @@ function PairPage(props) {
         <Typography variant="h6" component="h2" gutterBottom>
           IntoTheBlock
         </Typography>
-        <div style={{ position: "relative" }}>
-          <IntoTheBlock pairAddress={pair.id} />
-        </div>
+        <IntoTheBlock pairAddress={pair.id} />
       </Box> */}
       <Box my={4}>
         <Transactions transactions={transactions} txCount={pair.txCount} />

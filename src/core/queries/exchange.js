@@ -1,5 +1,30 @@
 import gql from "graphql-tag";
 
+export const factoryQuery = gql`
+  query factoryQuery(
+    $id: String! = "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac"
+  ) {
+    factory(id: $id) {
+      id
+      volumeUSD
+      oneDay @client
+      twoDay @client
+    }
+  }
+`;
+
+export const factoryTimeTravelQuery = gql`
+  query factoryTimeTravelQuery(
+    $id: String! = "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac"
+    $block: Block_height!
+  ) {
+    factory(id: $id, block: $block) {
+      id
+      volumeUSD
+    }
+  }
+`;
+
 export const userIdsQuery = gql`
   query userIdsQuery($first: Int! = 1000, $skip: Int! = 0) {
     users(first: $first, skip: $skip) {

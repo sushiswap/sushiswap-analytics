@@ -3,9 +3,14 @@ import { Grid, Paper, useTheme } from "@material-ui/core";
 import {
   barHistoriesQuery,
   barQuery,
+  ethPriceQuery,
+  factoryQuery,
   getApollo,
   getBar,
   getBarHistories,
+  getDayData,
+  getEthPrice,
+  getFactory,
   getSushiToken,
   tokenQuery,
   useInterval,
@@ -30,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function PoolsPage() {
+function BarPage() {
   const classes = useStyles();
 
   const theme = useTheme();
@@ -49,6 +54,24 @@ function PoolsPage() {
     context: {
       clientName: "bar",
     },
+  });
+
+  const {
+    data: { factory },
+  } = useQuery(factoryQuery);
+
+  const {
+    data: { token },
+  } = useQuery(tokenQuery, {
+    variables: {
+      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+    },
+  });
+
+  const {
+    data: { bundles },
+  } = useQuery(ethPriceQuery, {
+    pollInterval: 60000,
   });
 
   useInterval(async () => {
@@ -112,6 +135,17 @@ function PoolsPage() {
     [[], [], [], [], [], [], [], [], [], []]
   );
 
+  const sushiPrice =
+    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+
+  const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
+
+  const APR =
+    (((oneDayVolume * 0.05 * 0.01) / bar.totalSupply) * 365) /
+    (bar.ratio * sushiPrice);
+
+  const APY = Math.pow(1 + APR / 365, 365) - 1;
+
   return (
     <AppShell>
       <Head>
@@ -127,19 +161,22 @@ function PoolsPage() {
                 value={parseFloat(bar.xSushiAge).toLocaleString()}
               />
             </Grid> */}
-            <Grid item xs>
+            <Grid item xs={12} sm={6} md={3}>
+              <KPI title="APY" value={`${APY.toFixed(2)}%`} />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
               <KPI
                 title="xSushi"
-                value={parseFloat(bar.totalSupply).toLocaleString()}
+                value={parseInt(bar.totalSupply).toLocaleString()}
               />
             </Grid>
-            <Grid item xs>
+            <Grid item xs={12} sm={6} md={3}>
               <KPI
                 title="Sushi"
-                value={parseFloat(bar.sushiStaked).toLocaleString()}
+                value={parseInt(bar.sushiStaked).toLocaleString()}
               />
             </Grid>
-            <Grid item xs>
+            <Grid item xs={12} sm={6} md={3}>
               <KPI
                 title="xSushi:Sushi"
                 value={parseFloat(bar.ratio).toLocaleString()}
@@ -243,6 +280,9 @@ export async function getStaticProps() {
   const client = getApollo();
   await getBar();
   await getBarHistories();
+  await getFactory();
+  await getSushiToken();
+  await getEthPrice();
   return {
     props: {
       initialApolloState: client.cache.extract(),
@@ -251,4 +291,4 @@ export async function getStaticProps() {
   };
 }
 
-export default PoolsPage;
+export default BarPage;

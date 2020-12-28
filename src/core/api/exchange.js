@@ -1,5 +1,7 @@
 import {
   dayDatasQuery,
+  factoryQuery,
+  factoryTimeTravelQuery,
   tokenQuery,
   tokenTimeTravelQuery,
   tokensQuery,
@@ -12,6 +14,47 @@ import {
 } from "../api/blocks";
 
 import { getApollo } from "../apollo";
+
+export async function getFactory(client = getApollo()) {
+  const {
+    data: { factory },
+  } = await client.query({
+    query: factoryQuery,
+  });
+
+  const {
+    data: { factory: oneDay },
+  } = await client.query({
+    query: factoryTimeTravelQuery,
+    variables: {
+      block: await getOneDayBlock(),
+    },
+  });
+
+  const {
+    data: { factory: twoDay },
+  } = await client.query({
+    query: factoryTimeTravelQuery,
+    variables: {
+      block: await getTwoDayBlock(),
+    },
+  });
+
+  await client.cache.writeQuery({
+    query: factoryQuery,
+    data: {
+      factory: {
+        ...factory,
+        oneDay,
+        twoDay,
+      },
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: factoryQuery,
+  });
+}
 
 export async function getSushiToken(client = getApollo()) {
   return await getToken("0x6b3595068778dd592e39a122f4f5a5cf09c90fe2", client);

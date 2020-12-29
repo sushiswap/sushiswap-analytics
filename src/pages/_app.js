@@ -2,12 +2,16 @@ import "../styles/index.css";
 
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
 import React, { useEffect } from "react";
+import {
+  StylesProvider,
+  ThemeProvider,
+  createGenerateClassName,
+} from "@material-ui/core/styles";
 import { darkModeVar, useApollo } from "app/core";
 import { darkTheme, lightTheme } from "../theme";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Head from "next/head";
-import { ThemeProvider } from "@material-ui/core/styles";
 import fontTheme from "../styles/font";
 
 function MyApp({ Component, pageProps }) {

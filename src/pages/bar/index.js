@@ -3,6 +3,7 @@ import { Grid, Paper, useTheme } from "@material-ui/core";
 import {
   barHistoriesQuery,
   barQuery,
+  dayDataQuery,
   ethPriceQuery,
   factoryQuery,
   getApollo,
@@ -89,7 +90,7 @@ function BarPage() {
     xSushiAgeDestroyed,
     xSushi,
   ] = histories.reduce(
-    (previousValue, currentValue) => {
+    (previousValue, currentValue, index) => {
       const date = currentValue.date * 1000;
       previousValue[0].push({
         date,
@@ -132,7 +133,7 @@ function BarPage() {
 
       return previousValue;
     },
-    [[], [], [], [], [], [], [], [], [], []]
+    [[], [], [], [], [], [], [], [], [], [], []]
   );
 
   const sushiPrice =

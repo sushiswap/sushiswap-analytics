@@ -136,18 +136,16 @@ body {
 /* FONT */
 /* @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"); */
 
-.widget-container .itb-widget * {
-  /* font-family: "Inter", sans-serif; */
+/* .widget-container .itb-widget * {
   max-width: none;
 }
 
 .widget-container .itb-widget {
   min-width: unset;
-}
+} */
 
 /* CARDS */
-.widget-container .charts-container .itb-widget .defi-card {
-  /* box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 10px; */
+/* .widget-container .charts-container .itb-widget .defi-card {
   box-shadow: none;
   border-radius: 8px;
   background: #fff;
@@ -168,14 +166,14 @@ body {
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.12);
   box-shadow: none;
-}
+} */
 
 .widget-container {
   /* max-width: 1200px; */
   /* margin: 0 auto; */
   /* padding: 30px 0; */
 }
-.widget-container .charts-container {
+/* .widget-container .charts-container {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -196,10 +194,10 @@ body {
   text-align: center;
   font-size: 20px;
   font-family: "Inter";
-}
+} */
 
 /* NIGHT MODE */
-.dark-theme .widget-container .charts-container .itb-widget .defi-card {
+/* .dark-theme .widget-container .charts-container .itb-widget .defi-card {
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: none;
@@ -272,4 +270,4 @@ body {
 
 .itb-widget .powered-by .text {
   color: white !important;
-}
+} */

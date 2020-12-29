@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 
-const IntoTheBlock = ({ pairAddress }) => {
+import Head from "next/head";
+
+function IntoTheBlock({ pairAddress }) {
   useEffect(() => {
     if (window.itbWidgetInit) {
       window.itbWidgetInit({
@@ -59,6 +61,6 @@ const IntoTheBlock = ({ pairAddress }) => {
       </div>
     </div>
   );
-};
+}
 
 export default IntoTheBlock;

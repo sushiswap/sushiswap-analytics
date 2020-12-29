@@ -86,6 +86,8 @@ function UserPage() {
     },
   });
 
+  console.log(barData);
+
   const { data: poolData } = useQuery(poolUserQuery, {
     variables: {
       address: id.toLowerCase(),
@@ -220,17 +222,18 @@ function UserPage() {
   const barPendingUSD = barPending > 0 ? barPending * sushiPrice : 0;
 
   const barRoiSushi =
-    parseFloat(barData?.user?.sushiHarvested) -
-    parseFloat(barData?.user?.sushiStaked) -
-    parseFloat(barData?.user?.sushiOut) +
-    // parseFloat(barData?.user?.sushiIn) +
-    barPending;
+    barPending -
+    (parseFloat(barData?.user?.sushiStaked) -
+      parseFloat(barData?.user?.sushiHarvested) +
+      parseFloat(barData?.user?.sushiIn) -
+      parseFloat(barData?.user?.sushiOut));
 
   const barRoiUSD =
-    barData?.user?.sushiHarvestedUSD -
-    barData?.user?.sushiStakedUSD -
-    barData?.user?.usdOut +
-    barPendingUSD;
+    barPendingUSD -
+    (parseFloat(barData?.user?.sushiStakedUSD) -
+      parseFloat(barData?.user?.sushiHarvestedUSD) +
+      parseFloat(barData?.user?.usdIn) -
+      parseFloat(barData?.user?.usdOut));
 
   const { data: blocksData } = useQuery(latestBlockQuery, {
     context: {
@@ -242,9 +245,7 @@ function UserPage() {
     parseInt(blocksData?.blocks[0].number) -
     parseInt(barData.user.createdAtBlock);
 
-  const barRoiDailySushi =
-    ((barPending + barRoiSushi - barStaked) / blockDifference) * 6440;
-  // console.log({ blocksData, blockDifference, barData, barRoiDailySushi });
+  const barRoiDailySushi = (barRoiSushi / blockDifference) * 6440;
 
   const investments = farmingStaked + barPendingUSD + farmingPending;
 
@@ -273,22 +274,22 @@ function UserPage() {
               color="textSecondary"
               gutterBottom
             >
-              Investments
+              Original Investments
             </Typography>
             <Typography variant="h5" component="h2">
-              {currencyFormatter.format(investments)}
+              {currencyFormatter.format(originalInvestments)}
             </Typography>
           </Grid>
-          {/* <Grid item xs>
+          <Grid item xs>
             <Typography
               className={classes.title}
               color="textSecondary"
               gutterBottom
             >
-              Original Investments
+              Investments
             </Typography>
             <Typography variant="h5" component="h2">
-              {currencyFormatter.format(originalInvestments)}
+              {currencyFormatter.format(investments)}
             </Typography>
           </Grid>
           <Grid item xs>
@@ -302,7 +303,7 @@ function UserPage() {
             <Typography variant="h5" component="h2">
               {currencyFormatter.format(investments - originalInvestments)}
             </Typography>
-          </Grid> */}
+          </Grid>
         </Grid>
       </Box>
 
@@ -553,7 +554,7 @@ function UserPage() {
 
                   const sushiLockedUSD = sushiLocked * sushiPrice;
                   return (
-                    <TableRow key="12">
+                    <TableRow key={user.pool.id}>
                       <TableCell component="th" scope="row">
                         <Box display="flex" alignItems="center">
                           <PairIcon

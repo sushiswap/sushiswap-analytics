@@ -2,6 +2,9 @@
   "name": "sushiswap-analytics",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {
     "@apollo/client": "^3.2.0",
     "@material-ui/core": "^4.11.0",

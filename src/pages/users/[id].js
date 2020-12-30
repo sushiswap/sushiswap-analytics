@@ -266,10 +266,7 @@ function UserPage() {
 
       <PageHeader>
         <Typography variant="h5" component="h1" gutterBottom noWrap>
-          Portfolio
-        </Typography>
-        <Typography gutterBottom noWrap>
-          Address {id}
+          Portfolio {id}
         </Typography>
       </PageHeader>
 
@@ -286,7 +283,7 @@ function UserPage() {
         <Typography>Address isn't in the bar...</Typography>
       ) : (
         <>
-          <Box my={4}>
+          <Box mb={4}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6} md={4}>
                 <KPI

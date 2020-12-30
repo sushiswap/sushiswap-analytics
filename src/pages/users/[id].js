@@ -329,9 +329,6 @@ function UserPage() {
                     <TableCell key="barRoiSushi" align="right">
                       ROI (Sushi)
                     </TableCell>
-                    <TableCell key="barRoiUSD" align="right">
-                      ROI (USD)
-                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -383,19 +380,8 @@ function UserPage() {
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
-                      {decimalFormatter.format(barRoiSushi)}{" "}
-                      {/* {Number(
-                        barStaked - (barPending + barData?.user?.sushiHarvested)
-                      ).toFixed(2)}{" "} */}
-                      ({formatCurrency(barRoiSushi * sushiPrice)})
-                      {/* const barRoiSushi =
-                      barData?.user?.sushiHarvested -
-                      barData?.user?.sushiStaked -
-                      barPending -
-                      barData?.user?.sushiOut; */}
-                    </TableCell>
-                    <TableCell align="right">
-                      {formatCurrency(barRoiUSD)}
+                      {decimalFormatter.format(barRoiSushi)} (
+                      {formatCurrency(barRoiSushi * sushiPrice)})
                     </TableCell>
                   </TableRow>
                 </TableBody>

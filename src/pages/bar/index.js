@@ -163,7 +163,7 @@ function BarPage() {
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="APY" value={`${APY.toFixed(2)}%`} />
+              <KPI title="APY" value={`${(APY * 100).toFixed(2)}%`} />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <KPI

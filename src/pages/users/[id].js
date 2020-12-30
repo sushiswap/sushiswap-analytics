@@ -285,17 +285,24 @@ function UserPage() {
         <>
           <Box mb={4}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={3}>
                 <KPI
                   title="Value"
                   value={formatCurrency(sushiPrice * barPending)}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={3}>
                 <KPI title="Invested" value={formatCurrency(barStakedUSD)} />
               </Grid>
 
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={3}>
+                <KPI
+                  title="xSUSHI"
+                  value={Number(xSushi.toFixed(2)).toLocaleString()}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={3}>
                 <KPI title="Profit/Loss" value={formatCurrency(barRoiUSD)} />
               </Grid>
             </Grid>
@@ -308,10 +315,7 @@ function UserPage() {
                   <TableRow>
                     <TableCell key="token">Token</TableCell>
                     <TableCell key="staked" align="right">
-                      Invested
-                    </TableCell>
-                    <TableCell key="xSushi" align="right">
-                      xSushi
+                      Staked
                     </TableCell>
                     <TableCell key="balance" align="right">
                       Pending Sushi
@@ -356,13 +360,8 @@ function UserPage() {
                     </TableCell>
                     <TableCell align="right">
                       <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barStaked)} SUSHI (
+                        {decimalFormatter.format(barStaked)} (
                         {formatCurrency(barStakedUSD)})
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography noWrap variant="body2">
-                        {Number(xSushi.toFixed(2)).toLocaleString()} XSUSHI
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
@@ -448,7 +447,7 @@ function UserPage() {
         {!poolData?.users.length ? (
           <Typography>Address isn't farming...</Typography>
         ) : (
-          <TableContainer>
+          <TableContainer variant="outlined">
             <Table aria-label="farming">
               <TableHead>
                 <TableRow>

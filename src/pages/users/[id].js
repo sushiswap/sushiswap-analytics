@@ -157,6 +157,9 @@ function UserPage() {
 
   const barStakedUSD = barData?.user?.sushiStakedUSD;
 
+  const barHarvested = barData?.user?.sushiHarvested;
+  const barHarvestedUSD = barData?.user?.sushiHarvestedUSD;
+
   const barPendingUSD = barPending > 0 ? barPending * sushiPrice : 0;
 
   const barRoiSushi =
@@ -317,6 +320,9 @@ function UserPage() {
                     <TableCell key="staked" align="right">
                       Staked
                     </TableCell>
+                    <TableCell key="harvested" align="right">
+                      Harvested
+                    </TableCell>
                     <TableCell key="balance" align="right">
                       Pending Sushi
                     </TableCell>
@@ -362,6 +368,12 @@ function UserPage() {
                       <Typography noWrap variant="body2">
                         {decimalFormatter.format(barStaked)} (
                         {formatCurrency(barStakedUSD)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(barHarvested)} (
+                        {formatCurrency(barHarvestedUSD)})
                       </Typography>
                     </TableCell>
                     <TableCell align="right">

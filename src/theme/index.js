@@ -66,7 +66,8 @@ const fontFamily = [
 const overrides = {
   MuiTable: {
     root: {
-      "& > tbody > tr:last-child > *": { border: 0 },
+      // "& > tbody > tr:last-child > *": { border: 0 },
+      // "& > thead > tr > *": { border: 0 },
     },
   },
   MuiTableCell: {

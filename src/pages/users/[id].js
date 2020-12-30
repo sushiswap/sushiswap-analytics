@@ -302,108 +302,106 @@ function UserPage() {
           </Box>
 
           <Box my={4}>
-            <Paper variant="outlined">
-              <TableContainer variant="outlined">
-                <Table aria-label="farming">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell key="token">Token</TableCell>
-                      <TableCell key="staked" align="right">
-                        Invested
-                      </TableCell>
-                      <TableCell key="xSushi" align="right">
-                        xSushi
-                      </TableCell>
-                      <TableCell key="balance" align="right">
-                        Pending Sushi
-                      </TableCell>
-                      <TableCell key="barRoiDaily" align="right">
-                        ROI (Daily)
-                      </TableCell>
-                      <TableCell key="barRoiYearly" align="right">
-                        ROI (Yearly)
-                      </TableCell>
-                      <TableCell key="barRoiSushi" align="right">
-                        ROI (Sushi)
-                      </TableCell>
-                      <TableCell key="barRoiUSD" align="right">
-                        ROI (USD)
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow key="12">
-                      <TableCell component="th" scope="row">
-                        <Box display="flex" alignItems="center">
-                          <Avatar
-                            className={classes.avatar}
-                            imgProps={{ loading: "lazy" }}
-                            alt="SUSHI"
-                            src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                              "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
-                            )}/logo.png`}
-                          />
-                          <Link
-                            href={`/tokens/0x6b3595068778dd592e39a122f4f5a5cf09c90fe2`}
-                            variant="body2"
-                            noWrap
-                          >
-                            SUSHI
-                          </Link>
-                          {/* <Link href={`/tokens/0x8798249c2e607446efb7ad49ec89dd1865ff4272`} variant="body2" noWrap>
+            <TableContainer variant="outlined">
+              <Table aria-label="farming">
+                <TableHead>
+                  <TableRow>
+                    <TableCell key="token">Token</TableCell>
+                    <TableCell key="staked" align="right">
+                      Invested
+                    </TableCell>
+                    <TableCell key="xSushi" align="right">
+                      xSushi
+                    </TableCell>
+                    <TableCell key="balance" align="right">
+                      Pending Sushi
+                    </TableCell>
+                    <TableCell key="barRoiDaily" align="right">
+                      ROI (Daily)
+                    </TableCell>
+                    <TableCell key="barRoiYearly" align="right">
+                      ROI (Yearly)
+                    </TableCell>
+                    <TableCell key="barRoiSushi" align="right">
+                      ROI (Sushi)
+                    </TableCell>
+                    <TableCell key="barRoiUSD" align="right">
+                      ROI (USD)
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow key="12">
+                    <TableCell component="th" scope="row">
+                      <Box display="flex" alignItems="center">
+                        <Avatar
+                          className={classes.avatar}
+                          imgProps={{ loading: "lazy" }}
+                          alt="SUSHI"
+                          src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                            "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                          )}/logo.png`}
+                        />
+                        <Link
+                          href={`/tokens/0x6b3595068778dd592e39a122f4f5a5cf09c90fe2`}
+                          variant="body2"
+                          noWrap
+                        >
+                          SUSHI
+                        </Link>
+                        {/* <Link href={`/tokens/0x8798249c2e607446efb7ad49ec89dd1865ff4272`} variant="body2" noWrap>
                         xSUSHI
                       </Link> */}
-                        </Box>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {decimalFormatter.format(barStaked)} SUSHI (
-                          {formatCurrency(barStakedUSD)})
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {Number(xSushi.toFixed(2)).toLocaleString()} XSUSHI
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {Number(barPending.toFixed(2)).toLocaleString()} (
-                          {formatCurrency(sushiPrice * barPending)})
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {decimalFormatter.format(barRoiDailySushi)} (
-                          {formatCurrency(barRoiDailySushi * sushiPrice)})
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {decimalFormatter.format(barRoiDailySushi * 365)} (
-                          {formatCurrency(barRoiDailySushi * 365 * sushiPrice)})
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        {decimalFormatter.format(barRoiSushi)}{" "}
-                        {/* {Number(
+                      </Box>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(barStaked)} SUSHI (
+                        {formatCurrency(barStakedUSD)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {Number(xSushi.toFixed(2)).toLocaleString()} XSUSHI
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {Number(barPending.toFixed(2)).toLocaleString()} (
+                        {formatCurrency(sushiPrice * barPending)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(barRoiDailySushi)} (
+                        {formatCurrency(barRoiDailySushi * sushiPrice)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(barRoiDailySushi * 365)} (
+                        {formatCurrency(barRoiDailySushi * 365 * sushiPrice)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      {decimalFormatter.format(barRoiSushi)}{" "}
+                      {/* {Number(
                         barStaked - (barPending + barData?.user?.sushiHarvested)
                       ).toFixed(2)}{" "} */}
-                        ({formatCurrency(barRoiSushi * sushiPrice)})
-                        {/* const barRoiSushi =
+                      ({formatCurrency(barRoiSushi * sushiPrice)})
+                      {/* const barRoiSushi =
                       barData?.user?.sushiHarvested -
                       barData?.user?.sushiStaked -
                       barPending -
                       barData?.user?.sushiOut; */}
-                      </TableCell>
-                      <TableCell align="right">
-                        {formatCurrency(barRoiUSD)}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Paper>
+                    </TableCell>
+                    <TableCell align="right">
+                      {formatCurrency(barRoiUSD)}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Box>
         </>
       )}
@@ -447,179 +445,170 @@ function UserPage() {
       </Box>
 
       <Box my={4}>
-        <Paper variant="outlined">
-          {!poolData?.users.length ? (
-            <Typography>Address isn't farming...</Typography>
-          ) : (
-            <TableContainer variant="outlined">
-              <Table aria-label="farming">
-                <TableHead>
-                  <TableRow>
-                    <TableCell key="pool">Pool</TableCell>
-                    <TableCell key="slp" align="right">
-                      SLP
-                    </TableCell>
-                    <TableCell key="balance" align="right">
-                      Balance
-                    </TableCell>
-                    <TableCell key="value" align="right">
-                      Value
-                    </TableCell>
+        {!poolData?.users.length ? (
+          <Typography>Address isn't farming...</Typography>
+        ) : (
+          <TableContainer>
+            <Table aria-label="farming">
+              <TableHead>
+                <TableRow>
+                  <TableCell key="pool">Pool</TableCell>
+                  <TableCell key="slp" align="right">
+                    SLP
+                  </TableCell>
+                  <TableCell key="balance" align="right">
+                    Balance
+                  </TableCell>
+                  <TableCell key="value" align="right">
+                    Value
+                  </TableCell>
 
-                    <TableCell key="pendingSushi" align="right">
-                      Pending Sushi
-                    </TableCell>
-                    <TableCell key="sushiHarvested" align="right">
-                      Sushi Rewarded
-                    </TableCell>
-                    <TableCell key="sushiLocked" align="right">
-                      Sushi Locked
-                    </TableCell>
-                    <TableCell key="entryUSD" align="right">
-                      Entries
-                    </TableCell>
-                    <TableCell key="exitUSD" align="right">
-                      Exits
-                    </TableCell>
-                    <TableCell key="pl" align="right">
-                      Profit/Loss
-                    </TableCell>
-                    {/* <TableCell key="apy" align="right">
+                  <TableCell key="pendingSushi" align="right">
+                    Pending Sushi
+                  </TableCell>
+                  <TableCell key="sushiHarvested" align="right">
+                    Sushi Rewarded
+                  </TableCell>
+                  <TableCell key="sushiLocked" align="right">
+                    Sushi Locked
+                  </TableCell>
+                  <TableCell key="entryUSD" align="right">
+                    Entries
+                  </TableCell>
+                  <TableCell key="exitUSD" align="right">
+                    Exits
+                  </TableCell>
+                  <TableCell key="pl" align="right">
+                    Profit/Loss
+                  </TableCell>
+                  {/* <TableCell key="apy" align="right">
                       APY
                     </TableCell> */}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {poolUsers.map((user) => {
-                    const pair = pairs.find(
-                      (pair) => pair.id == user.pool.pair
-                    );
-                    const slp = Number(user.amount / 1e18);
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {poolUsers.map((user) => {
+                  const pair = pairs.find((pair) => pair.id == user.pool.pair);
+                  const slp = Number(user.amount / 1e18);
 
-                    const share = user.amount / user.pool.balance;
+                  const share = user.amount / user.pool.balance;
 
-                    const token0 = pair.reserve0 * share;
-                    const token1 = pair.reserve1 * share;
+                  const token0 = pair.reserve0 * share;
+                  const token1 = pair.reserve1 * share;
 
-                    const pendingSushi =
-                      ((user.amount * user.pool.accSushiPerShare) / 1e12 -
-                        user.rewardDebt) /
-                      1e18;
-                    // user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
+                  const pendingSushi =
+                    ((user.amount * user.pool.accSushiPerShare) / 1e12 -
+                      user.rewardDebt) /
+                    1e18;
+                  // user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
 
-                    // console.log(
-                    //   user,
-                    //   user.entryUSD,
-                    //   user.exitUSD,
-                    //   pendingSushi * sushiPrice
-                    // );
+                  // console.log(
+                  //   user,
+                  //   user.entryUSD,
+                  //   user.exitUSD,
+                  //   pendingSushi * sushiPrice
+                  // );
 
-                    const lockupUser = lockupData?.users.find(
-                      (u) => u.pool.id === user.pool.id
-                    );
+                  const lockupUser = lockupData?.users.find(
+                    (u) => u.pool.id === user.pool.id
+                  );
 
-                    const sushiAtLockup = lockupUser
-                      ? ((lockupUser.amount *
-                          lockupUser.pool.accSushiPerShare) /
-                          1e12 -
-                          lockupUser.rewardDebt) /
-                        1e18
-                      : 0;
+                  const sushiAtLockup = lockupUser
+                    ? ((lockupUser.amount * lockupUser.pool.accSushiPerShare) /
+                        1e12 -
+                        lockupUser.rewardDebt) /
+                      1e18
+                    : 0;
 
-                    const sushiLocked =
-                      (parseFloat(user.sushiHarvestedSinceLockup) +
-                        pendingSushi -
-                        sushiAtLockup) *
-                      2;
+                  const sushiLocked =
+                    (parseFloat(user.sushiHarvestedSinceLockup) +
+                      pendingSushi -
+                      sushiAtLockup) *
+                    2;
 
-                    const sushiLockedUSD = sushiLocked * sushiPrice;
-                    return (
-                      <TableRow key={user.pool.id}>
-                        <TableCell component="th" scope="row">
-                          <Box display="flex" alignItems="center">
-                            <PairIcon
-                              base={pair.token0.id}
-                              quote={pair.token1.id}
-                            />
-                            <Link
-                              href={`/pools/${user.pool.id}`}
-                              variant="body2"
-                              noWrap
-                            >
-                              {pair.token0.symbol}-{pair.token1.symbol}
-                            </Link>
-                          </Box>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {decimalFormatter.format(slp)} SLP
-                          </Typography>
-                        </TableCell>
+                  const sushiLockedUSD = sushiLocked * sushiPrice;
+                  return (
+                    <TableRow key={user.pool.id}>
+                      <TableCell component="th" scope="row">
+                        <Box display="flex" alignItems="center">
+                          <PairIcon
+                            base={pair.token0.id}
+                            quote={pair.token1.id}
+                          />
+                          <Link
+                            href={`/pools/${user.pool.id}`}
+                            variant="body2"
+                            noWrap
+                          >
+                            {pair.token0.symbol}-{pair.token1.symbol}
+                          </Link>
+                        </Box>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {decimalFormatter.format(slp)} SLP
+                        </Typography>
+                      </TableCell>
 
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {decimalFormatter.format(token0)}{" "}
-                            {pair.token0.symbol} +{" "}
-                            {decimalFormatter.format(token1)}{" "}
-                            {pair.token1.symbol}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {currencyFormatter.format(pair.reserveUSD * share)}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {decimalFormatter.format(pendingSushi)} (
-                            {currencyFormatter.format(
-                              pendingSushi * sushiPrice
-                            )}
-                            )
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {decimalFormatter.format(user.sushiHarvested)} (
-                            {currencyFormatter.format(user.sushiHarvestedUSD)})
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {decimalFormatter.format(sushiLocked)} (
-                            {currencyFormatter.format(sushiLockedUSD)})
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {currencyFormatter.format(user.entryUSD)}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {currencyFormatter.format(user.exitUSD)}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {currencyFormatter.format(
-                              parseFloat(pair.reserveUSD * share) +
-                                parseFloat(user.exitUSD) +
-                                parseFloat(user.sushiHarvestedUSD) +
-                                parseFloat(pendingSushi * sushiPrice) -
-                                parseFloat(user.entryUSD)
-                            )}
-                          </Typography>
-                        </TableCell>
-                        {/* <TableCell align="right">23.76%</TableCell> */}
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </Paper>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {decimalFormatter.format(token0)} {pair.token0.symbol}{" "}
+                          + {decimalFormatter.format(token1)}{" "}
+                          {pair.token1.symbol}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {currencyFormatter.format(pair.reserveUSD * share)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {decimalFormatter.format(pendingSushi)} (
+                          {currencyFormatter.format(pendingSushi * sushiPrice)})
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {decimalFormatter.format(user.sushiHarvested)} (
+                          {currencyFormatter.format(user.sushiHarvestedUSD)})
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {decimalFormatter.format(sushiLocked)} (
+                          {currencyFormatter.format(sushiLockedUSD)})
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {currencyFormatter.format(user.entryUSD)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {currencyFormatter.format(user.exitUSD)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {currencyFormatter.format(
+                            parseFloat(pair.reserveUSD * share) +
+                              parseFloat(user.exitUSD) +
+                              parseFloat(user.sushiHarvestedUSD) +
+                              parseFloat(pendingSushi * sushiPrice) -
+                              parseFloat(user.entryUSD)
+                          )}
+                        </Typography>
+                      </TableCell>
+                      {/* <TableCell align="right">23.76%</TableCell> */}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </Box>
     </AppShell>
   );

@@ -282,130 +282,59 @@ function UserPage() {
         >
           Bar
         </Typography>
-        <Paper variant="outlined">
-          {!barData?.user?.bar ? (
-            <Typography>Address isn't in the bar...</Typography>
-          ) : (
-            <TableContainer variant="outlined">
-              <Table aria-label="farming">
-                <TableHead>
-                  <TableRow>
-                    <TableCell key="token">
-                      <Typography variant="subtitle2" noWrap>
-                        Token
-                      </Typography>
-                    </TableCell>
-                    <TableCell key="staked" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        Staked
-                      </Typography>
-                    </TableCell>
-                    <TableCell key="xSushi" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        xSushi
-                      </Typography>
-                    </TableCell>
-                    <TableCell key="balance" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        Pending Sushi
-                      </Typography>
-                    </TableCell>
-                    <TableCell key="barRoiDaily" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        ROI (Daily)
-                      </Typography>
-                    </TableCell>
-                    <TableCell key="barRoiYearly" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        ROI (Yearly)
-                      </Typography>
-                    </TableCell>
-                    <TableCell key="barRoiSushi" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        ROI (Sushi)
-                      </Typography>
-                    </TableCell>
-                    <TableCell key="barRoiUSD" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        ROI (USD)
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow key="12">
-                    <TableCell component="th" scope="row">
-                      <Box display="flex" alignItems="center">
-                        <Avatar
-                          className={classes.avatar}
-                          imgProps={{ loading: "lazy" }}
-                          alt="SUSHI"
-                          src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                            "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
-                          )}/logo.png`}
-                        />
-                        <Link
-                          href={`/tokens/0x6b3595068778dd592e39a122f4f5a5cf09c90fe2`}
-                          variant="body2"
-                          noWrap
-                        >
-                          SUSHI
-                        </Link>
-                        {/* <Link href={`/tokens/0x8798249c2e607446efb7ad49ec89dd1865ff4272`} variant="body2" noWrap>
-                        xSUSHI
-                      </Link> */}
-                      </Box>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barStaked)} SUSHI (
-                        {formatCurrency(barStakedUSD)})
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography noWrap variant="body2">
-                        {Number(xSushi.toFixed(2)).toLocaleString()} XSUSHI
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography noWrap variant="body2">
-                        {Number(barPending.toFixed(2)).toLocaleString()} (
-                        {formatCurrency(sushiPrice * barPending)})
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barRoiDailySushi)} (
-                        {formatCurrency(barRoiDailySushi * sushiPrice)})
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barRoiDailySushi * 365)} (
-                        {formatCurrency(barRoiDailySushi * 365 * sushiPrice)})
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      {decimalFormatter.format(barRoiSushi)}{" "}
-                      {/* {Number(
-                        barStaked - (barPending + barData?.user?.sushiHarvested)
-                      ).toFixed(2)}{" "} */}
-                      ({formatCurrency(barRoiSushi * sushiPrice)})
-                      {/* const barRoiSushi =
-                      barData?.user?.sushiHarvested -
-                      barData?.user?.sushiStaked -
-                      barPending -
-                      barData?.user?.sushiOut; */}
-                    </TableCell>
-                    <TableCell align="right">
-                      {formatCurrency(barRoiUSD)}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </Paper>
+
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPI title="xSUSHI" value={xSushi.toFixed(2)} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPI
+              title="xSUSHI -> SUSHI"
+              value={Number(barPending.toFixed(2)).toLocaleString()}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPI
+              title="xSUSHI USD"
+              value={formatCurrency(sushiPrice * barPending)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPI
+              title="Invested SUSHI"
+              value={decimalFormatter.format(barStaked)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPI title="Invested USD" value={formatCurrency(barStakedUSD)} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPI
+              title="ROI (Yearly)"
+              value={`${decimalFormatter.format(
+                barRoiDailySushi * 365
+              )} SUSHI (${formatCurrency(
+                barRoiDailySushi * sushiPrice * 365
+              )})`}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPI
+              title="ROI (Daily)"
+              value={`${decimalFormatter.format(
+                barRoiDailySushi
+              )} SUSHI (${formatCurrency(barRoiDailySushi * sushiPrice)})`}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPI
+              title="ROI"
+              value={`${decimalFormatter.format(
+                barRoiSushi
+              )} SUSHI (${formatCurrency(barRoiUSD)})`}
+            />
+          </Grid>
+        </Grid>
       </Box>
 
       <Typography
@@ -421,12 +350,12 @@ function UserPage() {
         <Grid container spacing={2}>
           <Grid item xs>
             <KPI
-              title="Value"
+              title="SLP Value"
               value={formatCurrency(poolsUSD + poolsPendingUSD + lockedUSD)}
             />
           </Grid>
           <Grid item xs>
-            <KPI title="Entry Value" value={formatCurrency(poolEntriesUSD)} />
+            <KPI title="Invested" value={formatCurrency(poolEntriesUSD)} />
           </Grid>
           <Grid item xs>
             <KPI title="Locked" value={formatCurrency(lockedUSD)} />

@@ -73,6 +73,7 @@ const overrides = {
   MuiTableCell: {
     head: {
       fontWeight: 400,
+      whiteSpace: "nowrap",
     },
   },
   MuiAvatarGroup: {

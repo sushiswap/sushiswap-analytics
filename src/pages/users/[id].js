@@ -283,7 +283,9 @@ function UserPage() {
       </Typography>
 
       {!barData?.user?.bar ? (
-        <Typography>Address isn't in the bar...</Typography>
+        <Box mb={4}>
+          <Typography>Address isn't in the bar...</Typography>
+        </Box>
       ) : (
         <>
           <Box mb={4}>
@@ -422,201 +424,210 @@ function UserPage() {
         Pools
       </Typography>
 
-      <Box mb={4}>
-        <Grid container spacing={2}>
-          <Grid item xs>
-            <KPI
-              title="Value"
-              value={formatCurrency(poolsUSD + poolsPendingUSD + lockedUSD)}
-            />
-          </Grid>
-          <Grid item xs>
-            <KPI title="Invested" value={formatCurrency(poolEntriesUSD)} />
-          </Grid>
-          <Grid item xs>
-            <KPI title="Locked" value={formatCurrency(lockedUSD)} />
-          </Grid>
-          <Grid item xs>
-            <KPI
-              title="Profit/Loss"
-              value={formatCurrency(
-                poolsUSD +
-                  poolExitsUSD +
-                  poolHarvestedUSD +
-                  poolsPendingUSD -
-                  poolEntriesUSD
-              )}
-            />
-          </Grid>
-        </Grid>
-      </Box>
+      {!poolData?.users.length ? (
+        <Typography>Address isn't farming...</Typography>
+      ) : (
+        <>
+          <Box mb={4}>
+            <Grid container spacing={2}>
+              <Grid item xs>
+                <KPI
+                  title="Value"
+                  value={formatCurrency(poolsUSD + poolsPendingUSD + lockedUSD)}
+                />
+              </Grid>
+              <Grid item xs>
+                <KPI title="Invested" value={formatCurrency(poolEntriesUSD)} />
+              </Grid>
+              <Grid item xs>
+                <KPI title="Locked" value={formatCurrency(lockedUSD)} />
+              </Grid>
+              <Grid item xs>
+                <KPI
+                  title="Profit/Loss"
+                  value={formatCurrency(
+                    poolsUSD +
+                      poolExitsUSD +
+                      poolHarvestedUSD +
+                      poolsPendingUSD -
+                      poolEntriesUSD
+                  )}
+                />
+              </Grid>
+            </Grid>
+          </Box>
 
-      <Box my={4}>
-        {!poolData?.users.length ? (
-          <Typography>Address isn't farming...</Typography>
-        ) : (
-          <TableContainer variant="outlined">
-            <Table aria-label="farming">
-              <TableHead>
-                <TableRow>
-                  <TableCell key="pool">Pool</TableCell>
-                  <TableCell key="slp" align="right">
-                    SLP
-                  </TableCell>
-                  <TableCell key="balance" align="right">
-                    Balance
-                  </TableCell>
-                  <TableCell key="value" align="right">
-                    Value
-                  </TableCell>
+          <Box my={4}>
+            <TableContainer variant="outlined">
+              <Table aria-label="farming">
+                <TableHead>
+                  <TableRow>
+                    <TableCell key="pool">Pool</TableCell>
+                    <TableCell key="slp" align="right">
+                      SLP
+                    </TableCell>
+                    <TableCell key="balance" align="right">
+                      Balance
+                    </TableCell>
+                    <TableCell key="value" align="right">
+                      Value
+                    </TableCell>
 
-                  <TableCell key="pendingSushi" align="right">
-                    Pending Sushi
-                  </TableCell>
-                  <TableCell key="sushiHarvested" align="right">
-                    Sushi Rewarded
-                  </TableCell>
-                  <TableCell key="sushiLocked" align="right">
-                    Sushi Locked
-                  </TableCell>
-                  <TableCell key="entryUSD" align="right">
-                    Entries
-                  </TableCell>
-                  <TableCell key="exitUSD" align="right">
-                    Exits
-                  </TableCell>
-                  <TableCell key="pl" align="right">
-                    Profit/Loss
-                  </TableCell>
-                  {/* <TableCell key="apy" align="right">
+                    <TableCell key="pendingSushi" align="right">
+                      Pending Sushi
+                    </TableCell>
+                    <TableCell key="sushiHarvested" align="right">
+                      Sushi Rewarded
+                    </TableCell>
+                    <TableCell key="sushiLocked" align="right">
+                      Sushi Locked
+                    </TableCell>
+                    <TableCell key="entryUSD" align="right">
+                      Entries
+                    </TableCell>
+                    <TableCell key="exitUSD" align="right">
+                      Exits
+                    </TableCell>
+                    <TableCell key="pl" align="right">
+                      Profit/Loss
+                    </TableCell>
+                    {/* <TableCell key="apy" align="right">
                       APY
                     </TableCell> */}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {poolUsers.map((user) => {
-                  const pair = pairs.find((pair) => pair.id == user.pool.pair);
-                  const slp = Number(user.amount / 1e18);
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {poolUsers.map((user) => {
+                    const pair = pairs.find(
+                      (pair) => pair.id == user.pool.pair
+                    );
+                    const slp = Number(user.amount / 1e18);
 
-                  const share = user.amount / user.pool.balance;
+                    const share = user.amount / user.pool.balance;
 
-                  const token0 = pair.reserve0 * share;
-                  const token1 = pair.reserve1 * share;
+                    const token0 = pair.reserve0 * share;
+                    const token1 = pair.reserve1 * share;
 
-                  const pendingSushi =
-                    ((user.amount * user.pool.accSushiPerShare) / 1e12 -
-                      user.rewardDebt) /
-                    1e18;
-                  // user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
+                    const pendingSushi =
+                      ((user.amount * user.pool.accSushiPerShare) / 1e12 -
+                        user.rewardDebt) /
+                      1e18;
+                    // user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
 
-                  // console.log(
-                  //   user,
-                  //   user.entryUSD,
-                  //   user.exitUSD,
-                  //   pendingSushi * sushiPrice
-                  // );
+                    // console.log(
+                    //   user,
+                    //   user.entryUSD,
+                    //   user.exitUSD,
+                    //   pendingSushi * sushiPrice
+                    // );
 
-                  const lockupUser = lockupData?.users.find(
-                    (u) => u.pool.id === user.pool.id
-                  );
+                    const lockupUser = lockupData?.users.find(
+                      (u) => u.pool.id === user.pool.id
+                    );
 
-                  const sushiAtLockup = lockupUser
-                    ? ((lockupUser.amount * lockupUser.pool.accSushiPerShare) /
-                        1e12 -
-                        lockupUser.rewardDebt) /
-                      1e18
-                    : 0;
+                    const sushiAtLockup = lockupUser
+                      ? ((lockupUser.amount *
+                          lockupUser.pool.accSushiPerShare) /
+                          1e12 -
+                          lockupUser.rewardDebt) /
+                        1e18
+                      : 0;
 
-                  const sushiLocked =
-                    (parseFloat(user.sushiHarvestedSinceLockup) +
-                      pendingSushi -
-                      sushiAtLockup) *
-                    2;
+                    const sushiLocked =
+                      (parseFloat(user.sushiHarvestedSinceLockup) +
+                        pendingSushi -
+                        sushiAtLockup) *
+                      2;
 
-                  const sushiLockedUSD = sushiLocked * sushiPrice;
-                  return (
-                    <TableRow key={user.pool.id}>
-                      <TableCell component="th" scope="row">
-                        <Box display="flex" alignItems="center">
-                          <PairIcon
-                            base={pair.token0.id}
-                            quote={pair.token1.id}
-                          />
-                          <Link
-                            href={`/pools/${user.pool.id}`}
-                            variant="body2"
-                            noWrap
-                          >
-                            {pair.token0.symbol}-{pair.token1.symbol}
-                          </Link>
-                        </Box>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {decimalFormatter.format(slp)} SLP
-                        </Typography>
-                      </TableCell>
+                    const sushiLockedUSD = sushiLocked * sushiPrice;
+                    return (
+                      <TableRow key={user.pool.id}>
+                        <TableCell component="th" scope="row">
+                          <Box display="flex" alignItems="center">
+                            <PairIcon
+                              base={pair.token0.id}
+                              quote={pair.token1.id}
+                            />
+                            <Link
+                              href={`/pools/${user.pool.id}`}
+                              variant="body2"
+                              noWrap
+                            >
+                              {pair.token0.symbol}-{pair.token1.symbol}
+                            </Link>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography noWrap variant="body2">
+                            {decimalFormatter.format(slp)} SLP
+                          </Typography>
+                        </TableCell>
 
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {decimalFormatter.format(token0)} {pair.token0.symbol}{" "}
-                          + {decimalFormatter.format(token1)}{" "}
-                          {pair.token1.symbol}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {currencyFormatter.format(pair.reserveUSD * share)}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {decimalFormatter.format(pendingSushi)} (
-                          {currencyFormatter.format(pendingSushi * sushiPrice)})
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {decimalFormatter.format(user.sushiHarvested)} (
-                          {currencyFormatter.format(user.sushiHarvestedUSD)})
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {decimalFormatter.format(sushiLocked)} (
-                          {currencyFormatter.format(sushiLockedUSD)})
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {currencyFormatter.format(user.entryUSD)}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {currencyFormatter.format(user.exitUSD)}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography noWrap variant="body2">
-                          {currencyFormatter.format(
-                            parseFloat(pair.reserveUSD * share) +
-                              parseFloat(user.exitUSD) +
-                              parseFloat(user.sushiHarvestedUSD) +
-                              parseFloat(pendingSushi * sushiPrice) -
-                              parseFloat(user.entryUSD)
-                          )}
-                        </Typography>
-                      </TableCell>
-                      {/* <TableCell align="right">23.76%</TableCell> */}
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </Box>
+                        <TableCell align="right">
+                          <Typography noWrap variant="body2">
+                            {decimalFormatter.format(token0)}{" "}
+                            {pair.token0.symbol} +{" "}
+                            {decimalFormatter.format(token1)}{" "}
+                            {pair.token1.symbol}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography noWrap variant="body2">
+                            {currencyFormatter.format(pair.reserveUSD * share)}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography noWrap variant="body2">
+                            {decimalFormatter.format(pendingSushi)} (
+                            {currencyFormatter.format(
+                              pendingSushi * sushiPrice
+                            )}
+                            )
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography noWrap variant="body2">
+                            {decimalFormatter.format(user.sushiHarvested)} (
+                            {currencyFormatter.format(user.sushiHarvestedUSD)})
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography noWrap variant="body2">
+                            {decimalFormatter.format(sushiLocked)} (
+                            {currencyFormatter.format(sushiLockedUSD)})
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography noWrap variant="body2">
+                            {currencyFormatter.format(user.entryUSD)}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography noWrap variant="body2">
+                            {currencyFormatter.format(user.exitUSD)}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography noWrap variant="body2">
+                            {currencyFormatter.format(
+                              parseFloat(pair.reserveUSD * share) +
+                                parseFloat(user.exitUSD) +
+                                parseFloat(user.sushiHarvestedUSD) +
+                                parseFloat(pendingSushi * sushiPrice) -
+                                parseFloat(user.entryUSD)
+                            )}
+                          </Typography>
+                        </TableCell>
+                        {/* <TableCell align="right">23.76%</TableCell> */}
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </>
+      )}
     </AppShell>
   );
 }

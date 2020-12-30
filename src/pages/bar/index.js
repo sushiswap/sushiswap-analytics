@@ -279,11 +279,11 @@ function BarPage() {
 
 export async function getStaticProps() {
   const client = getApollo();
-  await getBar();
-  await getBarHistories();
-  await getFactory();
-  await getSushiToken();
-  await getEthPrice();
+  await getBar(client);
+  await getBarHistories(client);
+  await getFactory(client);
+  await getSushiToken(client);
+  await getEthPrice(client);
   return {
     props: {
       initialApolloState: client.cache.extract(),

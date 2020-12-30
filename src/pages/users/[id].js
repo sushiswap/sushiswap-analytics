@@ -320,14 +320,17 @@ function UserPage() {
                     <TableCell key="balance" align="right">
                       Pending Sushi
                     </TableCell>
-                    <TableCell key="barRoiDaily" align="right">
-                      ROI (Daily)
-                    </TableCell>
                     <TableCell key="barRoiYearly" align="right">
                       ROI (Yearly)
                     </TableCell>
+                    <TableCell key="barRoiMonthly" align="right">
+                      ROI (Monthly)
+                    </TableCell>
+                    <TableCell key="barRoiDaily" align="right">
+                      ROI (Daily)
+                    </TableCell>
                     <TableCell key="barRoiSushi" align="right">
-                      ROI (Sushi)
+                      ROI (All-time)
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -369,16 +372,23 @@ function UserPage() {
                     </TableCell>
                     <TableCell align="right">
                       <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barRoiDailySushi)} (
-                        {formatCurrency(barRoiDailySushi * sushiPrice)})
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography noWrap variant="body2">
                         {decimalFormatter.format(barRoiDailySushi * 365)} (
                         {formatCurrency(barRoiDailySushi * 365 * sushiPrice)})
                       </Typography>
                     </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(barRoiDailySushi * 30)} (
+                        {formatCurrency(barRoiDailySushi * 30 * sushiPrice)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(barRoiDailySushi)} (
+                        {formatCurrency(barRoiDailySushi * sushiPrice)})
+                      </Typography>
+                    </TableCell>
+
                     <TableCell align="right">
                       {decimalFormatter.format(barRoiSushi)} (
                       {formatCurrency(barRoiSushi * sushiPrice)})

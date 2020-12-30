@@ -33,7 +33,7 @@ export default function BasicTable({ title, headCells, bodyCells, style }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow key={Math.random()}>
+            <TableRow key={Date.now()}>
               {bodyCells.map((cell, index) => (
                 <TableCell
                   key={index}

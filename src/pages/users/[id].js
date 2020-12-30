@@ -273,59 +273,143 @@ function UserPage() {
         </Typography>
       </PageHeader>
 
-      <Box my={4}>
-        <Typography
-          variant="h6"
-          component="h2"
-          color="textSecondary"
-          gutterBottom
-        >
-          Bar
-        </Typography>
+      <Typography
+        variant="h6"
+        component="h2"
+        color="textSecondary"
+        gutterBottom
+      >
+        Bar
+      </Typography>
 
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={4}>
-            <KPI
-              title="xSUSHI Value"
-              value={formatCurrency(sushiPrice * barPending)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <KPI title="Invested" value={formatCurrency(barStakedUSD)} />
-          </Grid>
+      {!barData?.user?.bar ? (
+        <Typography>Address isn't in the bar...</Typography>
+      ) : (
+        <>
+          <Box my={4}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={4}>
+                <KPI
+                  title="Value"
+                  value={formatCurrency(sushiPrice * barPending)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <KPI title="Invested" value={formatCurrency(barStakedUSD)} />
+              </Grid>
 
-          <Grid item xs={12} sm={6} md={4}>
-            <KPI title="Profit/Loss" value={formatCurrency(barRoiUSD)} />
-          </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <KPI title="Profit/Loss" value={formatCurrency(barRoiUSD)} />
+              </Grid>
+            </Grid>
+          </Box>
 
-          <Grid item xs={12} sm={12} md={4}>
-            <KPI
-              title="Yearly"
-              value={`${Number(barRoiDailySushi * 365).toFixed(
-                2
-              )} (${formatCurrency(barRoiDailySushi * sushiPrice * 365)})`}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={12} md={4}>
-            <KPI
-              title="Monthly"
-              value={`${Number(barRoiDailySushi * 30).toFixed(
-                2
-              )} (${formatCurrency(barRoiDailySushi * sushiPrice * 30)})`}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={12} md={4}>
-            <KPI
-              title="Daily"
-              value={`${barRoiDailySushi.toFixed(2)} (${formatCurrency(
-                barRoiDailySushi * sushiPrice
-              )})`}
-            />
-          </Grid>
-        </Grid>
-      </Box>
+          <Box my={4}>
+            <Paper variant="outlined">
+              <TableContainer variant="outlined">
+                <Table aria-label="farming">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell key="token">Token</TableCell>
+                      <TableCell key="staked" align="right">
+                        Invested
+                      </TableCell>
+                      <TableCell key="xSushi" align="right">
+                        xSushi
+                      </TableCell>
+                      <TableCell key="balance" align="right">
+                        Pending Sushi
+                      </TableCell>
+                      <TableCell key="barRoiDaily" align="right">
+                        ROI (Daily)
+                      </TableCell>
+                      <TableCell key="barRoiYearly" align="right">
+                        ROI (Yearly)
+                      </TableCell>
+                      <TableCell key="barRoiSushi" align="right">
+                        ROI (Sushi)
+                      </TableCell>
+                      <TableCell key="barRoiUSD" align="right">
+                        ROI (USD)
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow key="12">
+                      <TableCell component="th" scope="row">
+                        <Box display="flex" alignItems="center">
+                          <Avatar
+                            className={classes.avatar}
+                            imgProps={{ loading: "lazy" }}
+                            alt="SUSHI"
+                            src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                              "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                            )}/logo.png`}
+                          />
+                          <Link
+                            href={`/tokens/0x6b3595068778dd592e39a122f4f5a5cf09c90fe2`}
+                            variant="body2"
+                            noWrap
+                          >
+                            SUSHI
+                          </Link>
+                          {/* <Link href={`/tokens/0x8798249c2e607446efb7ad49ec89dd1865ff4272`} variant="body2" noWrap>
+                        xSUSHI
+                      </Link> */}
+                        </Box>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {decimalFormatter.format(barStaked)} SUSHI (
+                          {formatCurrency(barStakedUSD)})
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {Number(xSushi.toFixed(2)).toLocaleString()} XSUSHI
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {Number(barPending.toFixed(2)).toLocaleString()} (
+                          {formatCurrency(sushiPrice * barPending)})
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {decimalFormatter.format(barRoiDailySushi)} (
+                          {formatCurrency(barRoiDailySushi * sushiPrice)})
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography noWrap variant="body2">
+                          {decimalFormatter.format(barRoiDailySushi * 365)} (
+                          {formatCurrency(barRoiDailySushi * 365 * sushiPrice)})
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        {decimalFormatter.format(barRoiSushi)}{" "}
+                        {/* {Number(
+                        barStaked - (barPending + barData?.user?.sushiHarvested)
+                      ).toFixed(2)}{" "} */}
+                        ({formatCurrency(barRoiSushi * sushiPrice)})
+                        {/* const barRoiSushi =
+                      barData?.user?.sushiHarvested -
+                      barData?.user?.sushiStaked -
+                      barPending -
+                      barData?.user?.sushiOut; */}
+                      </TableCell>
+                      <TableCell align="right">
+                        {formatCurrency(barRoiUSD)}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
+          </Box>
+        </>
+      )}
 
       <Typography
         variant="h6"
@@ -340,7 +424,7 @@ function UserPage() {
         <Grid container spacing={2}>
           <Grid item xs>
             <KPI
-              title="SLP Value"
+              title="Value"
               value={formatCurrency(poolsUSD + poolsPendingUSD + lockedUSD)}
             />
           </Grid>
@@ -376,50 +460,32 @@ function UserPage() {
                   <TableRow>
                     <TableCell key="pool">Pool</TableCell>
                     <TableCell key="slp" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        SLP
-                      </Typography>
+                      SLP
                     </TableCell>
                     <TableCell key="balance" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        Balance
-                      </Typography>
+                      Balance
                     </TableCell>
                     <TableCell key="value" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        Value
-                      </Typography>
+                      Value
                     </TableCell>
 
                     <TableCell key="pendingSushi" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        Pending Sushi
-                      </Typography>
+                      Pending Sushi
                     </TableCell>
                     <TableCell key="sushiHarvested" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        Sushi Rewarded
-                      </Typography>
+                      Sushi Rewarded
                     </TableCell>
                     <TableCell key="sushiLocked" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        Sushi Locked
-                      </Typography>
+                      Sushi Locked
                     </TableCell>
                     <TableCell key="entryUSD" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        Entries
-                      </Typography>
+                      Entries
                     </TableCell>
                     <TableCell key="exitUSD" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        Exits
-                      </Typography>
+                      Exits
                     </TableCell>
                     <TableCell key="pl" align="right">
-                      <Typography variant="subtitle2" noWrap>
-                        Profit/Loss
-                      </Typography>
+                      Profit/Loss
                     </TableCell>
                     {/* <TableCell key="apy" align="right">
                       APY

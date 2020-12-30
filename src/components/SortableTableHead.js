@@ -38,9 +38,7 @@ export default function SortableTableHead({
               direction={orderBy === column.key ? order : "asc"}
               onClick={createSortHandler(column.key)}
             >
-              <Typography variant="subtitle2" noWrap>
-                {column.label}
-              </Typography>
+              {column.label}
 
               {orderBy === column.key ? (
                 <span className={classes.visuallyHidden}>

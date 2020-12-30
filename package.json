@@ -6,7 +6,7 @@
     "@apollo/client": "^3.2.0",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.11.0",
-    "@material-ui/lab": "^4.0.0",
+    "@material-ui/lab": "4.0.0-alpha.57",
     "@visx/axis": "^1.1.0",
     "@visx/brush": "^1.1.0",
     "@visx/curve": "^1.0.0",

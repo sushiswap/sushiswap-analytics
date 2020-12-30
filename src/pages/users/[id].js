@@ -284,54 +284,44 @@ function UserPage() {
         </Typography>
 
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={3}>
-            <KPI title="xSUSHI" value={xSushi.toFixed(2)} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={4}>
             <KPI
-              title="xSUSHI -> SUSHI"
-              value={Number(barPending.toFixed(2)).toLocaleString()}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <KPI
-              title="xSUSHI USD"
+              title="xSUSHI Value"
               value={formatCurrency(sushiPrice * barPending)}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={4}>
+            <KPI title="Invested" value={formatCurrency(barStakedUSD)} />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={4}>
+            <KPI title="Profit/Loss" value={formatCurrency(barRoiUSD)} />
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={4}>
             <KPI
-              title="Invested SUSHI"
-              value={decimalFormatter.format(barStaked)}
+              title="Yearly"
+              value={`${Number(barRoiDailySushi * 365).toFixed(
+                2
+              )} (${formatCurrency(barRoiDailySushi * sushiPrice * 365)})`}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <KPI title="Invested USD" value={formatCurrency(barStakedUSD)} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+
+          <Grid item xs={12} sm={12} md={4}>
             <KPI
-              title="ROI (Yearly)"
-              value={`${decimalFormatter.format(
-                barRoiDailySushi * 365
-              )} SUSHI (${formatCurrency(
-                barRoiDailySushi * sushiPrice * 365
+              title="Monthly"
+              value={`${Number(barRoiDailySushi * 30).toFixed(
+                2
+              )} (${formatCurrency(barRoiDailySushi * sushiPrice * 30)})`}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={4}>
+            <KPI
+              title="Daily"
+              value={`${barRoiDailySushi.toFixed(2)} (${formatCurrency(
+                barRoiDailySushi * sushiPrice
               )})`}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <KPI
-              title="ROI (Daily)"
-              value={`${decimalFormatter.format(
-                barRoiDailySushi
-              )} SUSHI (${formatCurrency(barRoiDailySushi * sushiPrice)})`}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <KPI
-              title="ROI"
-              value={`${decimalFormatter.format(
-                barRoiSushi
-              )} SUSHI (${formatCurrency(barRoiUSD)})`}
             />
           </Grid>
         </Grid>

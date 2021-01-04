@@ -275,7 +275,7 @@ function BarPage() {
                 <Curves
                   width={width}
                   height={height}
-                  title="Fees recieved (USD)"
+                  title="Fees received (USD)"
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[fees]}
                 />

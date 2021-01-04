@@ -18,12 +18,5 @@ export default function TokenIcon({ id, ...rest }) {
       )}/logo.png`,
     [id]
   );
-  return (
-    <Avatar
-      classes={{ root: classes.root }}
-      imgProps={{ loading: "lazy" }}
-      src={src}
-      {...rest}
-    />
-  );
+  return <Avatar classes={{ root: classes.root }} src={src} {...rest} />;
 }

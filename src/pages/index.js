@@ -86,7 +86,7 @@ function IndexPage() {
         <title>Dashboard | SushiSwap Analytics</title>
       </Head>
       <Box mb={3}>
-        <Search />
+        <Search pairs={pairs} tokens={tokens} />
       </Box>
 
       <Grid container spacing={3}>

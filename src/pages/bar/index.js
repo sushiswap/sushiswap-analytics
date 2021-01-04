@@ -3,7 +3,7 @@ import { Grid, Paper, useTheme } from "@material-ui/core";
 import {
   barHistoriesQuery,
   barQuery,
-  dayDataQuery,
+  dayDatasQuery,
   ethPriceQuery,
   factoryQuery,
   getApollo,
@@ -75,69 +75,104 @@ function BarPage() {
     pollInterval: 60000,
   });
 
+  const {
+    data: { dayDatas },
+  } = useQuery(dayDatasQuery);
+
+  const sushiPrice =
+    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+
   useInterval(async () => {
-    await Promise.all([getBar, getBarHistories]);
+    await Promise.all([
+      getBar,
+      getBarHistories,
+      getDayData,
+      getFactory,
+      getSushiToken,
+      getEthPrice,
+    ]);
   }, 60000);
 
-  const [
+  const {
     sushiStakedUSD,
     sushiHarvestedUSD,
-    xSushiSushi,
-    xSushiPerSushi,
     xSushiMinted,
     xSushiBurned,
-    xSushiAge,
-    xSushiAgeDestroyed,
     xSushi,
-  ] = histories.reduce(
-    (previousValue, currentValue, index) => {
+    interest,
+    fees,
+  } = histories.reduce(
+    (previousValue, currentValue) => {
       const date = currentValue.date * 1000;
-      previousValue[0].push({
+      const dayData = dayDatas.find((d) => d.date === currentValue.date);
+      console.log({ dayData });
+      previousValue["sushiStakedUSD"].push({
         date,
         value: parseFloat(currentValue.sushiStakedUSD),
       });
-      previousValue[1].push({
+      previousValue["sushiHarvestedUSD"].push({
         date,
         value: parseFloat(currentValue.sushiHarvestedUSD),
       });
-      previousValue[2].push({
-        date,
-        value: parseFloat(currentValue.ratio),
-      });
-      previousValue[3].push({
-        date,
-        value: 2 - parseFloat(currentValue.ratio),
-      });
-      previousValue[4].push({
+      // previousValue[2].push({
+      //   date,
+      //   value: parseFloat(currentValue.ratio),
+      // });
+      // previousValue[3].push({
+      //   date,
+      //   value: 2 - parseFloat(currentValue.ratio),
+      // });
+      previousValue["xSushiMinted"].push({
         date,
         value: parseFloat(currentValue.xSushiMinted),
       });
-      previousValue[5].push({
+      previousValue["xSushiBurned"].push({
         date,
         value: parseFloat(currentValue.xSushiBurned),
       });
-      previousValue[6].push({
-        date,
-        value: parseInt(currentValue.xSushiAge),
-        stroke: theme.palette.positive.light,
-      });
-      previousValue[7].push({
-        date,
-        value: parseInt(currentValue.xSushiAgeDestroyed),
-      });
 
-      previousValue[8].push({
+      // previousValue[6].push({
+      //   date,
+      //   value: parseInt(currentValue.xSushiAge),
+      //   stroke: theme.palette.positive.light,
+      // });
+      // previousValue[7].push({
+      //   date,
+      //   value: parseInt(currentValue.xSushiAgeDestroyed),
+      // });
+
+      previousValue["xSushi"].push({
         date,
         value: parseFloat(currentValue.xSushiSupply),
       });
 
+      const APR =
+        (((dayData.volumeUSD * 0.05 * 0.01) / currentValue.xSushiSupply) *
+          365) /
+        (currentValue.ratio * sushiPrice);
+
+      previousValue["interest"].push({
+        date,
+        value: parseFloat((Math.pow(1 + APR / 365, 365) - 1) * 100),
+      });
+
+      previousValue["fees"].push({
+        date,
+        value: parseFloat(dayData.volumeUSD * 0.05 * 0.01),
+      });
+
       return previousValue;
     },
-    [[], [], [], [], [], [], [], [], [], [], []]
+    {
+      sushiStakedUSD: [],
+      sushiHarvestedUSD: [],
+      xSushiMinted: [],
+      xSushiBurned: [],
+      xSushi: [],
+      interest: [],
+      fees: [],
+    }
   );
-
-  const sushiPrice =
-    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
 
@@ -163,7 +198,7 @@ function BarPage() {
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="APY" value={`${(APY * 100).toFixed(2)}%`} />
+              <KPI title="APY (24h)" value={`${(APY * 100).toFixed(2)}%`} />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <KPI
@@ -213,6 +248,44 @@ function BarPage() {
                 <Curves
                   width={width}
                   height={height}
+                  title="Interest (APY)"
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[interest]}
+                />
+              )}
+            </ParentSize>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{ display: "flex", height: 400, flex: 1 }}
+          >
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  width={width}
+                  height={height}
+                  title="Fees recieved"
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[fees]}
+                />
+              )}
+            </ParentSize>
+          </Paper>
+        </Grid>
+
+        {/* <Grid item xs={12}>
+          <Paper
+            variant="outlined"
+            style={{ display: "flex", height: 400, flex: 1 }}
+          >
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  width={width}
+                  height={height}
                   title="xSushi:Sushi & Sushi:xSushi"
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[xSushiSushi, xSushiPerSushi]}
@@ -220,7 +293,7 @@ function BarPage() {
               )}
             </ParentSize>
           </Paper>
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={12}>
           <Paper
@@ -282,6 +355,7 @@ export async function getStaticProps() {
   await getBar(client);
   await getBarHistories(client);
   await getFactory(client);
+  await getDayData(client);
   await getSushiToken(client);
   await getEthPrice(client);
   return {

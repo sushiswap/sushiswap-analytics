@@ -14,17 +14,17 @@ import parse from "autosuggest-highlight/parse";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
-export default function Search() {
+export default function Search({ pairs, tokens }) {
   const router = useRouter();
-  const {
-    data: { pairs },
-    loading: pairsLoading,
-  } = useQuery(pairsQuery);
+  // const {
+  //   data: { pairs },
+  //   loading: pairsLoading,
+  // } = useQuery(pairsQuery);
 
-  const {
-    data: { tokens },
-    loading: tokensLoading,
-  } = useQuery(tokensQuery);
+  // const {
+  //   data: { tokens },
+  //   loading: tokensLoading,
+  // } = useQuery(tokensQuery);
 
   // const [offset, setOffset] = useState(0);
 
@@ -67,7 +67,6 @@ export default function Search() {
       onChange={(e, v) => {
         router.push(`/${v.__typename.toLowerCase()}s/${v.id}`);
       }}
-      loading={pairsLoading || tokensLoading}
       renderInput={(params) => (
         <TextField
           {...params}

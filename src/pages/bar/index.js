@@ -174,6 +174,11 @@ function BarPage() {
     }
   );
 
+  const averageApy =
+    interest.reduce((previousValue, currentValue) => {
+      return previousValue + currentValue.value;
+    }, 0) / interest.length;
+
   const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
 
   const APR =
@@ -201,17 +206,20 @@ function BarPage() {
               <KPI title="APY (24h)" value={`${(APY * 100).toFixed(2)}%`} />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
+              <KPI title="APY (Avg)" value={`${averageApy.toFixed(2)}%`} />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
               <KPI
                 title="xSushi"
                 value={parseInt(bar.totalSupply).toLocaleString()}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            {/* <Grid item xs={12} sm={6} md={3}>
               <KPI
                 title="Sushi"
                 value={parseInt(bar.sushiStaked).toLocaleString()}
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
               <KPI
                 title="xSushi:Sushi"

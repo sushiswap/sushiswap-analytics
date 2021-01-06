@@ -392,7 +392,7 @@ function PairPage(props) {
           ]}
         />
       </Box>
-      <Box my={4} mb={6}>
+      <Box my={4}>
         <Typography variant="h6" component="h2" gutterBottom>
           IntoTheBlock
         </Typography>

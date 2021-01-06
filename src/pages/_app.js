@@ -1,4 +1,5 @@
 import "../styles/index.css";
+import "../styles/itb.css";
 
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
 import React, { useEffect } from "react";

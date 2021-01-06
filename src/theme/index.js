@@ -70,6 +70,11 @@ const overrides = {
       // "& > thead > tr > *": { border: 0 },
     },
   },
+  MuiInputBase: {
+    root: {
+      backgroundColor: "#fff",
+    },
+  },
   MuiTableCell: {
     head: {
       fontWeight: 400,

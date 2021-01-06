@@ -392,12 +392,12 @@ function PairPage(props) {
           ]}
         />
       </Box>
-      {/* <Box my={4} mb={6}>
+      <Box my={4} mb={6}>
         <Typography variant="h6" component="h2" gutterBottom>
           IntoTheBlock
         </Typography>
         <IntoTheBlock pairAddress={pair.id} />
-      </Box> */}
+      </Box>
       <Box my={4}>
         <Transactions transactions={transactions} txCount={pair.txCount} />
       </Box>

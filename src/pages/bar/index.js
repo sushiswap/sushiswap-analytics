@@ -99,13 +99,13 @@ function BarPage() {
     xSushiMinted,
     xSushiBurned,
     xSushi,
-    interest,
+    apr,
+    apy,
     fees,
   } = histories.reduce(
     (previousValue, currentValue) => {
       const date = currentValue.date * 1000;
       const dayData = dayDatas.find((d) => d.date === currentValue.date);
-      console.log({ dayData });
       previousValue["sushiStakedUSD"].push({
         date,
         value: parseFloat(currentValue.sushiStakedUSD),
@@ -114,14 +114,7 @@ function BarPage() {
         date,
         value: parseFloat(currentValue.sushiHarvestedUSD),
       });
-      // previousValue[2].push({
-      //   date,
-      //   value: parseFloat(currentValue.ratio),
-      // });
-      // previousValue[3].push({
-      //   date,
-      //   value: 2 - parseFloat(currentValue.ratio),
-      // });
+
       previousValue["xSushiMinted"].push({
         date,
         value: parseFloat(currentValue.xSushiMinted),
@@ -130,37 +123,26 @@ function BarPage() {
         date,
         value: parseFloat(currentValue.xSushiBurned),
       });
-
-      // previousValue[6].push({
-      //   date,
-      //   value: parseInt(currentValue.xSushiAge),
-      //   stroke: theme.palette.positive.light,
-      // });
-      // previousValue[7].push({
-      //   date,
-      //   value: parseInt(currentValue.xSushiAgeDestroyed),
-      // });
-
       previousValue["xSushi"].push({
         date,
         value: parseFloat(currentValue.xSushiSupply),
       });
-
-      const APR =
+      const apr =
         (((dayData.volumeUSD * 0.05 * 0.01) / currentValue.xSushiSupply) *
           365) /
         (currentValue.ratio * sushiPrice);
-
-      previousValue["interest"].push({
+      previousValue["apr"].push({
         date,
-        value: parseFloat((Math.pow(1 + APR / 365, 365) - 1) * 100),
+        value: parseFloat(apr),
       });
-
+      previousValue["apy"].push({
+        date,
+        value: parseFloat((Math.pow(1 + apr / 365, 365) - 1) * 100),
+      });
       previousValue["fees"].push({
         date,
         value: parseFloat(dayData.volumeUSD * 0.05 * 0.01),
       });
-
       return previousValue;
     },
     {
@@ -169,15 +151,16 @@ function BarPage() {
       xSushiMinted: [],
       xSushiBurned: [],
       xSushi: [],
-      interest: [],
+      apr: [],
+      apy: [],
       fees: [],
     }
   );
 
   const averageApy =
-    interest.reduce((previousValue, currentValue) => {
+    apy.reduce((previousValue, currentValue) => {
       return previousValue + currentValue.value;
-    }, 0) / interest.length;
+    }, 0) / apy.length;
 
   const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
 
@@ -258,7 +241,7 @@ function BarPage() {
                   height={height}
                   title="Interest % (APY)"
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[interest]}
+                  data={[apy]}
                 />
               )}
             </ParentSize>

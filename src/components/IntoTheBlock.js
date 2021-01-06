@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 
-import Head from "next/head";
-
 function IntoTheBlock({ pairAddress }) {
   useEffect(() => {
     if (window.itbWidgetInit) {
@@ -9,7 +7,7 @@ function IntoTheBlock({ pairAddress }) {
         apiKey: "IXlsoP7uCH5tjojovmac53V8xlOh8Qa31yOgozMG",
         options: {
           colors: {
-            series: ["#8c6651"],
+            series: ["#FF1744"],
           },
           protocol: "sushiswap",
           pairAddress,

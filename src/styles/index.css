@@ -173,7 +173,7 @@ body {
   /* margin: 0 auto; */
   /* padding: 30px 0; */
 }
-/* .widget-container .charts-container {
+.widget-container .charts-container {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -194,10 +194,9 @@ body {
   text-align: center;
   font-size: 20px;
   font-family: "Inter";
-} */
+}
 
-/* NIGHT MODE */
-/* .dark-theme .widget-container .charts-container .itb-widget .defi-card {
+.dark-theme .widget-container .charts-container .itb-widget .defi-card {
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: none;
@@ -268,6 +267,18 @@ body {
   fill: #b93cf6 !important;
 }
 
+
+
+.widget-container .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.footer .itb-widget {
+  min-width: unset;
+}
+
 .itb-widget .powered-by .text {
   color: white !important;
-} */
+}

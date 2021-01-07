@@ -143,9 +143,9 @@ function PairPage(props) {
   const avgTradePriceChange =
     ((avgTradePrice - avgTradePriceYesturday) / avgTradePriceYesturday) * 100;
 
-  const utilisation = volume / pair.reserveUSD;
+  const utilisation = (volume / pair.reserveUSD) * 100;
 
-  const utilisationYesterday = volumeYesterday / pair.oneDay.reserveUSD;
+  const utilisationYesterday = (volumeYesterday / pair.oneDay.reserveUSD) * 100;
 
   const utilisationChange =
     ((utilisation - utilisationYesterday) / utilisationYesterday) * 100;
@@ -350,8 +350,8 @@ function PairPage(props) {
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
           <KPI
-            title="Utilisation % (24h)"
-            value={formatDecimal(utilisation)}
+            title="Utilisation (24h)"
+            value={`${formatDecimal(utilisation)}%`}
             difference={utilisationChange}
           />
         </Grid>

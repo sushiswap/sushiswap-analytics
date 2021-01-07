@@ -22,7 +22,7 @@ export default function LosersList({ pairs }) {
       <SortableTable
         title="Losers (24h)"
         orderBy="feesUSDLost"
-        order="asc"
+        order="desc"
         columns={[
           {
             key: "name",

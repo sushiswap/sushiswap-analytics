@@ -186,16 +186,13 @@ function BarPage() {
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="APY (24h)" value={`${(APY * 100).toFixed(2)}%`} />
+              <KPI title="APY (24h)" value={APY * 100} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="APY (Avg)" value={`${averageApy.toFixed(2)}%`} />
+              <KPI title="APY (Avg)" value={averageApy} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <KPI
-                title="xSushi"
-                value={parseInt(bar.totalSupply).toLocaleString()}
-              />
+              <KPI title="xSushi" value={bar.totalSupply} format="integer" />
             </Grid>
             {/* <Grid item xs={12} sm={6} md={3}>
               <KPI
@@ -204,10 +201,7 @@ function BarPage() {
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI
-                title="xSushi:Sushi"
-                value={parseFloat(bar.ratio).toLocaleString()}
-              />
+              <KPI title="xSushi:Sushi" value={Number(bar.ratio).toFixed(2)} />
             </Grid>
           </Grid>
         </Grid>

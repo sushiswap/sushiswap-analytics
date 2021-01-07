@@ -1,6 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
+import { Typography } from "@material-ui/core";
 
 function IntoTheBlock({ pairAddress }) {
+  const [notSupported, setNotSupported] = useState(false);
   useEffect(() => {
     if (window.itbWidgetInit) {
       window.itbWidgetInit({
@@ -16,7 +19,7 @@ function IntoTheBlock({ pairAddress }) {
           hideNavigator: true,
           events: {
             onPairNotSupported: () => {
-              props.onPairNotSupported(true);
+              setNotSupported(true);
             },
           },
         },
@@ -24,10 +27,18 @@ function IntoTheBlock({ pairAddress }) {
     }
   }, [pairAddress]);
 
-  return (
+  return !notSupported ? (
     <div>
+      <Typography variant="h6" component="h2" gutterBottom>
+        IntoTheBlock
+      </Typography>
       <div className="widget-container">
         <div className="charts-container">
+          <div
+            data-target="itb-widget"
+            data-type="protocol-roi-calculator"
+            className="full-width"
+          ></div>
           <div
             data-target="itb-widget"
             data-type="protocol-fees-per-liquidity"
@@ -46,11 +57,6 @@ function IntoTheBlock({ pairAddress }) {
             data-type="protocol-liquidity-variation"
             data-options='{ "pairTokenIndex": 1 }'
           ></div>
-          <div
-            data-target="itb-widget"
-            data-type="protocol-roi-calculator"
-            className="full-width"
-          ></div>
         </div>
         <div className="footer">
           <div data-target="itb-widget" data-type="call-to-action"></div>
@@ -58,7 +64,7 @@ function IntoTheBlock({ pairAddress }) {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 }
 
 export default IntoTheBlock;

@@ -8,7 +8,7 @@ export default function Percent({ percent, ...props }) {
   const value =
     !Number.isNaN(percent) && isFinite(percent)
       ? Number(percent).toFixed(2)
-      : "0.00";
+      : 0;
 
   let color = "inherit";
 

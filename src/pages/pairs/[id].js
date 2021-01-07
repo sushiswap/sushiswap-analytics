@@ -316,43 +316,53 @@ function PairPage(props) {
         <Grid item xs={12} sm={6} md={4}>
           <KPI
             title="Liquidity (24h)"
-            value={formatCurrency(pair?.reserveUSD || 0)}
-            difference={(
+            value={pair?.reserveUSD}
+            difference={
               ((pair?.reserveUSD - pair?.oneDay?.reserveUSD) /
                 pair?.oneDay?.reserveUSD) *
               100
-            ).toFixed(2)}
+            }
+            format="currency"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
           <KPI
             title="Volume (24h)"
-            value={formatCurrency(volume || 0)}
+            value={volume}
             difference={volumeChange}
+            format="currency"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
           <KPI
             title="Fees (24h)"
-            value={formatCurrency(fees)}
+            value={fees}
             difference={((fees - feesYesterday) / feesYesterday) * 100}
+            format="currency"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
-          <KPI title="Tx (24h)" value={tx} difference={txChange} />
+          <KPI
+            title="Tx (24h)"
+            value={tx}
+            difference={txChange}
+            format="integer"
+          />
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
           <KPI
             title="Avg. Trade (24h)"
-            value={formatCurrency(avgTradePrice)}
+            value={avgTradePrice}
             difference={avgTradePriceChange}
+            format="currency"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
           <KPI
             title="Utilisation (24h)"
-            value={`${formatDecimal(utilisation)}%`}
+            value={utilisation}
             difference={utilisationChange}
+            format="percent"
           />
         </Grid>
       </Grid>
@@ -393,9 +403,6 @@ function PairPage(props) {
         />
       </Box>
       <Box my={4}>
-        <Typography variant="h6" component="h2" gutterBottom>
-          IntoTheBlock
-        </Typography>
         <IntoTheBlock pairAddress={pair.id} />
       </Box>
       <Box my={4}>

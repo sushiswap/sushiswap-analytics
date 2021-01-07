@@ -38,8 +38,6 @@ export async function getPoolIds(client = getApollo()) {
 }
 
 export async function getPoolUser(id, client = getApollo()) {
-  console.log("GET POOL USER", id);
-
   const { data } = await client.query({
     query: poolUserQuery,
     fetchPolicy: "network-only",
@@ -50,8 +48,6 @@ export async function getPoolUser(id, client = getApollo()) {
       clientName: "masterchef",
     },
   });
-
-  console.log("POOL USER DATA", data);
 
   await client.cache.writeQuery({
     query: poolUserQuery,

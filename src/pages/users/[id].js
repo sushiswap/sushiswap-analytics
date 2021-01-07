@@ -261,6 +261,8 @@ function UserPage() {
   const investments =
     poolEntriesUSD + barPendingUSD + poolsPendingUSD + poolExitsUSD + lockedUSD;
 
+  // console.log(barData);
+
   return (
     <AppShell>
       <Head>
@@ -326,7 +328,10 @@ function UserPage() {
                       Harvested
                     </TableCell>
                     <TableCell key="balance" align="right">
-                      Pending Sushi
+                      Balance
+                    </TableCell>
+                    <TableCell key="pending" align="right">
+                      Pending
                     </TableCell>
                     <TableCell key="barRoiYearly" align="right">
                       ROI (Yearly)
@@ -376,6 +381,12 @@ function UserPage() {
                       <Typography noWrap variant="body2">
                         {decimalFormatter.format(barHarvested)} (
                         {formatCurrency(barHarvestedUSD)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(barStaked - barHarvested)} (
+                        {formatCurrency(barStakedUSD - barHarvestedUSD)})
                       </Typography>
                     </TableCell>
                     <TableCell align="right">

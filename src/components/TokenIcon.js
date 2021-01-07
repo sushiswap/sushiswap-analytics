@@ -6,7 +6,7 @@ import { useMemo } from "react";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginRight: theme.spacing(2),
-    background: theme.palette.background.default,
+    background: "transparent",
     color: theme.palette.text.secondary,
   },
 }));
@@ -21,12 +21,7 @@ export default function TokenIcon({ id, ...rest }) {
     [id]
   );
   return (
-    <Avatar
-      variant="rounded"
-      classes={{ root: classes.root }}
-      src={src}
-      {...rest}
-    >
+    <Avatar classes={{ root: classes.root }} src={src} {...rest}>
       {id.slice(0, 2)}
     </Avatar>
   );

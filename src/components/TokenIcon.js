@@ -1,12 +1,12 @@
 import { Avatar } from "@material-ui/core";
+import HelpIcon from "@material-ui/icons/Help";
 import { makeStyles } from "@material-ui/core/styles";
 import { toChecksumAddress } from "web3-utils";
 import { useMemo } from "react";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     marginRight: theme.spacing(2),
-    background: "transparent",
+    // background: "transparent",
     color: theme.palette.text.secondary,
   },
 }));
@@ -20,9 +20,5 @@ export default function TokenIcon({ id, ...rest }) {
       )}/logo.png`,
     [id]
   );
-  return (
-    <Avatar classes={{ root: classes.root }} src={src} {...rest}>
-      {id.slice(0, 2)}
-    </Avatar>
-  );
+  return <Avatar classes={{ root: classes.root }} src={src} {...rest} />;
 }

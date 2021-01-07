@@ -22,7 +22,7 @@ export default function GainersList({ pairs }) {
     <div className={classes.root}>
       <SortableTable
         title="Gainers (24h)"
-        orderBy="reserveUSDGained"
+        orderBy="feesUSDGained"
         order="desc"
         columns={[
           {
@@ -41,12 +41,12 @@ export default function GainersList({ pairs }) {
             ),
           },
           {
-            key: "reserveUSDGained",
-            label: "Liquidity USD Gained",
+            key: "feesUSDGained",
+            label: "Fees USD Gained",
             align: "right",
             render: (row, index) => (
               <div className={classes.gained}>
-                +{formatCurrency(row.reserveUSDGained)}
+                +{formatCurrency(row.feesUSDGained)}
               </div>
             ),
           },
@@ -57,6 +57,16 @@ export default function GainersList({ pairs }) {
             render: (row, index) => (
               <div className={classes.gained}>
                 +{formatCurrency(row.volumeUSDGained)}
+              </div>
+            ),
+          },
+          {
+            key: "reserveUSDGained",
+            label: "Liquidity USD Gained",
+            align: "right",
+            render: (row, index) => (
+              <div className={classes.gained}>
+                +{formatCurrency(row.reserveUSDGained)}
               </div>
             ),
           },

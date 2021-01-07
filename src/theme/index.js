@@ -86,6 +86,9 @@ const overrides = {
       border: 0,
     },
   },
+  MuiAvatar: {
+    fallback: {},
+  },
 };
 
 export const darkTheme = responsiveFontSizes(

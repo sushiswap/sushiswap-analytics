@@ -35,10 +35,14 @@ export async function getGainers(client = getApollo()) {
     data: {
       pairs: pairs.map((pair) => {
         const oneDayPair = oneDayPairs.find(({ id }) => pair.id === id);
+        const volumeUSDGained = pair.volumeUSD - oneDayPair?.volumeUSD;
+        const feesUSDGained = volumeUSDGained * 0.03;
+        const reserveUSDGained = pair.reserveUSD - oneDayPair?.reserveUSD;
         return {
           ...pair,
-          reserveUSDGained: pair.reserveUSD - oneDayPair?.reserveUSD,
-          volumeUSDGained: pair.volumeUSD - oneDayPair?.volumeUSD,
+          feesUSDGained,
+          reserveUSDGained,
+          volumeUSDGained,
         };
       }),
     },
@@ -78,9 +82,14 @@ export async function getLosers(client = getApollo()) {
     data: {
       pairs: pairs.map((pair) => {
         const oneDayPair = oneDayPairs.find(({ id }) => pair.id === id);
+        const volumeUSDLost = pair.volumeUSD - oneDayPair?.volumeUSD;
+        const feesUSDLost = volumeUSDLost * 0.03;
+        const reserveUSDLost = pair.reserveUSD - oneDayPair?.reserveUSD;
         return {
           ...pair,
-          reserveUSDLost: pair.reserveUSD - oneDayPair?.reserveUSD,
+          feesUSDLost,
+          volumeUSDLost,
+          reserveUSDLost,
         };
       }),
     },

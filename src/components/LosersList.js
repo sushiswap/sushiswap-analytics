@@ -21,7 +21,7 @@ export default function LosersList({ pairs }) {
     <div className={classes.root}>
       <SortableTable
         title="Losers (24h)"
-        orderBy="reserveUSDLost"
+        orderBy="feesUSDLost"
         order="asc"
         columns={[
           {
@@ -40,10 +40,30 @@ export default function LosersList({ pairs }) {
             ),
           },
           {
+            key: "feesUSDLost",
+            label: "Fees USD Lost",
+            align: "right",
+            render: (row) => (
+              <Typography className={classes.lost} noWrap>
+                -{formatCurrency(row.feesUSDLost)}
+              </Typography>
+            ),
+          },
+          {
+            key: "volumeUSDLost",
+            label: "Volume USD Lost",
+            align: "right",
+            render: (row) => (
+              <Typography className={classes.lost} noWrap>
+                -{formatCurrency(row.volumeUSDLost)}
+              </Typography>
+            ),
+          },
+          {
             key: "reserveUSDLost",
             label: "Liquidity USD Lost",
             align: "right",
-            render: (row, index) => (
+            render: (row) => (
               <Typography className={classes.lost} noWrap>
                 {formatCurrency(row.reserveUSDLost)}
               </Typography>

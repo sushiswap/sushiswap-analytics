@@ -27,7 +27,7 @@ export default function TokenIcon({ id, ...rest }) {
       src={src}
       {...rest}
     >
-      {id.slice(0, 3)}
+      {id.slice(0, 2)}
     </Avatar>
   );
 }

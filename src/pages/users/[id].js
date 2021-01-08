@@ -320,10 +320,10 @@ function UserPage() {
                   <TableRow>
                     <TableCell key="token">Token</TableCell>
                     <TableCell key="staked" align="right">
-                      Staked
+                      Deposited
                     </TableCell>
                     <TableCell key="harvested" align="right">
-                      Harvested
+                      Withdrawn
                     </TableCell>
                     <TableCell key="pending" align="right">
                       Pending
@@ -466,13 +466,18 @@ function UserPage() {
                     <TableCell key="slp" align="right">
                       SLP
                     </TableCell>
+                    <TableCell key="entryUSD" align="right">
+                      Deposited
+                    </TableCell>
+                    <TableCell key="exitUSD" align="right">
+                      Withdrawn
+                    </TableCell>
                     <TableCell key="balance" align="right">
                       Balance
                     </TableCell>
                     <TableCell key="value" align="right">
                       Value
                     </TableCell>
-
                     <TableCell key="pendingSushi" align="right">
                       Pending Sushi
                     </TableCell>
@@ -481,12 +486,6 @@ function UserPage() {
                     </TableCell>
                     <TableCell key="sushiLocked" align="right">
                       Sushi Locked
-                    </TableCell>
-                    <TableCell key="entryUSD" align="right">
-                      Entries
-                    </TableCell>
-                    <TableCell key="exitUSD" align="right">
-                      Exits
                     </TableCell>
                     <TableCell key="pl" align="right">
                       Profit/Loss

@@ -133,7 +133,7 @@ function BarPage() {
         (currentValue.ratio * sushiPrice);
       previousValue["apr"].push({
         date,
-        value: parseFloat(apr),
+        value: parseFloat(apr * 100),
       });
       previousValue["apy"].push({
         date,
@@ -233,9 +233,9 @@ function BarPage() {
                 <Curves
                   width={width}
                   height={height}
-                  title="Interest % (APY)"
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[apy]}
+                  data={[apy, apr]}
+                  labels={["APY", "APR"]}
                 />
               )}
             </ParentSize>
@@ -290,9 +290,9 @@ function BarPage() {
                 <Curves
                   width={width}
                   height={height}
-                  title="Sushi Staked (USD) & Sushi Harvested (USD)"
                   data={[sushiStakedUSD, sushiHarvestedUSD]}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  labels={["Sushi Staked (USD)", "Sushi Harvested (USD)"]}
                 />
               )}
             </ParentSize>
@@ -309,9 +309,9 @@ function BarPage() {
                 <Curves
                   width={width}
                   height={height}
-                  title="xSushi Minted & xSushi Burned"
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[xSushiMinted, xSushiBurned]}
+                  labels={["xSushi Minted", "xSushi Burned"]}
                 />
               )}
             </ParentSize>
@@ -319,14 +319,31 @@ function BarPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <Chart
+          <Paper
+            variant="outlined"
+            style={{ display: "flex", height: 400, flex: 1 }}
+          >
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  width={width}
+                  height={height}
+                  title="xSushi Total Supply"
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[xSushi]}
+                />
+              )}
+            </ParentSize>
+          </Paper>
+
+          {/* <Chart
             title="xSushi Total Supply"
             data={xSushi}
             height={400}
             margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
             tooptip
             brush
-          />
+          /> */}
         </Grid>
       </Grid>
 

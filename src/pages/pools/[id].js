@@ -289,9 +289,9 @@ function PoolPage() {
                 <Curves
                   width={width}
                   height={height}
-                  title="SLP Age & SLP Age Removed"
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[slpAge, slpAgeRemoved]}
+                  labels={["SLP Age", "SLP Age Removed"]}
                 />
               )}
             </ParentSize>
@@ -312,9 +312,9 @@ function PoolPage() {
                 <Curves
                   width={width}
                   height={height}
-                  title="SLP Deposited & SLP Withdrawn"
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[slpDeposited, slpWithdrawn]}
+                  labels={["SLP Deposited", "SLP Age Withdrawn"]}
                 />
               )}
             </ParentSize>
@@ -322,36 +322,75 @@ function PoolPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <Chart
-            title="~ SLP Age (Days)"
-            data={slpAgeAverage}
-            height={400}
-            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
-            tooptip
-            brush
-          />
+          <Paper
+            variant="outlined"
+            style={{
+              display: "flex",
+              position: "relative",
+              height: 400,
+              flex: 1,
+            }}
+          >
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  title="~ SLP Age (Days)"
+                  width={width}
+                  height={height}
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[slpAgeAverage]}
+                />
+              )}
+            </ParentSize>
+          </Paper>
         </Grid>
 
         <Grid item xs={12}>
-          <Chart
-            title="Users"
-            data={userCount}
-            height={400}
-            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
-            tooptip
-            brush
-          />
+          <Paper
+            variant="outlined"
+            style={{
+              display: "flex",
+              position: "relative",
+              height: 400,
+              flex: 1,
+            }}
+          >
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  title="Users"
+                  width={width}
+                  height={height}
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[userCount]}
+                />
+              )}
+            </ParentSize>
+          </Paper>
         </Grid>
 
         <Grid item xs={12}>
-          <Chart
-            title="SLP Balance"
-            data={slpBalance}
-            height={400}
-            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
-            tooptip
-            brush
-          />
+          <Paper
+            variant="outlined"
+            style={{
+              display: "flex",
+              position: "relative",
+              height: 400,
+              flex: 1,
+            }}
+          >
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  title="SLP Balance"
+                  width={width}
+                  height={height}
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[slpBalance]}
+                />
+              )}
+            </ParentSize>
+          </Paper>
         </Grid>
 
         {/* <Grid item xs={12}>
@@ -366,14 +405,27 @@ function PoolPage() {
         </Grid> */}
 
         <Grid item xs={12}>
-          <Chart
-            title="TVL USD"
-            data={tvl}
-            height={400}
-            margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
-            tooptip
-            brush
-          />
+          <Paper
+            variant="outlined"
+            style={{
+              display: "flex",
+              position: "relative",
+              height: 400,
+              flex: 1,
+            }}
+          >
+            <ParentSize>
+              {({ width, height }) => (
+                <Curves
+                  title="TVL (USD)"
+                  width={width}
+                  height={height}
+                  margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
+                  data={[tvl]}
+                />
+              )}
+            </ParentSize>
+          </Paper>
         </Grid>
       </Grid>
 

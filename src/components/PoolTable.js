@@ -65,9 +65,7 @@ export default function PoolTable({ pools, ...rest }) {
             key: "rewardPerThousand",
             label: "Reward per $1000",
             render: (row) =>
-              `${Number(row.rewardPerThousand * 24 * 1000).toFixed(
-                2
-              )} SUSHI per day`,
+              `${Number(row.rewardPerThousand).toFixed(2)} SUSHI per day`,
           },
           {
             key: "roi",
@@ -75,11 +73,11 @@ export default function PoolTable({ pools, ...rest }) {
             render: (row) => (
               <Typography variant="subtitle2" noWrap>
                 <Percent
-                  percent={Number(row.roiPerYear * 3 * 100).toFixed(2)}
+                  percent={Number(row.roiPerYear * 100).toFixed(2)}
                   display="inline"
                 />{" "}
-                / {Number(row.roiPerMonth * 3 * 100).toFixed(2)}% /{" "}
-                {Number(row.roiPerDay * 3 * 100).toFixed(2)}%
+                / {Number(row.roiPerMonth * 100).toFixed(2)}% /{" "}
+                {Number(row.roiPerDay * 100).toFixed(2)}%
               </Typography>
             ),
           },

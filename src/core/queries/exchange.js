@@ -130,6 +130,7 @@ export const pairFieldsQuery = gql`
   fragment pairFields on Pair {
     id
     reserveUSD
+    reserveETH
     volumeUSD
     untrackedVolumeUSD
     trackedReserveETH

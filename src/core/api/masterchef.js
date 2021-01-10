@@ -14,6 +14,7 @@ import {
 
 import { POOL_DENY } from "app/core/constants";
 import { getApollo } from "../apollo";
+import { sub } from "date-fns";
 
 export async function getPoolIds(client = getApollo()) {
   const {
@@ -134,6 +135,8 @@ export async function getPools(client = getApollo()) {
     })
     .sort();
 
+  const pool45 = pools.find((p) => p.id === "45");
+
   const {
     data: { pairs },
   } = await client.query({
@@ -146,8 +149,6 @@ export async function getPools(client = getApollo()) {
 
   const averageBlockTime = await getAverageBlockTime();
   // const averageBlockTime = 13;
-
-  // console.log({ averageBlockTime });
 
   const { bundles } = await getEthPrice();
 
@@ -181,27 +182,25 @@ export async function getPools(client = getApollo()) {
         .map((pool) => {
           const pair = pairs.find((pair) => pair.id === pool.pair);
 
-          // console.log({ pair, pool });
-
           const liquidityPosition = liquidityPositions.find(
             (liquidityPosition) => liquidityPosition.pair.id === pair.id
           );
-
-          const poolWeight = pool.allocPoint / pool.owner.totalAllocPoint;
 
           const balance = Number(pool.balance / 1e18);
 
           const balanceUSD =
             (balance / Number(pair.totalSupply)) * Number(pair.reserveUSD);
 
-          const rewardPerBlock =
-            ((pool.allocPoint / pool.owner.totalAllocPoint) *
-              pool.owner.sushiPerBlock) /
-            1e18;
-
           const blocksPerHour = 3600 / averageBlockTime;
 
-          const roiPerBlock = (rewardPerBlock * sushiPrice) / balanceUSD;
+          const rewardPerBlock = 60;
+
+          const roiPerBlock =
+            (Number(token.derivedETH) *
+              rewardPerBlock *
+              3 *
+              (Number(pool.allocPoint) / Number(pool.owner.totalAllocPoint))) /
+            (Number(pair.reserveETH) * (balance / Number(pair.totalSupply)));
 
           const roiPerHour = roiPerBlock * blocksPerHour;
 
@@ -219,7 +218,7 @@ export async function getPools(client = getApollo()) {
             roiPerDay,
             roiPerMonth,
             roiPerYear,
-            rewardPerThousand: (1e3 / balanceUSD) * rewardPerBlock,
+            rewardPerThousand: 1 * roiPerDay * (1000 / sushiPrice),
             tvl:
               (pair.reserveUSD / pair.totalSupply) *
               liquidityPosition.liquidityTokenBalance,

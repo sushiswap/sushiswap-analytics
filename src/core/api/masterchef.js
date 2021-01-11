@@ -188,12 +188,10 @@ export async function getPools(client = getApollo()) {
 
           const balance = Number(pool.balance / 1e18);
 
-          const balanceUSD =
-            (balance / Number(pair.totalSupply)) * Number(pair.reserveUSD);
-
           const blocksPerHour = 3600 / averageBlockTime;
 
-          const rewardPerBlock = 60;
+          const rewardPerBlock =
+            100 - 100 * (pool45.allocPoint / pool45.owner.totalAllocPoint);
 
           const roiPerBlock =
             (Number(token.derivedETH) *

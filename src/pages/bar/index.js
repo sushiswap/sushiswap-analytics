@@ -71,9 +71,7 @@ function BarPage() {
 
   const {
     data: { bundles },
-  } = useQuery(ethPriceQuery, {
-    pollInterval: 60000,
-  });
+  } = useQuery(ethPriceQuery);
 
   const {
     data: { dayDatas },

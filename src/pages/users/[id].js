@@ -561,7 +561,16 @@ function UserPage() {
                             {decimalFormatter.format(slp)} SLP
                           </Typography>
                         </TableCell>
-
+                        <TableCell align="right">
+                          <Typography noWrap variant="body2">
+                            {currencyFormatter.format(user.entryUSD)}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography noWrap variant="body2">
+                            {currencyFormatter.format(user.exitUSD)}
+                          </Typography>
+                        </TableCell>
                         <TableCell align="right">
                           <Typography noWrap variant="body2">
                             {decimalFormatter.format(token0)}{" "}
@@ -594,16 +603,6 @@ function UserPage() {
                           <Typography noWrap variant="body2">
                             {decimalFormatter.format(sushiLocked)} (
                             {currencyFormatter.format(sushiLockedUSD)})
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {currencyFormatter.format(user.entryUSD)}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {currencyFormatter.format(user.exitUSD)}
                           </Typography>
                         </TableCell>
                         <TableCell align="right">

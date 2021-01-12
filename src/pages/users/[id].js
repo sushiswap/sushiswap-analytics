@@ -479,10 +479,10 @@ function UserPage() {
                       Value
                     </TableCell>
                     <TableCell key="pendingSushi" align="right">
-                      Pending Sushi
+                      Sushi Pending
                     </TableCell>
                     <TableCell key="sushiHarvested" align="right">
-                      Sushi Rewarded
+                      Sushi Harvested
                     </TableCell>
                     <TableCell key="sushiLocked" align="right">
                       Sushi Locked

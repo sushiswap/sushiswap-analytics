@@ -135,6 +135,8 @@ export async function getPair(id, client = getApollo()) {
     fetchPolicy: "no-cache",
   });
 
+  // console.log({ oneDayPair, twoDayPair });
+
   await client.cache.writeQuery({
     query: pairQuery,
     variables: {
@@ -144,16 +146,16 @@ export async function getPair(id, client = getApollo()) {
       pair: {
         ...pair,
         oneDay: {
-          untrackedVolumeUSD: String(oneDayPair?.untrackedVolumeUSD),
-          volumeUSD: String(oneDayPair?.volumeUSD),
-          reserveUSD: String(oneDayPair?.reserveUSD),
-          txCount: String(oneDayPair?.txCount),
+          untrackedVolumeUSD: Number(oneDayPair?.untrackedVolumeUSD),
+          volumeUSD: Number(oneDayPair?.volumeUSD),
+          reserveUSD: Number(oneDayPair?.reserveUSD),
+          txCount: Number(oneDayPair?.txCount),
         },
         twoDay: {
-          untrackedVolumeUSD: String(twoDayPair?.untrackedVolumeUSD),
-          volumeUSD: String(twoDayPair?.volumeUSD),
-          reserveUSD: String(twoDayPair?.reserveUSD),
-          txCount: String(twoDayPair?.txCount),
+          untrackedVolumeUSD: Number(twoDayPair?.untrackedVolumeUSD),
+          volumeUSD: Number(twoDayPair?.volumeUSD),
+          reserveUSD: Number(twoDayPair?.reserveUSD),
+          txCount: Number(twoDayPair?.txCount),
         },
       },
     },

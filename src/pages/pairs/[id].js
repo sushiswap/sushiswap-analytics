@@ -182,6 +182,8 @@ function PairPage(props) {
     { liquidity: [], volume: [] }
   );
 
+  // console.log(pair);
+
   return (
     <AppShell>
       <Head>

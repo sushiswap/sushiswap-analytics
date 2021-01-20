@@ -139,7 +139,7 @@ function BarPage() {
       });
       previousValue["fees"].push({
         date,
-        value: parseFloat(dayData.volumeUSD * 0.05 * 0.01),
+        value: parseFloat(dayData.volumeUSD * 0.005),
       });
       return previousValue;
     },

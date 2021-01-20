@@ -131,9 +131,9 @@ function PairPage(props) {
 
   const volumeChange = ((volume - volumeYesterday) / volumeYesterday) * 100;
 
-  const fees = volume * 0.003;
+  const fees = volume * 0.03;
 
-  const feesYesterday = volumeYesterday * 0.003;
+  const feesYesterday = volumeYesterday * 0.03;
 
   const avgTradePrice = volume / (pair?.txCount - pair?.oneDay?.txCount);
 

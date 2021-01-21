@@ -339,6 +339,10 @@ function PairPage(props) {
           <KPI
             title="Fees (24h)"
             value={fees}
+            // difference={
+            //   100 *
+            //   Math.abs((fees - feesYesterday) / ((fees + feesYesterday) / 2))
+            // }
             difference={((fees - feesYesterday) / feesYesterday) * 100}
             format="currency"
           />

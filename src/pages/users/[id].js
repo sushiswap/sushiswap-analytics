@@ -184,7 +184,7 @@ function UserPage() {
 
   const blockDifference =
     parseInt(blocksData?.blocks[0].number) -
-    parseInt(barData.user.createdAtBlock);
+    parseInt(barData?.user?.createdAtBlock);
 
   const barRoiDailySushi = (barRoiSushi / blockDifference) * 6440;
 
@@ -502,7 +502,7 @@ function UserPage() {
                     );
                     const slp = Number(user.amount / 1e18);
 
-                    const share = user.amount / user.pool.balance;
+                    const share = slp / pair.totalSupply;
 
                     const token0 = pair.reserve0 * share;
                     const token1 = pair.reserve1 * share;

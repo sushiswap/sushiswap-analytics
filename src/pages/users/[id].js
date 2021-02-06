@@ -195,7 +195,7 @@ function UserPage() {
     if (!pair) {
       return previousValue;
     }
-    const share = currentValue.amount / currentValue?.pool?.balance;
+    const share = Number(currentValue.amount / 1e18) / pair.totalSupply;
     return previousValue + pair.reserveUSD * share;
   }, 0);
 

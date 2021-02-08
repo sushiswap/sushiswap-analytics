@@ -78,7 +78,7 @@ function TokenPage() {
 
   const classes = useStyles();
 
-  const { id } = router.query;
+  const id = router.query.id.toLowerCase();
 
   const {
     data: { token },
@@ -307,8 +307,10 @@ function TokenPage() {
   );
 }
 
-export async function getStaticProps({ params: { id } }) {
+export async function getStaticProps({ params }) {
   const client = getApollo();
+
+  const id = params.id.toLowerCase();
 
   await client.query({
     query: ethPriceQuery,

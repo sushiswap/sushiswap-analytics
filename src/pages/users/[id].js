@@ -70,7 +70,7 @@ function UserPage() {
 
   const classes = useStyles();
 
-  const { id } = router.query;
+  const id = router.query.id.toLowerCase();
 
   const {
     data: { bundles },
@@ -630,8 +630,10 @@ function UserPage() {
   );
 }
 
-export async function getStaticProps({ params: { id } }) {
+export async function getStaticProps({ params }) {
   const client = getApollo();
+
+  const id = params.id.toLowerCase();
 
   await getEthPrice(client);
 

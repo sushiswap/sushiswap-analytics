@@ -79,7 +79,7 @@ function PairPage(props) {
 
   const classes = useStyles();
 
-  const { id } = router.query;
+  const id = router.query.id.toLowerCase();
 
   const {
     data: { bundles },
@@ -418,8 +418,10 @@ function PairPage(props) {
   );
 }
 
-export async function getStaticProps({ params: { id } }) {
+export async function getStaticProps({ params }) {
   const client = getApollo();
+
+  const id = params.id.toLowerCase()
 
   // EthPrice
   await client.query({

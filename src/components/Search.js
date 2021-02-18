@@ -1,40 +1,96 @@
-import Autocomplete, {
-  createFilterOptions,
-} from "@material-ui/lab/Autocomplete";
-import { Box, TextField } from "@material-ui/core";
-/* eslint-disable no-use-before-define */
-import React, { useState } from "react";
-import { pairsQuery, tokensQuery } from "../core";
-
-import PairIcon from "./PairIcon";
-import { TokenIcon } from "app/components";
-import Typography from "@material-ui/core/Typography";
+import React from 'react';
+import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import { FixedSizeList } from 'react-window';
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
-import { useQuery } from "@apollo/client";
+import PairIcon from "./PairIcon";
+import TokenIcon from "./TokenIcon";
 import { useRouter } from "next/router";
+import { Box } from '@material-ui/core';
+
+const LISTBOX_PADDING = 8; // px
+
+function renderRow(props) {
+  const { data, index, style } = props;
+  return React.cloneElement(data[index], {
+    style: {
+      ...style,
+      top: style.top + LISTBOX_PADDING,
+    },
+  });
+}
+
+const OuterElementContext = React.createContext({});
+
+const OuterElementType = React.forwardRef((props, ref) => {
+  const outerProps = React.useContext(OuterElementContext);
+  return <div ref={ref} {...props} {...outerProps} />;
+});
+
+// Adapter for react-window
+const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) {
+  const { children, ...other } = props;
+  const itemData = React.Children.toArray(children);
+  const itemCount = itemData.length;
+  const itemSize = 55;
+
+  const getChildSize = (child) => {
+    if (React.isValidElement(child) && child.type === ListSubheader) {
+      return 60;
+    }
+
+    return itemSize;
+  };
+
+  const getHeight = () => {
+    if (itemCount > 8) {
+      return 8 * itemSize;
+    }
+    return itemData.map(getChildSize).reduce((a, b) => a + b, 0);
+  };
+
+  return (
+    <div ref={ref}>
+      <OuterElementContext.Provider value={other}>
+        <FixedSizeList
+          itemData={itemData}
+          height={getHeight() + 2 * LISTBOX_PADDING}
+          width="100%"
+          outerElementType={OuterElementType}
+          innerElementType="ul"
+          itemSize={itemSize}
+          overscanCount={5}
+          itemCount={itemCount}
+        >
+          {renderRow}
+        </FixedSizeList>
+      </OuterElementContext.Provider>
+    </div>
+  );
+});
+
+ListboxComponent.propTypes = {
+  children: PropTypes.node,
+};
+
+const renderGroup = (params) => [
+  <ListSubheader key={params.key} component="div">
+    {params.group}
+  </ListSubheader>,
+  params.children,
+];
 
 export default function Search({ pairs, tokens }) {
   const router = useRouter();
-  // const {
-  //   data: { pairs },
-  //   loading: pairsLoading,
-  // } = useQuery(pairsQuery);
-
-  // const {
-  //   data: { tokens },
-  //   loading: tokensLoading,
-  // } = useQuery(tokensQuery);
-
-  // const [offset, setOffset] = useState(0);
-
-  // const [limit, setLimit] = useState(200);
 
   const options = [
     // ...pairs.slice(offset, limit),
     // ...tokens.slice(offset, limit),
     ...pairs,
-    ...tokens,
+    ...tokens
   ].map((option) => {
     return {
       __typename: option.__typename,
@@ -45,28 +101,24 @@ export default function Search({ pairs, tokens }) {
         ? ` ${option.symbol} ${option.name}`
         : `${option.token0?.symbol}-${option.token1?.symbol}`,
     };
-  });
-
-  const filterOptions = createFilterOptions({
-    matchFrom: "start",
-    stringify: (option) => option.text,
-  });
+  })
 
   return (
     <Autocomplete
       id="search"
-      filterOptions={filterOptions}
+      style={{ width: "100%" }}
+      disableListWrap
+      ListboxComponent={ListboxComponent}
+      renderGroup={renderGroup}
+      onChange={(e, v) => {
+        router.push(`/${v.__typename.toLowerCase()}s/${v.id}`);
+      }}
       options={options.sort((a, b) => {
         if (a.__typename === "Token" && b.__typename === "Pair") {
           return -1;
         }
       })}
       groupBy={(option) => option.__typename}
-      getOptionLabel={(option) => option.text}
-      style={{ width: "100%" }}
-      onChange={(e, v) => {
-        router.push(`/${v.__typename.toLowerCase()}s/${v.id}`);
-      }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -75,24 +127,23 @@ export default function Search({ pairs, tokens }) {
           size="small"
         />
       )}
+      getOptionLabel={(option) => option.text}
       renderOption={(option, { inputValue }) => {
         const matches = match(option.text, inputValue);
         const parts = parse(option.text, matches);
         return (
           <Box display="flex" alignItems="center">
-            {option.__typename === "Token" ? (
-              <TokenIcon id={option.id} />
-            ) : (
-              <PairIcon base={option.token0} quote={option.token1} />
-            )}
-            {parts.map((part, index) => (
-              <span
-                key={index}
-                style={{ fontWeight: part.highlight ? 700 : 400 }}
-              >
-                {part.text}
-              </span>
-            ))}
+            {option.__typename === "Token" ? <TokenIcon id={option.id} /> : <PairIcon base={option.token0} quote={option.token1} />}
+            {parts.map((part, index) => {
+              return (
+                <span
+                  key={index}
+                  style={{ fontWeight: part.highlight ? 700 : 400, whiteSpace: "pre-wrap" }}
+                >
+                  {part.text}
+                </span>
+              )
+            })}
           </Box>
         );
       }}

@@ -1,4 +1,4 @@
-import { AppShell, KPI, Link, PageHeader, PairIcon } from "app/components";
+import { AppShell, KPI, Link, PageHeader, PairIcon, Loading } from "app/components";
 import {
   Avatar,
   Box,
@@ -65,12 +65,11 @@ function UserPage() {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <AppShell />;
+    return <Loading />;
   }
-
   const classes = useStyles();
 
-  const id = router.query.id.toLowerCase();
+  const id = router && router.query && router.query.id && router.query.id.toLowerCase();
 
   const {
     data: { bundles },

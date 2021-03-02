@@ -199,7 +199,7 @@ function BarPage() {
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="xSushi:Sushi" value={Number(bar.ratio).toFixed(2)} />
+              <KPI title="xSushi:Sushi" value={Number(bar.ratio).toFixed(4)} />
             </Grid>
           </Grid>
         </Grid>

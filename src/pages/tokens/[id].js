@@ -162,8 +162,8 @@ function TokenPage() {
   const txCount = token?.txCount - token?.oneDay?.txCount;
   const txCountYesterday = token?.oneDay?.txCount - token?.twoDay?.txCount;
 
-  const fees = volume * 0.003;
-  const feesYesterday = volumeYesterday * 0.003;
+  const fees = volume * 0.0025;
+  const feesYesterday = volumeYesterday * 0.0025;
 
   return (
     <AppShell>

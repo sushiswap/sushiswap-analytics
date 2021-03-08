@@ -36,7 +36,7 @@ export async function getGainers(client = getApollo()) {
       pairs: pairs.map((pair) => {
         const oneDayPair = oneDayPairs.find(({ id }) => pair.id === id);
         const volumeUSDGained = pair.volumeUSD - oneDayPair?.volumeUSD;
-        const feesUSDGained = volumeUSDGained * 0.0025;
+        const feesUSDGained = volumeUSDGained * 0.003;
         const reserveUSDGained = pair.reserveUSD - oneDayPair?.reserveUSD;
         return {
           ...pair,
@@ -83,7 +83,7 @@ export async function getLosers(client = getApollo()) {
       pairs: pairs.map((pair) => {
         const oneDayPair = oneDayPairs.find(({ id }) => pair.id === id);
         const volumeUSDLost = pair.volumeUSD - oneDayPair?.volumeUSD;
-        const feesUSDLost = volumeUSDLost * 0.0025;
+        const feesUSDLost = volumeUSDLost * 0.003;
         const reserveUSDLost = pair.reserveUSD - oneDayPair?.reserveUSD;
         return {
           ...pair,

@@ -39,6 +39,8 @@ export default function Transactions({ transactions, txCount }) {
 
   const now = new Date();
 
+ 
+
   return (
     <div className={classes.root}>
       <SortableTable
@@ -48,18 +50,20 @@ export default function Transactions({ transactions, txCount }) {
           {
             key: "__typename",
             label: "Type",
-            render: (row) => (
+            render: (row) => { 
+              console.log(row)
+              return (
               <Typography variant="body2" noWrap>
                 {row.__typename}{" "}
-                {row.amount0In === "0"
+                {row.amount0In === "0" || row.__typename === 'Mint' && !row.amount0In
                   ? row.pair.token1.symbol
                   : row.pair.token0.symbol}{" "}
                 for{" "}
-                {row.amount1Out === "0"
+                {row.amount1Out === "0" || row.__typename === 'Mint' && !row.amount1Out
                   ? row.pair.token0.symbol
                   : row.pair.token1.symbol}
               </Typography>
-            ),
+            ) },
           },
           {
             key: "amountUSD",
@@ -74,7 +78,7 @@ export default function Transactions({ transactions, txCount }) {
             render: (row) => (
               <Typography variant="body2" noWrap>
                 {decimalFormatter.format(row.amount0)}{" "}
-                {row.amount1In === "0"
+                {row.amount1In === "0" || !row.amount1In
                   ? row.pair.token0.symbol
                   : row.pair.token1.symbol}
               </Typography>
@@ -87,7 +91,7 @@ export default function Transactions({ transactions, txCount }) {
             render: (row) => (
               <Typography variant="body2" noWrap>
                 {decimalFormatter.format(row.amount1)}{" "}
-                {row.amount0Out === "0"
+                {row.amount0Out === "0" || !row.amount0Out
                   ? row.pair.token1.symbol
                   : row.pair.token0.symbol}
               </Typography>

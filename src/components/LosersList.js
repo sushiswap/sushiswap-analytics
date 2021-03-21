@@ -45,7 +45,7 @@ export default function LosersList({ pairs }) {
             align: "right",
             render: (row) => (
               <Typography className={classes.lost} noWrap>
-                -{formatCurrency(row.feesUSDLost)}
+                {formatCurrency(row.feesUSDLost - row.feesUSDLostYesterday)}
               </Typography>
             ),
           },

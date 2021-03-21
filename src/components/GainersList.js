@@ -46,7 +46,7 @@ export default function GainersList({ pairs }) {
             align: "right",
             render: (row, index) => (
               <div className={classes.gained}>
-                +{formatCurrency(row.feesUSDGained)}
+                +{formatCurrency(row.feesUSDGained - row.feesUSDGainedYesterday)}
               </div>
             ),
           },

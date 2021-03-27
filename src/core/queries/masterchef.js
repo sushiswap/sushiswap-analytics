@@ -5,9 +5,13 @@ export const lockupUserQuery = gql`
     users(first: 1000, where: { amount_gt: 0, address: $address }) {
       id
       amount
+      address
       rewardDebt
       pool {
         id
+        lockup {
+          totalAllocPoint
+        }
         balance
         accSushiPerShare
       }

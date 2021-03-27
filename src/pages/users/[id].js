@@ -102,7 +102,11 @@ function UserPage() {
     context: {
       clientName: "lockup",
     },
+    fetchPolicy: 'no-cache'
   });
+  
+  console.log({lockupData})
+
 
   const {
     data: { token },
@@ -207,8 +211,6 @@ function UserPage() {
           1e18
       );
     }, 0) * sushiPrice;
-
-  // console.log({ barData, poolData });
 
   const [
     poolEntriesUSD,
@@ -538,6 +540,7 @@ function UserPage() {
                       2;
 
                     const sushiLockedUSD = sushiLocked * sushiPrice;
+
                     return (
                       <TableRow key={user.pool.id}>
                         <TableCell component="th" scope="row">
@@ -648,6 +651,7 @@ export async function getStaticProps({ params }) {
     context: {
       clientName: "lockup",
     },
+    fetchPolicy: "no-cache"
   });
 
   await getPoolUser(id.toLowerCase(), client);

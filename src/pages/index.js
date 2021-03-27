@@ -130,9 +130,9 @@ function IndexPage() {
 
         <Grid item xs={12}>
           <PoolTable
-            title="Top Sushi Reward Pools"
+            title="Sushi Reward Pools"
             pools={pools}
-            orderBy="rewardPerThousand"
+            orderBy="tvl"
             order="desc"
             rowsPerPage={25}
           />

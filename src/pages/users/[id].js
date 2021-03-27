@@ -105,9 +105,6 @@ function UserPage() {
     fetchPolicy: 'no-cache'
   });
   
-  console.log({lockupData})
-
-
   const {
     data: { token },
   } = useQuery(tokenQuery, {

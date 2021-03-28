@@ -12,7 +12,10 @@ function LosersPage() {
     getLosers();
   }, 60000);
   const pairs = data.pairs.filter((pair) => {
-    return Math.sign(pair.reserveUSDLost) < 0;
+    const negativeFees = Math.sign(pair.feesUSDLost - pair.feesUSDLostYesterday) < 0;
+    const negativeReserve = Math.sign(pair.reserveUSDLost) < 0;
+
+    return negativeReserve && negativeFees;
   });
   return (
     <AppShell>

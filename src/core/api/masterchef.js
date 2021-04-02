@@ -203,13 +203,13 @@ export async function getPools(client = getApollo()) {
           const balanceUSD =
             (balance / Number(pair.totalSupply)) * Number(pair.reserveUSD);
 
-          const rewardPerBlock =	
-            ((pool.allocPoint / pool.owner.totalAllocPoint) *	
-              pool.owner.sushiPerBlock) /	
+          const rewardPerBlock =
+            ((pool.allocPoint / pool.owner.totalAllocPoint) *
+              pool.owner.sushiPerBlock) /
             1e18;
 
 
-          const roiPerBlock = ((rewardPerBlock * 3) * sushiPrice) / balanceUSD;
+          const roiPerBlock = (rewardPerBlock * sushiPrice) / balanceUSD;
 
           const roiPerHour = roiPerBlock * blocksPerHour;
 

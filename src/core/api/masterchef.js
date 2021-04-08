@@ -12,7 +12,7 @@ import {
   poolsQuery,
 } from "../queries/masterchef";
 
-import { POOL_DENY } from "app/core/constants";
+import { POOL_DENY, SUSHI_TOKEN } from "app/core/constants";
 import { getApollo } from "../apollo";
 import { sub } from "date-fns";
 
@@ -154,9 +154,7 @@ export async function getPools(client = getApollo()) {
 
   const ethPrice = bundles[0].ethPrice;
 
-  const { token } = await getToken(
-    "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
-  );
+  const { token } = await getToken(SUSHI_TOKEN);
 
   const sushiPrice = ethPrice * token.derivedETH;
 

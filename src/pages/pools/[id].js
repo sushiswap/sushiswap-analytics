@@ -32,7 +32,7 @@ import {
 } from "app/core";
 
 import Head from "next/head";
-import { POOL_DENY } from "app/core/constants";
+import { POOL_DENY, SUSHI_TOKEN } from "app/core/constants";
 import { ParentSize } from "@visx/responsive";
 import { deepPurple } from "@material-ui/core/colors";
 import { useQuery } from "@apollo/client";
@@ -87,7 +87,7 @@ function PoolPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+      id: SUSHI_TOKEN,
     },
   });
 

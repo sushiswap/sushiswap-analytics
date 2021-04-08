@@ -19,6 +19,7 @@ import {
 
 import Chart from "../../components/Chart";
 import Head from "next/head";
+import { SUSHI_TOKEN } from "app/core/constants";
 import { ParentSize } from "@visx/responsive";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
@@ -65,7 +66,7 @@ function BarPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+      id: SUSHI_TOKEN,
     },
   });
 

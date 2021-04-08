@@ -12,6 +12,7 @@ import {
   getSevenDayBlock,
   getTwoDayBlock,
 } from "../api/blocks";
+import { SUSHI_TOKEN } from "../constants";
 
 import { getApollo } from "../apollo";
 
@@ -57,7 +58,7 @@ export async function getFactory(client = getApollo()) {
 }
 
 export async function getSushiToken(client = getApollo()) {
-  return await getToken("0x6b3595068778dd592e39a122f4f5a5cf09c90fe2", client);
+  return await getToken(SUSHI_TOKEN, client);
 }
 
 export async function getDayData(client = getApollo()) {

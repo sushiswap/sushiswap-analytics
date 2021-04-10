@@ -15,8 +15,11 @@ export const gainersQuery = gql`
     pairs(first: $first, orderBy: trackedReserveETH, orderDirection: desc) {
       ...pairFields
       reserveUSDGained @client
+      reserveUSDGainedYesterday @client
       volumeUSDGained @client
+      volumeUSDGainedYesterday @client
       feesUSDGained @client
+      feesUSDGainedYesterday @client
     }
   }
   ${pairFieldsQuery}
@@ -28,8 +31,11 @@ export const losersQuery = gql`
     pairs(first: $first, orderBy: trackedReserveETH, orderDirection: desc) {
       ...pairFields
       reserveUSDLost @client
+      reserveUSDLostYesterday @client
       volumeUSDLost @client
+      volumeUSDLostYesterday @client
       feesUSDLost @client
+      feesUSDLostYesterday @client
     }
   }
   ${pairFieldsQuery}

@@ -151,15 +151,108 @@ export const pairFieldsQuery = gql`
   ${pairTokenFieldsQuery}
 `;
 
+export const pairDayDataFields = gql`
+  fragment pairDayData on Pair {
+    dayData {
+      date
+      pair {
+        id
+      }
+      token0 {
+        derivedETH
+      }
+      token1 {
+        derivedETH
+      }
+      reserveUSD
+      volumeToken0
+      volumeToken1
+      volumeUSD
+      txCount
+    }
+  }
+`;
+
+export const transactionFields = gql`
+  fragment transactionFields on Pair {
+    mints(
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0
+      amount1
+      amountUSD
+      to
+    }
+    burns(
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0
+      amount1
+      amountUSD
+      to
+    }
+    swaps(
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0In
+      amount0Out
+      amount1In
+      amount1Out
+      amountUSD
+      to
+    }
+  }
+`;
+
 export const pairQuery = gql`
   query pairQuery($id: String!) {
     pair(id: $id) {
       ...pairFields
+      ...pairDayData
+      ...transactionFields
       oneDay @client
       twoDay @client
     }
   }
   ${pairFieldsQuery}
+  ${pairDayDataFields}
+  ${transactionFields}
 `;
 
 export const pairTimeTravelQuery = gql`

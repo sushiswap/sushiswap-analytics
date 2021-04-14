@@ -153,7 +153,12 @@ export const pairFieldsQuery = gql`
 
 export const pairDayDataFields = gql`
   fragment pairDayData on Pair {
-    dayData {
+    dayData(
+      first: 1000
+      orderBy: date
+      orderDirection: desc
+      where: { date_gt: 0 }
+    ) {
       date
       pair {
         id

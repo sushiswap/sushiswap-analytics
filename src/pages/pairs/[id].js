@@ -19,7 +19,6 @@ import {
   getApollo,
   getPair,
   pairQuery,
-  transactionsQuery,
   useInterval,
 } from "app/core";
 
@@ -94,9 +93,9 @@ function PairPage(props) {
   }, 60000);
 
   const transactions = {
-    swaps: pair.swaps,
-    mints: pair.mints,
-    burns: pair.burns,
+    swaps: pair?.swaps,
+    mints: pair?.mints,
+    burns: pair?.burns,
   };
 
   const volumeUSD =
@@ -143,7 +142,7 @@ function PairPage(props) {
 
   const txChange = ((tx - txYesterday) / txYesterday) * 100;
 
-  const chartDatas = pair.dayData.reduce(
+  const chartDatas = pair?.dayData.reduce(
     (previousValue, currentValue) => {
       const untrackedVolumeUSD =
         currentValue?.token0.derivedETH * currentValue?.volumeToken0 +
@@ -168,8 +167,6 @@ function PairPage(props) {
     },
     { liquidity: [], volume: [] }
   );
-
-  // console.log(pair);
 
   return (
     <AppShell>
@@ -416,6 +413,7 @@ export async function getStaticProps({ params }) {
   });
 
   await getPair(id, client);
+  
   return {
     props: {
       initialApolloState: client.cache.extract(),

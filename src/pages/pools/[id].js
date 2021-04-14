@@ -1,6 +1,5 @@
 import {
   AppShell,
-  Chart,
   Curves,
   KPI,
   Link,
@@ -14,27 +13,19 @@ import {
   Paper,
   Typography,
   makeStyles,
-  useTheme,
 } from "@material-ui/core";
 import {
-  currencyFormatter,
-  ethPriceQuery,
   getApollo,
   getEthPrice,
   getPool,
   getPoolHistories,
-  getPoolIds,
-  getPools,
   getSushiToken,
   poolHistoryQuery,
   poolQuery,
-  tokenQuery,
 } from "app/core";
 
 import Head from "next/head";
-import { POOL_DENY, SUSHI_TOKEN } from "app/core/constants";
 import { ParentSize } from "@visx/responsive";
-import { deepPurple } from "@material-ui/core/colors";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
@@ -50,8 +41,6 @@ function PoolPage() {
   }
 
   const classes = useStyles();
-
-  const theme = useTheme();
 
   const { id } = router.query;
 
@@ -76,23 +65,6 @@ function PoolPage() {
       clientName: "masterchef",
     },
   });
-
-  const {
-    data: { bundles },
-  } = useQuery(ethPriceQuery, {
-    pollInterval: 60000,
-  });
-
-  const {
-    data: { token },
-  } = useQuery(tokenQuery, {
-    variables: {
-      id: SUSHI_TOKEN,
-    },
-  });
-
-  const sushiPrice =
-    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   const {
     slpAge,

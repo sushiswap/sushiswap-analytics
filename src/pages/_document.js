@@ -2,8 +2,8 @@ import Document, { Head, Html, Main, NextScript } from "next/document";
 
 import React from "react";
 import { ServerStyleSheets } from "@material-ui/core/styles";
-//
 import { palette } from "../theme";
+import { GA_TRACKING_ID } from '../core/analytics'
 
 export default class MyDocument extends Document {
   render() {
@@ -100,9 +100,23 @@ export default class MyDocument extends Document {
           <meta property="og:site_name" content={process.env.APP_NAME} />
           <meta property="og:url" content={process.env.APP_URL} />
           <meta property="og:image" content="/apple-touch-icon.png" />
+
+          {/* Global Site Tag (gtag.js) - Google Analytics */}
           <script
-            type="text/javascript"
-            src="https://app.intotheblock.com/widget.js"
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+            }}
           />
         </Head>
         <body className="no-js">

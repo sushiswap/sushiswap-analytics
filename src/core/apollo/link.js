@@ -29,7 +29,7 @@ export const masterchef = from([
 export const exchange = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/exchange",
+    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/fantom-exchange",
     shouldBatch: true,
   }),
 ]);

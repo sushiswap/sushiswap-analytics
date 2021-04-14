@@ -123,100 +123,6 @@ export default function AppNavigation() {
           <ListItemText primary="Dashboard" />
         </ListItem>
 
-        <ListItem
-          key="/bar"
-          button
-          selected={router.pathname === "/bar"}
-          onClick={() => router.push("/bar")}
-        >
-          <ListItemIcon>
-            <FastfoodOutlined />
-          </ListItemIcon>
-          <ListItemText primary="Bar" />
-          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
-        </ListItem>
-
-        {/* <Collapse in={open} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItem
-              button
-              key="/bar"
-              button
-              selected={router.pathname === "/bar"}
-              onClick={() => router.push("/bar")}
-              className={classes.nested}
-            >
-              <ListItemIcon>
-                <ViewStreamOutlined />
-              </ListItemIcon>
-              <ListItemText primary="Overview" />
-            </ListItem>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <HistoryOutlined />
-              </ListItemIcon>
-              <ListItemText primary="Past Servings" />
-            </ListItem>
-          </List>
-        </Collapse> */}
-
-        <ListItem button>
-          <ListItemIcon>
-            <WavesOutlined />
-          </ListItemIcon>
-          <ListItemText primary="Pools" />
-          {open ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItem
-              button
-              selected={router.pathname === "/pools/recent"}
-              onClick={() => router.push("/pools/recent")}
-              className={classes.nested}
-            >
-              <ListItemIcon>
-                <FiberNewOutlined />
-              </ListItemIcon>
-              <ListItemText primary="Recent" />
-            </ListItem>
-            <ListItem
-              button
-              selected={router.pathname === "/pools"}
-              onClick={() => router.push("/pools")}
-              className={classes.nested}
-            >
-              <ListItemIcon>
-                <DetailsOutlined />
-              </ListItemIcon>
-              <ListItemText primary="All" />
-            </ListItem>
-
-            {/* <ListItem
-              button
-              selected={router.pathname === "/pools/gainers"}
-              onClick={() => router.push("/pools/gainers")}
-              className={classes.nested}
-            >
-              <ListItemIcon>
-                <TrendingUpOutlined />
-              </ListItemIcon>
-              <ListItemText primary="Gainers" />
-            </ListItem>
-            <ListItem
-              button
-              selected={router.pathname === "/pools/losers"}
-              onClick={() => router.push("/pools/losers")}
-              className={classes.nested}
-            >
-              <ListItemIcon>
-                <TrendingDownOutlined />
-              </ListItemIcon>
-              <ListItemText primary="Losers" />
-            </ListItem> */}
-          </List>
-        </Collapse>
-
         <ListItem button>
           <ListItemIcon>
             <LinkOutlined />
@@ -283,24 +189,6 @@ export default function AppNavigation() {
             <MoneyOutlined />
           </ListItemIcon>
           <ListItemText primary="Tokens" />
-        </ListItem>
-        <ListItem
-          button
-          key="/portfolio"
-          selected={router.pathname.includes("/portfolio")}
-          onClick={() => {
-            const defaultAddress = localStorage.getItem("defaultAddress");
-            if (defaultAddress) {
-              router.push("/users/" + defaultAddress);
-            } else {
-              handleClickOpen();
-            }
-          }}
-        >
-          <ListItemIcon>
-            <AccountTreeOutlined />
-          </ListItemIcon>
-          <ListItemText primary="Portfolio" />
         </ListItem>
       </List>
       <Dialog

@@ -3,7 +3,6 @@ import {
   AreaChart,
   BarChart,
   PairTable,
-  PoolTable,
   Search,
   TokenTable,
 } from "app/components";
@@ -16,11 +15,9 @@ import {
   getEthPrice,
   getOneDayEthPrice,
   getPairs,
-  getPools,
   getSevenDayEthPrice,
   getTokens,
   pairsQuery,
-  poolsQuery,
   tokensQuery,
   useInterval,
 } from "app/core";
@@ -39,14 +36,6 @@ function IndexPage() {
   } = useQuery(pairsQuery);
 
   const {
-    data: { pools },
-  } = useQuery(poolsQuery, {
-    context: {
-      clientName: "masterchef",
-    },
-  });
-
-  const {
     data: { dayDatas },
   } = useQuery(dayDatasQuery);
 
@@ -54,7 +43,6 @@ function IndexPage() {
     () =>
       Promise.all([
         getPairs,
-        getPools,
         getTokens,
         getDayData,
         getOneDayEthPrice,
@@ -129,16 +117,6 @@ function IndexPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <PoolTable
-            title="Sushi Reward Pools"
-            pools={pools}
-            orderBy="tvl"
-            order="desc"
-            rowsPerPage={25}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
           <PairTable title="Top Sushi Liquidity Pairs" pairs={pairs} />
         </Grid>
 
@@ -164,8 +142,6 @@ export async function getStaticProps() {
   await getTokens(client);
 
   await getPairs(client);
-
-  await getPools(client);
 
   return {
     props: {

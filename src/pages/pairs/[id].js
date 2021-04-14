@@ -4,7 +4,6 @@ import {
   BarChart,
   BasicTable,
   Chart,
-  IntoTheBlock,
   KPI,
   Link,
   PageHeader,
@@ -407,9 +406,6 @@ function PairPage(props) {
             <Link href={`https://etherscan.io/address/${pair.id}`}>View</Link>,
           ]}
         />
-      </Box>
-      <Box my={4}>
-        <IntoTheBlock pairAddress={pair.id} />
       </Box>
       <Box my={4}>
         <Transactions transactions={transactions} txCount={pair.txCount} />

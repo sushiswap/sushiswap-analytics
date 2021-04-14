@@ -3,7 +3,6 @@ import {
   Avatar,
   Box,
   Grid,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -15,7 +14,6 @@ import {
 } from "@material-ui/core";
 import {
   barUserQuery,
-  blockQuery,
   currencyFormatter,
   decimalFormatter,
   ethPriceQuery,
@@ -27,21 +25,13 @@ import {
   getPairs,
   getPoolUser,
   getSushiToken,
-  getToken,
-  getUser,
   latestBlockQuery,
   lockupUserQuery,
-  pairSubsetQuery,
   pairsQuery,
   poolUserQuery,
   tokenQuery,
-  useInterval,
-  userIdsQuery,
-  userQuery,
 } from "app/core";
-import { getUnixTime, startOfMinute, startOfSecond } from "date-fns";
 
-import { AvatarGroup } from "@material-ui/lab";
 import Head from "next/head";
 import { POOL_DENY, SUSHI_TOKEN } from "app/core/constants";
 import { toChecksumAddress } from "web3-utils";
@@ -71,12 +61,6 @@ function UserPage() {
 
   const id = router && router.query && router.query.id && router.query.id.toLowerCase();
 
-  const {
-    data: { bundles },
-  } = useQuery(ethPriceQuery, {
-    pollInterval: 60000,
-  });
-
   const { data: barData } = useQuery(barUserQuery, {
     variables: {
       id: id.toLowerCase(),
@@ -103,6 +87,18 @@ function UserPage() {
       clientName: "lockup",
     },
     fetchPolicy: 'no-cache'
+  });
+
+  const { data: blocksData } = useQuery(latestBlockQuery, {
+    context: {
+      clientName: "blocklytics",
+    },
+  });
+
+  const {
+    data: { bundles },
+  } = useQuery(ethPriceQuery, {
+    pollInterval: 60000,
   });
   
   const {
@@ -175,12 +171,6 @@ function UserPage() {
       parseFloat(barData?.user?.sushiHarvestedUSD) +
       parseFloat(barData?.user?.usdIn) -
       parseFloat(barData?.user?.usdOut));
-
-  const { data: blocksData } = useQuery(latestBlockQuery, {
-    context: {
-      clientName: "blocklytics",
-    },
-  });
 
   const blockDifference =
     parseInt(blocksData?.blocks[0].number) -

@@ -16,14 +16,10 @@ import {
   currencyFormatter,
   ethPriceQuery,
   getApollo,
-  getOneDayBlock,
   getOneDayEthPrice,
   getToken,
   getTokenPairs,
   oneDayEthPriceQuery,
-  sevenDayEthPriceQuery,
-  tokenDayDatasQuery,
-  tokenIdsQuery,
   tokenPairsQuery,
   tokenQuery,
   transactionsQuery,
@@ -100,15 +96,6 @@ function TokenPage() {
   }, 60000);
 
   const {
-    data: { tokenDayDatas },
-  } = useQuery(tokenDayDatasQuery, {
-    variables: {
-      tokens: [id],
-    },
-    pollInterval: 60000,
-  });
-
-  const {
     data: { pairs0, pairs1 },
   } = useQuery(tokenPairsQuery, {
     variables: { id },
@@ -123,7 +110,7 @@ function TokenPage() {
     pollInterval: 60000,
   });
 
-  const chartDatas = tokenDayDatas.reduce(
+  const chartDatas = token?.dayData.reduce(
     (previousValue, currentValue) => {
       previousValue["liquidity"].unshift({
         date: currentValue.date,
@@ -317,13 +304,6 @@ export async function getStaticProps({ params }) {
   });
 
   await getToken(id, client);
-
-  await client.query({
-    query: tokenDayDatasQuery,
-    variables: {
-      tokens: [id],
-    },
-  });
 
   const { pairs0, pairs1 } = await getTokenPairs(id, client);
 

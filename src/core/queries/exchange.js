@@ -391,6 +391,27 @@ export const pairsTimeTravelQuery = gql`
 `;
 
 // Tokens...
+export const tokenDayDataFieldsQuery = gql`
+  fragment tokenDayDataFields on Token {
+    dayData(
+      first: 1000
+      orderBy: date
+      orderDirection: desc
+      where: { date_gt: 0 }
+    ) {
+      id
+      date
+      token {
+        id
+      }
+      volumeUSD
+      liquidityUSD
+      priceUSD
+      txCount
+    }
+  }
+`;
+
 export const tokenFieldsQuery = gql`
   fragment tokenFields on Token {
     id
@@ -404,7 +425,9 @@ export const tokenFieldsQuery = gql`
     txCount
     liquidity
     derivedETH
+    ...tokenDayDataFields
   }
+  ${tokenDayDataFieldsQuery}
 `;
 
 export const tokenQuery = gql`

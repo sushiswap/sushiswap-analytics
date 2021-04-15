@@ -111,7 +111,8 @@ function UserPage() {
     (user) =>
       user.pool &&
       !POOL_DENY.includes(user.pool.id) &&
-      user.pool.allocPoint !== "0"
+      user.pool.allocPoint !== "0" &&
+      pairs.find((pair) => pair?.id === user.pool.pair)
   );
 
   // useInterval(
@@ -563,17 +564,6 @@ export async function getStaticProps({ params }) {
   await getSushiToken(client);
 
   await getBarUser(id.toLowerCase(), client);
-
-  await client.query({
-    query: lockupUserQuery,
-    variables: {
-      address: id.toLowerCase(),
-    },
-    context: {
-      clientName: "lockup",
-    },
-    fetchPolicy: "no-cache"
-  });
 
   await getPoolUser(id.toLowerCase(), client);
 

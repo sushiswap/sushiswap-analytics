@@ -4,12 +4,6 @@ import link from "./link";
 import merge from "lodash.merge";
 import { useMemo } from "react";
 
-function customizer(objValue, srcValue) {
-  if (_.isArray(objValue)) {
-    return objValue.concat(srcValue);
-  }
-}
-
 let apolloClient;
 
 function createApolloClient() {

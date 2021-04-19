@@ -1,6 +1,9 @@
 import {
   gainersQuery,
   getApollo,
+  factoryQuery,
+  factoryTimeTravelQuery,
+  dayDatasQuery,
   getOneDayBlock,
   getTwoDayBlock,
   getSevenDayBlock,
@@ -10,7 +13,77 @@ import {
   pairTimeTravelQuery,
   pairsQuery,
   tokenPairsQuery,
+  tokenQuery,
+  ethPriceQuery,
 } from "app/core";
+import { SUSHI_TOKEN } from "app/core/constants";
+import { barPageQuery } from "core/queries/pages";
+
+// Bar
+export async function getBarPageData(client = getApollo()) {
+  const {
+    data: {
+      bar,
+      histories
+    },
+  } = await client.query({
+    query: barPageQuery,
+    context: {
+      clientName: "bar",
+    },
+  });
+
+  const {
+    data: { factory },
+  } = await client.query({
+    query: factoryQuery
+  });
+
+  const {
+    data: { factory: oneDay },
+  } = await client.query({
+    query: factoryTimeTravelQuery,
+    variables: {
+      block: await getOneDayBlock(),
+    },
+  });
+
+  const {
+    data: { dayDatas },
+  } = await client.query({
+    query: dayDatasQuery
+  });
+
+  const {
+    data: { token },
+  } = await client.query({
+    query: tokenQuery,
+    variables: {
+      id: SUSHI_TOKEN,
+    },
+  });
+
+  const {
+    data: { bundles },
+  } = await client.query({
+    query: ethPriceQuery
+  });
+
+  await client.cache.writeQuery({
+    query: barPageQuery,
+    data: {
+      bar,
+      histories,
+      dayDatas,
+      sushiPrice: parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice),
+      oneDayVolume: factory?.volumeUSD - oneDay?.volumeUSD,
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: barPageQuery,
+  });
+}
 
 // Pairs
 export async function getPair(id, client = getApollo()) {

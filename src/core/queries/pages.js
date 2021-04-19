@@ -1,7 +1,24 @@
 import gql from "graphql-tag";
 import { pairFieldsQuery } from "./exchange";
+import { barFieldsQuery, barHistoryFieldsQuery, barUserFieldsQuery } from "./bar";
 
-// TODO: Dashboard
+// Bar
+export const barPageQuery = gql`
+  query barPageQuery($barId: String! = "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {
+    bar(id: $barId) {
+      ...barFields
+    }
+    histories(first: 1000) {
+      ...barHistoryFields
+    }
+    sushiPrice @client
+    oneDayVolume @client
+    dayDatas @client
+  }
+  ${barFieldsQuery}
+  ${barHistoryFieldsQuery}
+  ${barUserFieldsQuery}
+`;
 
 // TODO: Pools
 

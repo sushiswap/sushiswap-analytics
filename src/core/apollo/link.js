@@ -10,22 +10,6 @@ export const uniswap = from([
   }),
 ]);
 
-export const bar = from([
-  new RetryLink(),
-  new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/bar",
-    shouldBatch: true,
-  }),
-]);
-
-export const masterchef = from([
-  new RetryLink(),
-  new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/master-chef",
-    shouldBatch: true,
-  }),
-]);
-
 export const exchange = from([
   new RetryLink(),
   new HttpLink({
@@ -37,15 +21,7 @@ export const exchange = from([
 export const blocklytics = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks",
-    shouldBatch: true,
-  }),
-]);
-
-export const lockup = from([
-  new RetryLink(),
-  new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/lockup",
+    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/fantom-blocks",
     shouldBatch: true,
   }),
 ]);
@@ -55,23 +31,5 @@ export default split(
     return operation.getContext().clientName === "blocklytics";
   },
   blocklytics,
-  split(
-    (operation) => {
-      return operation.getContext().clientName === "masterchef";
-    },
-    masterchef,
-    split(
-      (operation) => {
-        return operation.getContext().clientName === "bar";
-      },
-      bar,
-      split(
-        (operation) => {
-          return operation.getContext().clientName === "lockup";
-        },
-        lockup,
-        exchange
-      )
-    )
-  )
+  exchange
 );

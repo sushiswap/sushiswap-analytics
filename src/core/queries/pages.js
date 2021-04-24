@@ -20,9 +20,13 @@ export const barPageQuery = gql`
   ${barUserFieldsQuery}
 `;
 
-// TODO: Pools
-
-// TODO: Pairs
+// Pools
+export const poolPageQuery = gql`
+  query poolPageQuery($id: ID!) {
+    pool @client
+    poolHistories @client
+  }
+`;
 
 // TODO: Tokens
 

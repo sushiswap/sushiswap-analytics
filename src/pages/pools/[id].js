@@ -16,12 +16,9 @@ import {
 } from "@material-ui/core";
 import {
   getApollo,
-  getEthPrice,
-  getPool,
-  getPoolHistories,
-  getSushiToken,
-  poolHistoryQuery,
-  poolQuery,
+  getPoolsPageData,
+  poolPageQuery,
+  useInterval,
 } from "app/core";
 
 import Head from "next/head";
@@ -45,26 +42,19 @@ function PoolPage() {
   const { id } = router.query;
 
   const {
-    data: { pool },
-  } = useQuery(poolQuery, {
+    data: {
+      pool,
+      poolHistories,
+    }
+  } = useQuery(poolPageQuery, {
     variables: {
       id,
-    },
-    context: {
-      clientName: "masterchef",
-    },
+    }
   });
 
-  const {
-    data: { poolHistories },
-  } = useQuery(poolHistoryQuery, {
-    variables: {
-      id,
-    },
-    context: {
-      clientName: "masterchef",
-    },
-  });
+  useInterval(() => {
+    getPoolsPageData(id);
+  }, 60000);
 
   const {
     slpAge,
@@ -413,10 +403,9 @@ function PoolPage() {
 
 export async function getStaticProps({ params: { id } }) {
   const client = getApollo();
-  await getEthPrice(client);
-  await getSushiToken(client);
-  await getPool(id, client);
-  await getPoolHistories(id, client);
+
+  await getPoolsPageData(id, client);
+
   return {
     props: {
       initialApolloState: client.cache.extract(),

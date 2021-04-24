@@ -12,6 +12,9 @@ import {
   pairQuery,
   pairTimeTravelQuery,
   pairsQuery,
+  poolPageQuery,
+  poolQuery,
+  poolHistoryQuery,
   tokenPairsQuery,
   tokenQuery,
   ethPriceQuery,
@@ -82,6 +85,54 @@ export async function getBarPageData(client = getApollo()) {
 
   return await client.cache.readQuery({
     query: barPageQuery,
+  });
+}
+
+// Pools
+export async function getPoolsPageData(id, client = getApollo()) {
+  const {
+    data: { pool },
+  } = await client.query({
+    query: poolQuery,
+    fetchPolicy: "network-only",
+    variables: { id },
+    context: {
+      clientName: "masterchef",
+    },
+  });
+
+  const {
+    data: { pair: liquidityPair },
+  } = await client.query({
+    query: pairQuery,
+    variables: { id: pool.pair },
+    fetchPolicy: "network-only",
+  });
+
+  const {
+    data: { poolHistories },
+  } = await client.query({
+    query: poolHistoryQuery,
+    fetchPolicy: "network-only",
+    variables: { id },
+    context: {
+      clientName: "masterchef",
+    },
+  });
+
+  await client.cache.writeQuery({
+    query: poolPageQuery,
+    data: {
+      pool: {
+        ...pool,
+        liquidityPair,
+      },
+      poolHistories,
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: poolPageQuery,
   });
 }
 

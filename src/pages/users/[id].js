@@ -13,23 +13,13 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import {
-  barUserQuery,
   currencyFormatter,
   decimalFormatter,
-  ethPriceQuery,
   formatCurrency,
   getApollo,
-  getBarUser,
-  getEthPrice,
-  getLatestBlock,
-  getPairs,
-  getPoolUser,
-  getSushiToken,
-  latestBlockQuery,
-  lockupUserQuery,
-  pairsQuery,
-  poolUserQuery,
-  tokenQuery,
+  getUserPageData,
+  userPageQuery,
+  useInterval
 } from "app/core";
 
 import Head from "next/head";
@@ -61,57 +51,22 @@ function UserPage() {
 
   const id = router && router.query && router.query.id && router.query.id.toLowerCase();
 
-  const { data: barData } = useQuery(barUserQuery, {
-    variables: {
-      id: id.toLowerCase(),
-    },
-    context: {
-      clientName: "bar",
-    },
-  });
-
-  const { data: poolData } = useQuery(poolUserQuery, {
-    variables: {
-      address: id.toLowerCase(),
-    },
-    context: {
-      clientName: "masterchef",
-    },
-  });
-
-  const { data: lockupData } = useQuery(lockupUserQuery, {
-    variables: {
-      address: id.toLowerCase(),
-    },
-    context: {
-      clientName: "lockup",
-    },
-    fetchPolicy: 'no-cache'
-  });
-
-  const { data: blocksData } = useQuery(latestBlockQuery, {
-    context: {
-      clientName: "blocklytics",
-    },
-  });
-
   const {
-    data: { bundles },
-  } = useQuery(ethPriceQuery, {
-    pollInterval: 60000,
-  });
-  
-  const {
-    data: { token },
-  } = useQuery(tokenQuery, {
-    variables: {
-      id: SUSHI_TOKEN,
+    data: { 
+      bar: barData,
+      pool: poolData,
+      lockup: lockupData,
+      blocks: blocksData,
+      pairs,
+      sushiPrice,
     },
+  } = useQuery(userPageQuery, {
+    variables: { id },
   });
 
-  const {
-    data: { pairs },
-  } = useQuery(pairsQuery);
+  useInterval(async () => {
+    await getUserPageData(id);
+  }, 60000);
 
   const poolUsers = poolData.users.filter(
     (user) =>
@@ -119,21 +74,6 @@ function UserPage() {
       !POOL_DENY.includes(user.pool.id) &&
       user.pool.allocPoint !== "0"
   );
-
-  // useInterval(
-  //   () =>
-  //     Promise.all([
-  //       getPairs,
-  //       getSushiToken,
-  //       getPoolUser(id.toLowerCase()),
-  //       getBarUser(id.toLocaleLowerCase()),
-  //       getEthPrice,
-  //     ]),
-  //   60000
-  // );
-
-  const sushiPrice =
-    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   // BAR
   const xSushi = parseFloat(barData?.user?.xSushi);
@@ -624,28 +564,7 @@ export async function getStaticProps({ params }) {
 
   const id = params.id.toLowerCase();
 
-  await getEthPrice(client);
-
-  await getSushiToken(client);
-
-  await getBarUser(id.toLowerCase(), client);
-
-  await client.query({
-    query: lockupUserQuery,
-    variables: {
-      address: id.toLowerCase(),
-    },
-    context: {
-      clientName: "lockup",
-    },
-    fetchPolicy: "no-cache"
-  });
-
-  await getPoolUser(id.toLowerCase(), client);
-
-  await getPairs(client);
-
-  await getLatestBlock(client);
+  await getUserPageData(id.toLowerCase(), client);
 
   return {
     props: {

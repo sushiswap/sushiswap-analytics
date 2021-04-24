@@ -23,6 +23,11 @@ import {
   transactionsQuery,
   ethPriceQuery,
   ethPriceTimeTravelQuery,
+  userPageQuery,
+  barUserQuery,
+  poolUserQuery,
+  lockupUserQuery,
+  latestBlockQuery,
 } from "app/core";
 import { SUSHI_TOKEN } from "app/core/constants";
 
@@ -584,5 +589,83 @@ export async function getLosers(client = getApollo()) {
 
   return await client.cache.readQuery({
     query: losersQuery,
+  });
+}
+
+// Users
+export async function getUserPageData(id, client = getApollo()) {
+  const { data: bar } = await client.query({
+    query: barUserQuery,
+    variables: {
+      id: id.toLowerCase(),
+    },
+    context: {
+      clientName: "bar",
+    },
+  });
+
+  const { data: pool } = await client.query({ 
+    query: poolUserQuery,
+    variables: {
+      address: id.toLowerCase(),
+    },
+    context: {
+      clientName: "masterchef",
+    },
+  });
+
+  const { data: lockup } = await client.query({
+    query: lockupUserQuery,
+    variables: {
+      address: id.toLowerCase(),
+    },
+    context: {
+      clientName: "lockup",
+    },
+    fetchPolicy: 'no-cache'
+  });
+
+  const { data: blocks } = await client.query({
+    query: latestBlockQuery,
+    context: {
+      clientName: "blocklytics",
+    },
+  });
+
+  const {
+    data: { pairs },
+  } = await client.query({
+    query: pairsQuery,
+  });
+
+  const {
+    data: { token },
+  } = await client.query({
+    query: tokenQuery,
+    variables: {
+      id: SUSHI_TOKEN,
+    },
+  });
+
+  const {
+    data: { bundles },
+  } = await client.query({
+    query: ethPriceQuery
+  });
+
+  await client.cache.writeQuery({
+    query: userPageQuery,
+    data: {
+      bar,
+      pool,
+      lockup,
+      blocks,
+      pairs,
+      sushiPrice: parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice),
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: userPageQuery,
   });
 }

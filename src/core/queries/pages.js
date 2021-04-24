@@ -75,3 +75,18 @@ export const losersQuery = gql`
   }
   ${pairFieldsQuery}
 `;
+
+// Users
+export const userPageQuery = gql`
+  query userPageQuery($userId: ID!) {
+    bar(id: $userId) {
+      ...barFields
+    }
+    pool @client
+    lockup @client
+    blocks @client
+    pairs @client
+    sushiPrice @client
+  }
+  ${barFieldsQuery}
+`;

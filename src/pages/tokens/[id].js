@@ -14,16 +14,10 @@ import {
 import { Box, Grid, Paper, Typography } from "@material-ui/core";
 import {
   currencyFormatter,
-  ethPriceQuery,
   getApollo,
-  getOneDayEthPrice,
-  getToken,
-  getTokenPairs,
-  oneDayEthPriceQuery,
-  tokenPairsQuery,
-  tokenQuery,
-  transactionsQuery,
+  tokenPageQuery,
   useInterval,
+  getTokenPageData,
 } from "app/core";
 
 import Head from "next/head";
@@ -77,38 +71,20 @@ function TokenPage() {
   const id = router.query.id.toLowerCase();
 
   const {
-    data: { token },
-  } = useQuery(tokenQuery, {
+    data: { 
+      token,
+      pairs,
+      transactions,
+      ethPrice,
+      oneDayEthPrice,
+    },
+  } = useQuery(tokenPageQuery, {
     variables: { id },
   });
-
-  const {
-    data: { bundles },
-  } = useQuery(ethPriceQuery, {
-    pollInterval: 60000,
-  });
-
-  const { data: oneDayEthPriceData } = useQuery(oneDayEthPriceQuery);
 
   useInterval(async () => {
-    await getToken(id);
-    await getOneDayEthPrice();
+    await getTokenPageData(id);
   }, 60000);
-
-  const {
-    data: { pairs0, pairs1 },
-  } = useQuery(tokenPairsQuery, {
-    variables: { id },
-  });
-
-  const pairs = [...pairs0, ...pairs1];
-
-  const { data: transactions } = useQuery(transactionsQuery, {
-    variables: {
-      pairAddresses: pairs.map((pair) => pair.id).sort(),
-    },
-    pollInterval: 60000,
-  });
 
   const chartDatas = token?.dayData.reduce(
     (previousValue, currentValue) => {
@@ -128,18 +104,18 @@ function TokenPage() {
   const totalLiquidityUSD =
     parseFloat(token?.liquidity) *
     parseFloat(token?.derivedETH) *
-    parseFloat(bundles[0].ethPrice);
+    parseFloat(ethPrice);
 
   const totalLiquidityUSDYesterday =
     parseFloat(token.oneDay?.liquidity) *
     parseFloat(token.oneDay?.derivedETH) *
-    parseFloat(oneDayEthPriceData?.ethPrice);
+    parseFloat(oneDayEthPrice);
 
-  const price = parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+  const price = parseFloat(token?.derivedETH) * parseFloat(ethPrice);
 
   const priceYesterday =
     parseFloat(token.oneDay?.derivedETH) *
-    parseFloat(oneDayEthPriceData?.ethPrice);
+    parseFloat(oneDayEthPrice);
 
   const priceChange = ((price - priceYesterday) / priceYesterday) * 100;
 
@@ -299,28 +275,7 @@ export async function getStaticProps({ params }) {
 
   const id = params.id.toLowerCase();
 
-  await client.query({
-    query: ethPriceQuery,
-  });
-
-  await getToken(id, client);
-
-  const { pairs0, pairs1 } = await getTokenPairs(id, client);
-
-  const pairAddresses = [
-    ...pairs0.map((pair) => pair.id),
-    ...pairs1.map((pair) => pair.id),
-  ].sort();
-
-  // Transactions
-  await client.query({
-    query: transactionsQuery,
-    variables: {
-      pairAddresses,
-    },
-  });
-
-  await getOneDayEthPrice(client);
+  await getTokenPageData(id, client);
 
   return {
     props: {

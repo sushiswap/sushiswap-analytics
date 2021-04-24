@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import { pairFieldsQuery } from "./exchange";
+import { pairFieldsQuery, tokenFieldsQuery } from "./exchange";
 import { barFieldsQuery, barHistoryFieldsQuery, barUserFieldsQuery } from "./bar";
 
 // Bar
@@ -28,7 +28,21 @@ export const poolPageQuery = gql`
   }
 `;
 
-// TODO: Tokens
+// Tokens
+export const tokenPageQuery = gql`
+  query tokenPageQuery($id: ID!) {
+    token(id: $id) {
+      ...tokenFields
+      oneDay @client
+      twoDay @client
+    }
+    pairs @client
+    transactions @client
+    ethPrice @client
+    oneDayEthPrice @client
+  }
+  ${tokenFieldsQuery}
+`;
 
 // Gainers
 export const gainersQuery = gql`

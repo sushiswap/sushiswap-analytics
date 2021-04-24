@@ -1,6 +1,7 @@
 import {
   gainersQuery,
   getApollo,
+  barPageQuery,
   factoryQuery,
   factoryTimeTravelQuery,
   dayDatasQuery,
@@ -15,12 +16,15 @@ import {
   poolPageQuery,
   poolQuery,
   poolHistoryQuery,
+  tokenPageQuery,
   tokenPairsQuery,
   tokenQuery,
+  tokenTimeTravelQuery,
+  transactionsQuery,
   ethPriceQuery,
+  ethPriceTimeTravelQuery,
 } from "app/core";
 import { SUSHI_TOKEN } from "app/core/constants";
-import { barPageQuery } from "core/queries/pages";
 
 // Bar
 export async function getBarPageData(client = getApollo()) {
@@ -133,6 +137,107 @@ export async function getPoolsPageData(id, client = getApollo()) {
 
   return await client.cache.readQuery({
     query: poolPageQuery,
+  });
+}
+
+// Tokens
+export async function getTokenPageData(id, client = getApollo()) {
+  const {
+    data: { token },
+  } = await client.query({
+    query: tokenQuery,
+    variables: { id },
+  });
+
+  const oneDayBlock = await getOneDayBlock();
+  const twoDayBlock = await getTwoDayBlock();
+
+  const {
+    data: { token: oneDayToken },
+  } = await client.query({
+    query: tokenTimeTravelQuery,
+    variables: {
+      id,
+      block: oneDayBlock,
+    },
+    fetchPolicy: "no-cache",
+  });
+
+  const {
+    data: { token: twoDayToken },
+  } = await client.query({
+    query: tokenTimeTravelQuery,
+    variables: {
+      id,
+      block: twoDayBlock,
+    },
+    fetchPolicy: "no-cache",
+  });
+
+  const {
+    data: { bundles },
+  } = await client.query({
+    query: ethPriceQuery,
+    fetchPolicy: "no-cache",
+  });
+
+  const {
+    data: { bundles: oneDayEthPriceBundles },
+  } = await client.query({
+    query: ethPriceTimeTravelQuery,
+    variables: {
+      block: oneDayBlock,
+    },
+    fetchPolicy: "no-cache",
+  });
+
+  const {
+    data: { pairs0, pairs1 },
+  } = await client.query({ 
+    query: tokenPairsQuery, 
+    variables: { id },
+    fetchPolicy: "no-cache",
+  });
+
+  const pairs = [...pairs0, ...pairs1];
+
+  const {
+    data: transactions
+  } = await client.query({
+    query: transactionsQuery,
+    variables: {
+      pairAddresses: pairs.map((pair) => pair.id).sort(),
+    },
+    fetchPolicy: "no-cache",
+  });
+
+  await client.cache.writeQuery({
+    query: tokenPageQuery,
+    data: {
+      token: {
+        ...token,
+        oneDay: {
+          volumeUSD: String(oneDayToken?.volumeUSD),
+          derivedETH: String(oneDayToken?.derivedETH),
+          liquidity: String(oneDayToken?.liquidity),
+          txCount: String(oneDayToken?.txCount),
+        },
+        twoDay: {
+          volumeUSD: String(twoDayToken?.volumeUSD),
+          derivedETH: String(twoDayToken?.derivedETH),
+          liquidity: String(twoDayToken?.liquidity),
+          txCount: String(twoDayToken?.txCount),
+        },
+      },
+      pairs,
+      transactions,
+      ethPrice: bundles[0]?.ethPrice,
+      oneDayEthPrice: oneDayEthPriceBundles[0]?.ethPrice,
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: tokenPageQuery,
   });
 }
 

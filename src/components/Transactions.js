@@ -51,7 +51,6 @@ export default function Transactions({ transactions, txCount }) {
             key: "__typename",
             label: "Type",
             render: (row) => { 
-              console.log(row)
               return (
               <Typography variant="body2" noWrap>
                 {row.__typename}{" "}

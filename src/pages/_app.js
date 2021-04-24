@@ -14,9 +14,22 @@ import { darkTheme, lightTheme } from "../theme";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Head from "next/head";
 import fontTheme from "../styles/font";
+import { useRouter } from 'next/router'
+import * as gtag from '../core/analytics'
 
 function MyApp({ Component, pageProps }) {
   const client = useApollo(pageProps.initialApolloState);
+
+  const router = useRouter()
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      gtag.pageview(url)
+    }
+    router.events.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
 
   useEffect(() => {
     // Remove the server-side injected CSS.

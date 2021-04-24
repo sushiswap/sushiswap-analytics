@@ -159,14 +159,14 @@ function TokenPage() {
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href={`https://exchange.sushiswapclassic.org/#/add/${token.id}/ETH`}
+              href={`https://app.sushi.com/add/${token.id}/ETH`}
               target="_blank"
               variant="body1"
             >
               Add Liquidity
             </Link>
             <Link
-              href={`https://exchange.sushiswapclassic.org/#/swap?inputCurrency=${token.id}`}
+              href={`https://app.sushi.com/swap?inputCurrency=${token.id}`}
               target="_blank"
               variant="body1"
             >

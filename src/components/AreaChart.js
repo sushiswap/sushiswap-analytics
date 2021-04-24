@@ -28,9 +28,9 @@ const tooltipStyles = {
   zIndex: 1702,
 };
 
-const getDate = (d) => new Date(d.date);
-const bisectDate = bisector((d) => new Date(d.date)).left;
-const getValue = (d) => d.value;
+const getDate = (d) => new Date(d?.date);
+const bisectDate = bisector((d) => new Date(d?.date)).left;
+const getValue = (d) => d?.value;
 
 const formatDate = timeFormat("%b %d, '%y");
 
@@ -66,12 +66,16 @@ function AreaChart({
     }
   }
 
+  // console.log('area', { data, length: data.length, timespan })
+
   data = data.filter((d) => timespan <= d.date);
+
+  // console.log({ data: data[data.length - 1]})
 
   const [overlay, setOverlay] = useState({
     title,
-    value: currencyFormatter.format(data[data.length - 1].value),
-    date: data[data.length - 1].date,
+    value: currencyFormatter.format(data[data.length - 1]?.value),
+    date: data[data.length - 1]?.date,
   });
 
   // Max
@@ -104,6 +108,8 @@ function AreaChart({
     [yMax, data]
   );
 
+
+
   // tooltip handler
   const handleTooltip = useCallback(
     (event) => {
@@ -123,8 +129,8 @@ function AreaChart({
       // console.log("show ", d);
       setOverlay({
         ...overlay,
-        value: currencyFormatter.format(d.value),
-        date: d.date,
+        value: currencyFormatter.format(d?.value),
+        date: d?.date,
       });
       showTooltip({
         tooltipData: d,
@@ -169,8 +175,8 @@ function AreaChart({
             hideTooltip();
             setOverlay({
               ...overlay,
-              value: currencyFormatter.format(data[data.length - 1].value),
-              date: data[data.length - 1].date,
+              value: currencyFormatter.format(data[data.length - 1]?.value),
+              date: data[data.length - 1]?.date,
             });
           }}
         />

@@ -55,7 +55,6 @@ function UserPage() {
     data: { 
       bar: barData,
       pool: poolData,
-      lockup: lockupData,
       blocks: blocksData,
       pairs,
       sushiPrice,
@@ -72,7 +71,8 @@ function UserPage() {
     (user) =>
       user.pool &&
       !POOL_DENY.includes(user.pool.id) &&
-      user.pool.allocPoint !== "0"
+      user.pool.allocPoint !== "0" &&
+      pairs.find((pair) => pair?.id === user.pool.pair)
   );
 
   // BAR
@@ -155,39 +155,13 @@ function UserPage() {
     [0, 0, 0]
   );
 
-  const lockedUSD = poolData?.users.reduce((previousValue, user) => {
-    const pendingSushi =
-      ((user.amount * user.pool.accSushiPerShare) / 1e12 - user.rewardDebt) /
-      1e18;
-
-    const lockupUser = lockupData?.users.find(
-      (u) => u.pool.id === user.pool.id
-    );
-
-    const sushiAtLockup = lockupUser
-      ? ((lockupUser.amount * lockupUser.pool.accSushiPerShare) / 1e12 -
-          lockupUser.rewardDebt) /
-        1e18
-      : 0;
-
-    const sushiLocked =
-      (parseFloat(user.sushiHarvestedSinceLockup) +
-        pendingSushi -
-        sushiAtLockup) *
-      2;
-
-    const sushiLockedUSD = sushiLocked * sushiPrice;
-
-    return previousValue + sushiLockedUSD;
-  }, 0);
-
   // Global
 
   // const originalInvestments =
   //   parseFloat(barData?.user?.sushiStakedUSD) + parseFloat(poolEntriesUSD);
 
   const investments =
-    poolEntriesUSD + barPendingUSD + poolsPendingUSD + poolExitsUSD + lockedUSD;
+    poolEntriesUSD + barPendingUSD + poolsPendingUSD + poolExitsUSD;
 
   return (
     <AppShell>
@@ -361,14 +335,11 @@ function UserPage() {
               <Grid item xs>
                 <KPI
                   title="Value"
-                  value={formatCurrency(poolsUSD + poolsPendingUSD + lockedUSD)}
+                  value={formatCurrency(poolsUSD + poolsPendingUSD)}
                 />
               </Grid>
               <Grid item xs>
                 <KPI title="Invested" value={formatCurrency(poolEntriesUSD)} />
-              </Grid>
-              <Grid item xs>
-                <KPI title="Locked" value={formatCurrency(lockedUSD)} />
               </Grid>
               <Grid item xs>
                 <KPI
@@ -412,9 +383,6 @@ function UserPage() {
                     <TableCell key="sushiHarvested" align="right">
                       Sushi Harvested
                     </TableCell>
-                    <TableCell key="sushiLocked" align="right">
-                      Sushi Locked
-                    </TableCell>
                     <TableCell key="pl" align="right">
                       Profit/Loss
                     </TableCell>
@@ -439,34 +407,6 @@ function UserPage() {
                       ((user.amount * user.pool.accSushiPerShare) / 1e12 -
                         user.rewardDebt) /
                       1e18;
-                    // user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
-
-                    // console.log(
-                    //   user,
-                    //   user.entryUSD,
-                    //   user.exitUSD,
-                    //   pendingSushi * sushiPrice
-                    // );
-
-                    const lockupUser = lockupData?.users.find(
-                      (u) => u.pool.id === user.pool.id
-                    );
-
-                    const sushiAtLockup = lockupUser
-                      ? ((lockupUser.amount *
-                          lockupUser.pool.accSushiPerShare) /
-                          1e12 -
-                          lockupUser.rewardDebt) /
-                        1e18
-                      : 0;
-
-                    const sushiLocked =
-                      (parseFloat(user.sushiHarvestedSinceLockup) +
-                        pendingSushi -
-                        sushiAtLockup) *
-                      2;
-
-                    const sushiLockedUSD = sushiLocked * sushiPrice;
 
                     return (
                       <TableRow key={user.pool.id}>
@@ -526,12 +466,6 @@ function UserPage() {
                           <Typography noWrap variant="body2">
                             {decimalFormatter.format(user.sushiHarvested)} (
                             {currencyFormatter.format(user.sushiHarvestedUSD)})
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography noWrap variant="body2">
-                            {decimalFormatter.format(sushiLocked)} (
-                            {currencyFormatter.format(sushiLockedUSD)})
                           </Typography>
                         </TableCell>
                         <TableCell align="right">

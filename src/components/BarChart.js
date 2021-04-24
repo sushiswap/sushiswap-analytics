@@ -88,12 +88,14 @@ export default function BarChart({
     }
   }
 
+  // console.log('bar', { data, length: data.length, timespan })
+
   data = data.filter((d) => timespan <= d.date);
 
   const [overlay, setOverlay] = useState({
     title,
-    value: currencyFormatter.format(data[data.length - 1].value),
-    date: data[data.length - 1].date,
+    value: currencyFormatter.format(data[data.length - 1]?.value),
+    date: data[data.length - 1]?.date,
   });
 
   // bounds

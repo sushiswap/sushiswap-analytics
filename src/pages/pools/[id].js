@@ -159,12 +159,7 @@ function PoolPage() {
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href={`https://sushiswapclassic.org/farms/${
-                pool.liquidityPair.token0.symbol
-              }-${pool.liquidityPair.token1.symbol.replace(
-                "WETH",
-                "ETH"
-              )}%20SLP`}
+              href="https://sushi.com/yield"
               target="_blank"
               variant="body1"
             >

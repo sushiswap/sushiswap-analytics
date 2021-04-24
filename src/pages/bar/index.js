@@ -4,13 +4,7 @@ import { Grid, Paper } from "@material-ui/core";
 import {
   barPageQuery,
   getApollo,
-  getBar,
-  getBarHistories,
   getBarPageData,
-  getDayData,
-  getEthPrice,
-  getFactory,
-  getSushiToken,
   useInterval,
 } from "app/core";
 

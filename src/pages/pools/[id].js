@@ -197,7 +197,7 @@ function PoolPage() {
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href="https://sushi.com/yield"
+              href="https://app.sushi.com/yield"
               target="_blank"
               variant="body1"
             >
@@ -244,7 +244,7 @@ function PoolPage() {
             )}
           />
         </Grid> */}
-        {/* 
+        {/*
         <Grid item xs={12}>
           <Paper
             variant="outlined"

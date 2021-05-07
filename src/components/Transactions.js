@@ -39,7 +39,7 @@ export default function Transactions({ transactions, txCount }) {
 
   const now = new Date();
 
- 
+
 
   return (
     <div className={classes.root}>
@@ -50,7 +50,7 @@ export default function Transactions({ transactions, txCount }) {
           {
             key: "__typename",
             label: "Type",
-            render: (row) => { 
+            render: (row) => {
               console.log(row)
               return (
               <Typography variant="body2" noWrap>
@@ -101,7 +101,7 @@ export default function Transactions({ transactions, txCount }) {
             key: "to",
             label: "To",
             render: (row) => (
-              <Link href={`https://etherscan.io/address/${row.to}`}>
+              <Link href={`https://explorer-mainnet.maticvigil.com/address/${row.to}`}>
                 {row.to}
               </Link>
             ),

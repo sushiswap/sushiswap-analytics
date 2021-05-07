@@ -403,7 +403,7 @@ function PairPage(props) {
             <Typography variant="body2" noWrap>
               {pair.token1.id}
             </Typography>,
-            <Link href={`https://etherscan.io/address/${pair.id}`}>View</Link>,
+            <Link href={`https://explorer-mainnet.maticvigil.com/address/${pair.id}`}>View</Link>,
           ]}
         />
       </Box>

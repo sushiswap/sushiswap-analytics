@@ -151,15 +151,113 @@ export const pairFieldsQuery = gql`
   ${pairTokenFieldsQuery}
 `;
 
+export const pairDayDataFields = gql`
+  fragment pairDayData on Pair {
+    dayData(
+      first: 1000
+      orderBy: date
+      orderDirection: desc
+      where: { date_gt: 0 }
+    ) {
+      date
+      pair {
+        id
+      }
+      token0 {
+        derivedETH
+      }
+      token1 {
+        derivedETH
+      }
+      reserveUSD
+      volumeToken0
+      volumeToken1
+      volumeUSD
+      txCount
+    }
+  }
+`;
+
+export const transactionFields = gql`
+  fragment transactionFields on Pair {
+    mints(
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0
+      amount1
+      amountUSD
+      to
+    }
+    burns(
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0
+      amount1
+      amountUSD
+      to
+    }
+    swaps(
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      sender
+      amount0In
+      amount0Out
+      amount1In
+      amount1Out
+      amountUSD
+      to
+    }
+  }
+`;
+
 export const pairQuery = gql`
   query pairQuery($id: String!) {
     pair(id: $id) {
       ...pairFields
+      ...pairDayData
+      ...transactionFields
       oneDay @client
       twoDay @client
     }
   }
   ${pairFieldsQuery}
+  ${pairDayDataFields}
+  ${transactionFields}
 `;
 
 export const pairTimeTravelQuery = gql`
@@ -293,6 +391,27 @@ export const pairsTimeTravelQuery = gql`
 `;
 
 // Tokens...
+export const tokenDayDataFieldsQuery = gql`
+  fragment tokenDayDataFields on Token {
+    dayData(
+      first: 1000
+      orderBy: date
+      orderDirection: desc
+      where: { date_gt: 0 }
+    ) {
+      id
+      date
+      token {
+        id
+      }
+      volumeUSD
+      liquidityUSD
+      priceUSD
+      txCount
+    }
+  }
+`;
+
 export const tokenFieldsQuery = gql`
   fragment tokenFields on Token {
     id
@@ -306,7 +425,9 @@ export const tokenFieldsQuery = gql`
     txCount
     liquidity
     derivedETH
+    ...tokenDayDataFields
   }
+  ${tokenDayDataFieldsQuery}
 `;
 
 export const tokenQuery = gql`

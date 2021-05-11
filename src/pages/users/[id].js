@@ -3,7 +3,6 @@ import {
   Avatar,
   Box,
   Grid,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -14,36 +13,17 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import {
-  barUserQuery,
-  blockQuery,
   currencyFormatter,
   decimalFormatter,
-  ethPriceQuery,
   formatCurrency,
   getApollo,
-  getBarUser,
-  getEthPrice,
-  getLatestBlock,
-  getPairs,
-  getPoolUser,
-  getSushiToken,
-  getToken,
-  getUser,
-  latestBlockQuery,
-  lockupUserQuery,
-  pairSubsetQuery,
-  pairsQuery,
-  poolUserQuery,
-  tokenQuery,
-  useInterval,
-  userIdsQuery,
-  userQuery,
+  getUserPageData,
+  userPageQuery,
+  useInterval
 } from "app/core";
-import { getUnixTime, startOfMinute, startOfSecond } from "date-fns";
 
-import { AvatarGroup } from "@material-ui/lab";
 import Head from "next/head";
-import { POOL_DENY } from "app/core/constants";
+import { POOL_DENY, SUSHI_TOKEN } from "app/core/constants";
 import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -72,40 +52,20 @@ function UserPage() {
   const id = router && router.query && router.query.id && router.query.id.toLowerCase();
 
   const {
-    data: { bundles },
-  } = useQuery(ethPriceQuery, {
-    pollInterval: 60000,
+    data: { 
+      bar: barData,
+      pool: poolData,
+      blocks: blocksData,
+      pairs,
+      sushiPrice,
+    },
+  } = useQuery(userPageQuery, {
+    variables: { id },
   });
 
-  const { data: barData } = useQuery(barUserQuery, {
-    variables: {
-      id: id.toLowerCase(),
-    },
-    context: {
-      clientName: "bar",
-    },
-  });
-
-  const { data: poolData } = useQuery(poolUserQuery, {
-    variables: {
-      address: id.toLowerCase(),
-    },
-    context: {
-      clientName: "masterchef",
-    },
-  });
-
-  const {
-    data: { token },
-  } = useQuery(tokenQuery, {
-    variables: {
-      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
-    },
-  });
-
-  const {
-    data: { pairs },
-  } = useQuery(pairsQuery);
+  useInterval(async () => {
+    await getUserPageData(id);
+  }, 60000);
 
   const poolUsers = poolData.users.filter(
     (user) =>
@@ -114,21 +74,6 @@ function UserPage() {
       user.pool.allocPoint !== "0" &&
       pairs.find((pair) => pair?.id === user.pool.pair)
   );
-
-  // useInterval(
-  //   () =>
-  //     Promise.all([
-  //       getPairs,
-  //       getSushiToken,
-  //       getPoolUser(id.toLowerCase()),
-  //       getBarUser(id.toLocaleLowerCase()),
-  //       getEthPrice,
-  //     ]),
-  //   60000
-  // );
-
-  const sushiPrice =
-    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   // BAR
   const xSushi = parseFloat(barData?.user?.xSushi);
@@ -166,12 +111,6 @@ function UserPage() {
       parseFloat(barData?.user?.sushiHarvestedUSD) +
       parseFloat(barData?.user?.usdIn) -
       parseFloat(barData?.user?.usdOut));
-
-  const { data: blocksData } = useQuery(latestBlockQuery, {
-    context: {
-      clientName: "blocklytics",
-    },
-  });
 
   const blockDifference =
     parseInt(blocksData?.blocks[0].number) -
@@ -314,11 +253,11 @@ function UserPage() {
                           imgProps={{ loading: "lazy" }}
                           alt="SUSHI"
                           src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                            "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                            SUSHI_TOKEN
                           )}/logo.png`}
                         />
                         <Link
-                          href={`/tokens/0x6b3595068778dd592e39a122f4f5a5cf09c90fe2`}
+                          href={`/tokens/${SUSHI_TOKEN}`}
                           variant="body2"
                           noWrap
                         >
@@ -559,17 +498,7 @@ export async function getStaticProps({ params }) {
 
   const id = params.id.toLowerCase();
 
-  await getEthPrice(client);
-
-  await getSushiToken(client);
-
-  await getBarUser(id.toLowerCase(), client);
-
-  await getPoolUser(id.toLowerCase(), client);
-
-  await getPairs(client);
-
-  await getLatestBlock(client);
+  await getUserPageData(id.toLowerCase(), client);
 
   return {
     props: {

@@ -1,12 +1,5 @@
-import { AppShell, PairTable, PoolTable } from "app/components";
-import {
-  getApollo,
-  getPairs,
-  getPools,
-  pairsQuery,
-  poolsQuery,
-  useInterval,
-} from "app/core";
+import { AppShell, PairTable } from "app/components";
+import { getApollo, getPairs, pairsQuery, useInterval } from "app/core";
 
 import Head from "next/head";
 import React from "react";

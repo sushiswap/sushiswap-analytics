@@ -1,6 +1,5 @@
 import {
   AppShell,
-  Chart,
   Curves,
   KPI,
   Link,
@@ -14,27 +13,16 @@ import {
   Paper,
   Typography,
   makeStyles,
-  useTheme,
 } from "@material-ui/core";
 import {
-  currencyFormatter,
-  ethPriceQuery,
   getApollo,
-  getEthPrice,
-  getPool,
-  getPoolHistories,
-  getPoolIds,
-  getPools,
-  getSushiToken,
-  poolHistoryQuery,
-  poolQuery,
-  tokenQuery,
+  getPoolsPageData,
+  poolPageQuery,
+  useInterval,
 } from "app/core";
 
 import Head from "next/head";
-import { POOL_DENY } from "app/core/constants";
 import { ParentSize } from "@visx/responsive";
-import { deepPurple } from "@material-ui/core/colors";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
@@ -51,48 +39,22 @@ function PoolPage() {
 
   const classes = useStyles();
 
-  const theme = useTheme();
-
   const { id } = router.query;
 
   const {
-    data: { pool },
-  } = useQuery(poolQuery, {
+    data: {
+      pool,
+      poolHistories,
+    }
+  } = useQuery(poolPageQuery, {
     variables: {
       id,
-    },
-    context: {
-      clientName: "masterchef",
-    },
+    }
   });
 
-  const {
-    data: { poolHistories },
-  } = useQuery(poolHistoryQuery, {
-    variables: {
-      id,
-    },
-    context: {
-      clientName: "masterchef",
-    },
-  });
-
-  const {
-    data: { bundles },
-  } = useQuery(ethPriceQuery, {
-    pollInterval: 60000,
-  });
-
-  const {
-    data: { token },
-  } = useQuery(tokenQuery, {
-    variables: {
-      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
-    },
-  });
-
-  const sushiPrice =
-    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+  useInterval(() => {
+    getPoolsPageData(id);
+  }, 60000);
 
   const {
     slpAge,
@@ -436,10 +398,9 @@ function PoolPage() {
 
 export async function getStaticProps({ params: { id } }) {
   const client = getApollo();
-  await getEthPrice(client);
-  await getSushiToken(client);
-  await getPool(id, client);
-  await getPoolHistories(id, client);
+
+  await getPoolsPageData(id, client);
+
   return {
     props: {
       initialApolloState: client.cache.extract(),

@@ -3,27 +3,22 @@ import {
   AreaChart,
   BarChart,
   BasicTable,
-  Chart,
   IntoTheBlock,
   KPI,
   Link,
   PageHeader,
   PairIcon,
-  Percent,
   TokenIcon,
   Transactions,
 } from "app/components";
-import { Avatar, Box, Chip, Grid, Paper, Typography } from "@material-ui/core";
+import { Box, Grid, Paper, Typography } from "@material-ui/core";
 import {
   ethPriceQuery,
   formatCurrency,
   formatDecimal,
   getApollo,
   getPair,
-  pairDayDatasQuery,
-  pairIdsQuery,
   pairQuery,
-  transactionsQuery,
   useInterval,
 } from "app/core";
 
@@ -31,7 +26,6 @@ import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
@@ -98,19 +92,11 @@ function PairPage(props) {
     await getPair(id);
   }, 60000);
 
-  const { data: transactions } = useQuery(transactionsQuery, {
-    variables: { pairAddresses: [id] },
-    pollInterval: 60000,
-  });
-
-  const {
-    data: { pairDayDatas },
-  } = useQuery(pairDayDatasQuery, {
-    variables: {
-      pairs: [id],
-    },
-    pollInterval: 60000,
-  });
+  const transactions = {
+    swaps: pair?.swaps,
+    mints: pair?.mints,
+    burns: pair?.burns,
+  };
 
   const volumeUSD =
     pair?.volumeUSD === "0" ? pair?.untrackedVolumeUSD : pair?.volumeUSD;
@@ -156,7 +142,7 @@ function PairPage(props) {
 
   const txChange = ((tx - txYesterday) / txYesterday) * 100;
 
-  const chartDatas = pairDayDatas.reduce(
+  const chartDatas = pair?.dayData.reduce(
     (previousValue, currentValue) => {
       const untrackedVolumeUSD =
         currentValue?.token0.derivedETH * currentValue?.volumeToken0 +
@@ -181,8 +167,6 @@ function PairPage(props) {
     },
     { liquidity: [], volume: [] }
   );
-
-  // console.log(pair);
 
   return (
     <AppShell>
@@ -429,21 +413,7 @@ export async function getStaticProps({ params }) {
   });
 
   await getPair(id, client);
-
-  await client.query({
-    query: pairDayDatasQuery,
-    variables: {
-      pairs: [id],
-    },
-  });
-
-  await client.query({
-    query: transactionsQuery,
-    variables: {
-      pairAddresses: [id],
-    },
-  });
-
+  
   return {
     props: {
       initialApolloState: client.cache.extract(),

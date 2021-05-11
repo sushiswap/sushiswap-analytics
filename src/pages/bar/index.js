@@ -1,94 +1,30 @@
+import React from "react";
 import { AppShell, Curves, KPI } from "app/components";
-import { Grid, Paper, useTheme } from "@material-ui/core";
+import { Grid, Paper } from "@material-ui/core";
 import {
-  barHistoriesQuery,
-  barQuery,
-  dayDatasQuery,
-  ethPriceQuery,
-  factoryQuery,
+  barPageQuery,
   getApollo,
-  getBar,
-  getBarHistories,
-  getDayData,
-  getEthPrice,
-  getFactory,
-  getSushiToken,
-  tokenQuery,
+  getBarPageData,
   useInterval,
 } from "app/core";
 
-import Chart from "../../components/Chart";
 import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from "@apollo/client";
 
-const useStyles = makeStyles((theme) => ({
-  charts: {
-    flexGrow: 1,
-    marginBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    // textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-}));
-
 function BarPage() {
-  const classes = useStyles();
-
-  const theme = useTheme();
-
   const {
-    data: { bar },
-  } = useQuery(barQuery, {
-    context: {
-      clientName: "bar",
-    },
-  });
+    data: {
+      bar,
+      histories,
+      sushiPrice,
+      oneDayVolume,
+      dayDatas,
+    }
+  } = useQuery(barPageQuery);
 
-  const {
-    data: { histories },
-  } = useQuery(barHistoriesQuery, {
-    context: {
-      clientName: "bar",
-    },
-  });
-
-  const {
-    data: { factory },
-  } = useQuery(factoryQuery);
-
-  const {
-    data: { token },
-  } = useQuery(tokenQuery, {
-    variables: {
-      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
-    },
-  });
-
-  const {
-    data: { bundles },
-  } = useQuery(ethPriceQuery);
-
-  const {
-    data: { dayDatas },
-  } = useQuery(dayDatasQuery);
-
-  const sushiPrice =
-    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
-
-  useInterval(async () => {
-    await Promise.all([
-      getBar,
-      getBarHistories,
-      getDayData,
-      getFactory,
-      getSushiToken,
-      getEthPrice,
-    ]);
+  useInterval(() => {
+    getBarPageData();
   }, 60000);
 
   const {
@@ -160,7 +96,6 @@ function BarPage() {
       return previousValue + currentValue.value;
     }, 0) / apy.length;
 
-  const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
 
   const APR =
     (((oneDayVolume * 0.05 * 0.01) / bar.totalSupply) * 365) /
@@ -352,12 +287,9 @@ function BarPage() {
 
 export async function getStaticProps() {
   const client = getApollo();
-  await getBar(client);
-  await getBarHistories(client);
-  await getFactory(client);
-  await getDayData(client);
-  await getSushiToken(client);
-  await getEthPrice(client);
+
+  await getBarPageData(client);
+
   return {
     props: {
       initialApolloState: client.cache.extract(),

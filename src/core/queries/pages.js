@@ -1,13 +1,48 @@
 import gql from "graphql-tag";
-import { pairFieldsQuery } from "./exchange";
+import { pairFieldsQuery, tokenFieldsQuery } from "./exchange";
+import { barFieldsQuery, barHistoryFieldsQuery, barUserFieldsQuery } from "./bar";
 
-// TODO: Dashboard
+// Bar
+export const barPageQuery = gql`
+  query barPageQuery($barId: String! = "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {
+    bar(id: $barId) {
+      ...barFields
+    }
+    histories(first: 1000) {
+      ...barHistoryFields
+    }
+    sushiPrice @client
+    oneDayVolume @client
+    dayDatas @client
+  }
+  ${barFieldsQuery}
+  ${barHistoryFieldsQuery}
+  ${barUserFieldsQuery}
+`;
 
-// TODO: Pools
+// Pools
+export const poolPageQuery = gql`
+  query poolPageQuery($id: ID!) {
+    pool @client
+    poolHistories @client
+  }
+`;
 
-// TODO: Pairs
-
-// TODO: Tokens
+// Tokens
+export const tokenPageQuery = gql`
+  query tokenPageQuery($id: ID!) {
+    token(id: $id) {
+      ...tokenFields
+      oneDay @client
+      twoDay @client
+    }
+    pairs @client
+    transactions @client
+    ethPrice @client
+    oneDayEthPrice @client
+  }
+  ${tokenFieldsQuery}
+`;
 
 // Gainers
 export const gainersQuery = gql`
@@ -39,4 +74,19 @@ export const losersQuery = gql`
     }
   }
   ${pairFieldsQuery}
+`;
+
+// Users
+export const userPageQuery = gql`
+  query userPageQuery($userId: ID!) {
+    bar(id: $userId) {
+      ...barFields
+    }
+    pool @client
+    lockup @client
+    blocks @client
+    pairs @client
+    sushiPrice @client
+  }
+  ${barFieldsQuery}
 `;

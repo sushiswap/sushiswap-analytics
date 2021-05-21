@@ -21,7 +21,7 @@ export const bar = from([
 export const masterchef = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/master-chef",
+    uri: "https://api.thegraph.com/subgraphs/name/jiro-ono/master-chef",
     shouldBatch: true,
   }),
 ]);

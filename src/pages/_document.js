@@ -1,5 +1,6 @@
 import Document, { Head, Html, Main, NextScript } from "next/document";
 
+import { GA_TRACKING_ID } from '../core/analytics'
 import React from "react";
 import { ServerStyleSheets } from "@material-ui/core/styles";
 //
@@ -103,6 +104,23 @@ export default class MyDocument extends Document {
           <script
             type="text/javascript"
             src="https://app.intotheblock.com/widget.js"
+          />
+                   {/* Global Site Tag (gtag.js) - Google Analytics */}
+                   <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+            }}
           />
         </Head>
         <body className="no-js">

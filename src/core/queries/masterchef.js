@@ -36,8 +36,6 @@ const poolUserFragment = gql`
     exitUSD
     sushiHarvested
     sushiHarvestedUSD
-    sushiHarvestedSinceLockup
-    sushiHarvestedSinceLockupUSD
   }
 `;
 

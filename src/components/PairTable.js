@@ -102,7 +102,7 @@ export default function PairTable({ pairs, title, ...rest }) {
           {
             key: "sevenDayFees",
             render: (row) =>
-              currencyFormatter.format(row.sevenDayVolume * 0.03),
+              currencyFormatter.format(row.sevenDayVolume * 0.003),
             align: "right",
             label: "Fees (7d)",
           },

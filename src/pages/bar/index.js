@@ -24,6 +24,8 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from "@apollo/client";
 
+const FEE_RATE = 0.0005  // 0.05% 
+
 const useStyles = makeStyles((theme) => ({
   charts: {
     flexGrow: 1,
@@ -126,7 +128,7 @@ function BarPage() {
         value: parseFloat(currentValue.xSushiSupply),
       });
       const apr =
-        (((dayData.volumeUSD * 0.05 * 0.01) / currentValue.xSushiSupply) *
+        (((dayData.volumeUSD * FEE_RATE) / currentValue.xSushiSupply) *
           365) /
         (currentValue.ratio * sushiPrice);
       previousValue["apr"].push({
@@ -139,7 +141,7 @@ function BarPage() {
       });
       previousValue["fees"].push({
         date,
-        value: parseFloat(dayData.volumeUSD * 0.005),
+        value: parseFloat(dayData.volumeUSD * FEE_RATE),
       });
       return previousValue;
     },
@@ -163,7 +165,7 @@ function BarPage() {
   const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
 
   const APR =
-    (((oneDayVolume * 0.05 * 0.01) / bar.totalSupply) * 365) /
+    (((oneDayVolume * FEE_RATE) / bar.totalSupply) * 365) /
     (bar.ratio * sushiPrice);
 
   const APY = Math.pow(1 + APR / 365, 365) - 1;

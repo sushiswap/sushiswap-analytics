@@ -12,3 +12,9 @@ export const EXCHANGE_CREATED_TIMESTAMP = 1599214239;
 export const POOL_DENY = ["14", "29", "45", "30"];
 
 export const SUSHI_TOKEN = "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2";
+
+
+export const BURY_SHIB_ADDRESS = "";
+export const BURY_LEASH_ADDRESS = "";
+export const BURY_BONE_ADDRESS = "";
+export const TOPDOG_ADDRESS = "";

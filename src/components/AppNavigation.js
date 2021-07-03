@@ -96,7 +96,7 @@ export default function AppNavigation() {
               <Sushi />
             </IconButton>
             <Typography variant="subtitle1" color="textPrimary" noWrap>
-              Sushi Analytics
+              Bone Analytics
             </Typography>
           </Box>
         </Hidden>
@@ -135,6 +135,49 @@ export default function AppNavigation() {
           <ListItemText primary="Bar" />
           {/* {open ? <ExpandLess /> : <ExpandMore />} */}
         </ListItem>
+
+
+        <ListItem
+          key="/bury-shib"
+          button
+          selected={router.pathname === "/bury-shib"}
+          onClick={() => router.push("/bury-shib")}
+        >
+          <ListItemIcon>
+            <FastfoodOutlined />
+          </ListItemIcon>
+          <ListItemText primary="Bury Shib" />
+          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+        </ListItem>
+
+
+        <ListItem
+          key="/bury-leash"
+          button
+          selected={router.pathname === "/bury-leash"}
+          onClick={() => router.push("/bury-leash")}
+        >
+          <ListItemIcon>
+            <FastfoodOutlined />
+          </ListItemIcon>
+          <ListItemText primary="Bury Leash" />
+          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+        </ListItem>
+
+
+        <ListItem
+          key="/bury-bone"
+          button
+          selected={router.pathname === "/bury-bone"}
+          onClick={() => router.push("/bury-bone")}
+        >
+          <ListItemIcon>
+            <FastfoodOutlined />
+          </ListItemIcon>
+          <ListItemText primary="Bury Bone" />
+          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+        </ListItem>
+
 
         {/* <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>

@@ -144,12 +144,6 @@ export const poolsQuery = gql`
         sushiPerBlock
         totalAllocPoint
       }
-      # users {
-      #   id
-      #   address
-      #   amount
-      #   rewardDebt
-      # }
       liquidityPair @client
       roiPerBlock @client
       roiPerHour @client

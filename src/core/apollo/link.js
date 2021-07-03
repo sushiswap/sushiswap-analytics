@@ -75,3 +75,45 @@ export default split(
     )
   )
 );
+
+
+export const buryShib = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/kaaldhairya/buryshibkovanv7",
+    shouldBatch: true,
+  }),
+]);
+
+export const buryLeash = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/kaaldhairya/buryleashkv1",
+    shouldBatch: true,
+  }),
+]);
+
+
+export const buryBone = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/kaaldhairya/burybonekv1",
+    shouldBatch: true,
+  }),
+]);
+
+export const topDog = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/kaaldhairya/topdogkovanv4",
+    shouldBatch: true,
+  }),
+]);
+
+export const shibaSwapExchange = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/shibaswap/exchange",
+    shouldBatch: true,
+  }),
+]);

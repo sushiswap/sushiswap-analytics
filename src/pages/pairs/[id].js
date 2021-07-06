@@ -181,7 +181,7 @@ function PairPage(props) {
     { liquidity: [], volume: [] }
   );
 
-  // console.log(pair);
+  // console.log(pair.token0?.derivedETH, bundles[0].ethPrice);
 
   return (
     <AppShell>
@@ -403,7 +403,9 @@ function PairPage(props) {
             <Typography variant="body2" noWrap>
               {pair.token1.id}
             </Typography>,
-            <Link href={`https://explorer-mainnet.maticvigil.com/address/${pair.id}`}>View</Link>,
+            <Link href={`https://beta.explorer.harmony.one/address/${pair.id}`}>
+              View
+            </Link>,
           ]}
         />
       </Box>
@@ -417,7 +419,7 @@ function PairPage(props) {
 export async function getStaticProps({ params }) {
   const client = getApollo();
 
-  const id = params.id.toLowerCase()
+  const id = params.id.toLowerCase();
 
   // EthPrice
   await client.query({

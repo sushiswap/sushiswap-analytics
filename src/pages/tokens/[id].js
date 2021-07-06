@@ -92,7 +92,7 @@ function TokenPage() {
     pollInterval: 60000,
   });
 
-  console.log({ token })
+  // console.log({ token })
 
   const { data: oneDayEthPriceData } = useQuery(oneDayEthPriceQuery);
 
@@ -297,7 +297,11 @@ function TokenPage() {
             token.name,
             token.symbol,
             token.id,
-            <Link href={`https://explorer-mainnet.maticvigil.com/address/${token.id}`}>View</Link>,
+            <Link
+              href={`https://beta.explorer.harmony.one//address/${token.id}`}
+            >
+              View
+            </Link>,
           ]}
         />
       </Box>

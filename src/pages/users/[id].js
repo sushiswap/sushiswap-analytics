@@ -99,7 +99,7 @@ function UserPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+      id: "0xd514244ed479a2050c44b448ec681faadd8c7429",
     },
   });
 
@@ -194,7 +194,7 @@ function UserPage() {
     poolUsers?.reduce((previousValue, currentValue) => {
       return (
         previousValue +
-        ((currentValue.amount * currentValue.pool.accSushiPerShare) / 1e12 -
+        ((currentValue.amount * currentValue.pool.accBonePerShare) / 1e12 -
           currentValue.rewardDebt) /
           1e18
       );
@@ -314,11 +314,11 @@ function UserPage() {
                           imgProps={{ loading: "lazy" }}
                           alt="SUSHI"
                           src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                            "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                            "0xd514244ed479a2050c44b448ec681faadd8c7429"
                           )}/logo.png`}
                         />
                         <Link
-                          href={`/tokens/0x6b3595068778dd592e39a122f4f5a5cf09c90fe2`}
+                          href={`/tokens/0xd514244ed479a2050c44b448ec681faadd8c7429`}
                           variant="body2"
                           noWrap
                         >
@@ -465,10 +465,10 @@ function UserPage() {
                     const token1 = pair.reserve1 * share;
 
                     const pendingSushi =
-                      ((user.amount * user.pool.accSushiPerShare) / 1e12 -
+                      ((user.amount * user.pool.accBonePerShare) / 1e12 -
                         user.rewardDebt) /
                       1e18;
-                    // user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
+                    // user.amount.mul(accBonePerShare).div(1e12).sub(user.rewardDebt);
 
                     // console.log(
                     //   user,

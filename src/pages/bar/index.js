@@ -65,7 +65,7 @@ function BarPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0xd514244ed479a2050c44b448ec681faadd8c7429",
+      id: "0x9813037ee2218799597d83d4a5b6f3b6778218d9",
     },
   });
 

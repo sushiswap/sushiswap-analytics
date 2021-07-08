@@ -155,7 +155,7 @@ export async function getPools(client = getApollo()) {
   const ethPrice = bundles[0].ethPrice;
 
   const { token } = await getToken(
-    "0xd514244ed479a2050c44b448ec681faadd8c7429"
+    "0x9813037ee2218799597d83d4a5b6f3b6778218d9"
   );
 
   const bonePrice = ethPrice * token.derivedETH;
@@ -165,7 +165,7 @@ export async function getPools(client = getApollo()) {
     data: { liquidityPositions },
   } = await client.query({
     query: liquidityPositionSubsetQuery,
-    variables: { user: "0xa897676603c7ad3e6037a11b5294dd5b3b54ad71" },
+    variables: { user: "0x94235659cf8b805b2c658f9ea2d6d6ddbb17c8d7" },
   });
 
   await client.cache.writeQuery({

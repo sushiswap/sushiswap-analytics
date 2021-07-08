@@ -99,7 +99,7 @@ function UserPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0xd514244ed479a2050c44b448ec681faadd8c7429",
+      id: "0x9813037ee2218799597d83d4a5b6f3b6778218d9",
     },
   });
 
@@ -314,11 +314,11 @@ function UserPage() {
                           imgProps={{ loading: "lazy" }}
                           alt="SUSHI"
                           src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                            "0xd514244ed479a2050c44b448ec681faadd8c7429"
+                            "0x9813037ee2218799597d83D4a5B6F3b6778218d9"
                           )}/logo.png`}
                         />
                         <Link
-                          href={`/tokens/0xd514244ed479a2050c44b448ec681faadd8c7429`}
+                          href={`/tokens/0x9813037ee2218799597d83D4a5B6F3b6778218d9`}
                           variant="body2"
                           noWrap
                         >

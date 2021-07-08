@@ -11,10 +11,10 @@ export const EXCHANGE_CREATED_TIMESTAMP = 1599214239;
 
 export const POOL_DENY = ["14", "29", "45", "30"];
 
-export const BONE_TOKEN = "0xd514244ed479a2050c44b448ec681faadd8c7429";
+export const BONE_TOKEN = "0x9813037ee2218799597d83d4a5b6f3b6778218d9";
 
 
 export const BURY_SHIB_ADDRESS = "";
 export const BURY_LEASH_ADDRESS = "";
 export const BURY_BONE_ADDRESS = "";
-export const TOPDOG_ADDRESS = "0xa897676603c7ad3e6037a11b5294dd5b3b54ad71";
+export const TOPDOG_ADDRESS = "0x94235659cf8b805b2c658f9ea2d6d6ddbb17c8d7";

@@ -290,7 +290,7 @@ function BarPage() {
                   height={height}
                   data={[sushiStakedUSD, sushiHarvestedUSD]}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  labels={["Sushi Staked (USD)", "Sushi Harvested (USD)"]}
+                  labels={["Bone Staked (USD)", "Bone Harvested (USD)"]}
                 />
               )}
             </ParentSize>

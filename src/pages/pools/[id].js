@@ -95,49 +95,49 @@ function PoolPage() {
     parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   const {
-    slpAge,
-    slpAgeRemoved,
+    sslpAge,
+    sslpAgeRemoved,
     userCount,
-    slpDeposited,
-    slpWithdrawn,
-    slpAgeAverage,
-    slpBalance,
+    sslpDeposited,
+    sslpWithdrawn,
+    sslpAgeAverage,
+    sslpBalance,
     tvl,
   } = poolHistories.reduce(
     (previousValue, currentValue) => {
       const date = currentValue.timestamp * 1000;
 
-      previousValue.slpAge.push({
+      previousValue.sslpAge.push({
         date,
-        value: currentValue.slpAge,
+        value: currentValue.sslpAge,
       });
 
-      const slpAgeAverage =
-        parseFloat(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
+      const sslpAgeAverage =
+        parseFloat(currentValue.sslpAge) / parseFloat(currentValue.sslpBalance);
 
-      previousValue.slpAgeAverage.push({
+      previousValue.sslpAgeAverage.push({
         date,
-        value: !Number.isNaN(slpAgeAverage) ? slpAgeAverage : 0,
+        value: !Number.isNaN(sslpAgeAverage) ? sslpAgeAverage : 0,
       });
 
-      previousValue.slpAgeRemoved.push({
+      previousValue.sslpAgeRemoved.push({
         date,
-        value: currentValue.slpAgeRemoved,
+        value: currentValue.sslpAgeRemoved,
       });
 
-      previousValue.slpBalance.push({
+      previousValue.sslpBalance.push({
         date,
-        value: parseFloat(currentValue.slpBalance),
+        value: parseFloat(currentValue.sslpBalance),
       });
 
-      previousValue.slpDeposited.push({
+      previousValue.sslpDeposited.push({
         date,
-        value: parseFloat(currentValue.slpDeposited),
+        value: parseFloat(currentValue.sslpDeposited),
       });
 
-      previousValue.slpWithdrawn.push({
+      previousValue.sslpWithdrawn.push({
         date,
-        value: parseFloat(currentValue.slpWithdrawn),
+        value: parseFloat(currentValue.sslpWithdrawn),
       });
 
       previousValue.tvl.push({
@@ -145,7 +145,7 @@ function PoolPage() {
         value:
           (parseFloat(pool.liquidityPair.reserveUSD) /
             parseFloat(pool.liquidityPair.totalSupply)) *
-          parseFloat(currentValue.slpBalance),
+          parseFloat(currentValue.sslpBalance),
       });
 
       previousValue.userCount.push({
@@ -158,12 +158,12 @@ function PoolPage() {
     {
       entries: [],
       exits: [],
-      slpAge: [],
-      slpAgeAverage: [],
-      slpAgeRemoved: [],
-      slpBalance: [],
-      slpDeposited: [],
-      slpWithdrawn: [],
+      sslpAge: [],
+      sslpAgeAverage: [],
+      sslpAgeRemoved: [],
+      sslpBalance: [],
+      sslpDeposited: [],
+      sslpWithdrawn: [],
       tvl: [],
       userCount: [],
     }
@@ -206,7 +206,7 @@ function PoolPage() {
               target="_blank"
               variant="body1"
             >
-              Stake SLP
+              Stake SSLP
             </Link>
           </Grid>
         </Grid>
@@ -226,9 +226,9 @@ function PoolPage() {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
           <KPI
-            title="~ SLP Age"
+            title="~ SSLP Age"
             value={`${(
-              parseFloat(pool.slpAge) / parseFloat(pool.balance / 1e18)
+              parseFloat(pool.sslpAge) / parseFloat(pool.balance / 1e18)
             ).toFixed(2)} Days`}
           />
         </Grid>
@@ -238,7 +238,7 @@ function PoolPage() {
         <Grid item xs={12} sm={4}>
           <KPI
             title="Staked"
-            value={`${(pool.balance / 1e18).toFixed(4)} SLP`}
+            value={`${(pool.balance / 1e18).toFixed(4)} SSLP`}
           />
         </Grid>
         {/* <Grid item xs={12} sm={4}>
@@ -290,8 +290,8 @@ function PoolPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpAge, slpAgeRemoved]}
-                  labels={["SLP Age", "SLP Age Removed"]}
+                  data={[sslpAge, sslpAgeRemoved]}
+                  labels={["SSLP Age", "SSLP Age Removed"]}
                 />
               )}
             </ParentSize>
@@ -313,8 +313,8 @@ function PoolPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpDeposited, slpWithdrawn]}
-                  labels={["SLP Deposited", "SLP Age Withdrawn"]}
+                  data={[sslpDeposited, sslpWithdrawn]}
+                  labels={["SSLP Deposited", "SSLP Age Withdrawn"]}
                 />
               )}
             </ParentSize>
@@ -334,11 +334,11 @@ function PoolPage() {
             <ParentSize>
               {({ width, height }) => (
                 <Curves
-                  title="~ SLP Age (Days)"
+                  title="~ SSLP Age (Days)"
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpAgeAverage]}
+                  data={[sslpAgeAverage]}
                 />
               )}
             </ParentSize>
@@ -382,11 +382,11 @@ function PoolPage() {
             <ParentSize>
               {({ width, height }) => (
                 <Curves
-                  title="SLP Balance"
+                  title="SSLP Balance"
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[slpBalance]}
+                  data={[sslpBalance]}
                 />
               )}
             </ParentSize>

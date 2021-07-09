@@ -49,7 +49,7 @@ function BuryShibPage() {
       clientName: "buryShib",
     },
   });
-  
+
   const {
     data: { histories },
   } = useQuery(buryShibHistoriesQuery, {
@@ -128,7 +128,7 @@ function BuryShibPage() {
         value: parseFloat(currentValue.xShibSupply),
       });
       const apr =
-        (((dayData.volumeUSD * 0.05 * 0.01) / currentValue.xShibSupply) *
+        (((dayData.volumeUSD * 0.01 * 0.01) / currentValue.xShibSupply) *
           365) /
         (currentValue.ratio * shibPrice);
       previousValue["apr"].push({

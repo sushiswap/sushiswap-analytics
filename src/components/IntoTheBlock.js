@@ -12,7 +12,7 @@ function IntoTheBlock({ pairAddress }) {
           colors: {
             series: ["#FF1744"],
           },
-          protocol: "sushiswap",
+          protocol: "shibaswap",
           pairAddress,
           granularity: "hourly",
           loader: true,

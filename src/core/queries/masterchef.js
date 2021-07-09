@@ -56,11 +56,11 @@ export const poolHistoryQuery = gql`
         id
         accBonePerShare
       }
-      slpBalance
-      slpAge
-      slpAgeRemoved
-      slpDeposited
-      slpWithdrawn
+      sslpBalance
+      sslpAge
+      sslpAgeRemoved
+      sslpDeposited
+      sslpWithdrawn
       entryUSD
       exitUSD
       boneHarvestedUSD
@@ -92,7 +92,7 @@ export const poolQuery = gql`
         amount
         rewardDebt
       }
-      slpAge
+      sslpAge
       liquidityPair @client
       timestamp
       entryUSD

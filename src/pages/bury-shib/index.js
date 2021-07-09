@@ -43,13 +43,13 @@ function BuryShibPage() {
   const theme = useTheme();
 
   const {
-    data: { buryShib },
+    data: { bury },
   } = useQuery(buryShibQuery, {
     context: {
       clientName: "buryShib",
     },
   });
-
+  
   const {
     data: { histories },
   } = useQuery(buryShibHistoriesQuery, {
@@ -165,8 +165,8 @@ function BuryShibPage() {
   const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
 
   const APR =
-    (((oneDayVolume * 0.05 * 0.01) / buryShib.totalSupply) * 365) /
-    (buryShib.ratio * shibPrice);
+    (((oneDayVolume * 0.05 * 0.01) / bury.totalSupply) * 365) /
+    (bury.ratio * shibPrice);
 
   const APY = Math.pow(1 + APR / 365, 365) - 1;
 
@@ -182,7 +182,7 @@ function BuryShibPage() {
             {/* <Grid item xs>
               <KPI
                 title="xShib Age"
-                value={parseFloat(buryShib.xShibAge).toLocaleString()}
+                value={parseFloat(bury.xShibAge).toLocaleString()}
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
@@ -192,16 +192,16 @@ function BuryShibPage() {
               <KPI title="APY (Avg)" value={averageApy} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="xShib" value={buryShib.totalSupply} format="integer" />
+              <KPI title="xShib" value={bury.totalSupply} format="integer" />
             </Grid>
             {/* <Grid item xs={12} sm={6} md={3}>
               <KPI
                 title="Shib"
-                value={parseInt(buryShib.shibStaked).toLocaleString()}
+                value={parseInt(bury.shibStaked).toLocaleString()}
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="xShib:Shib" value={Number(buryShib.ratio).toFixed(4)} />
+              <KPI title="xShib:Shib" value={Number(bury.ratio).toFixed(4)} />
             </Grid>
           </Grid>
         </Grid>
@@ -347,7 +347,7 @@ function BuryShibPage() {
         </Grid>
       </Grid>
 
-      {/* <pre>{JSON.stringify(buryShib, null, 2)}</pre> */}
+      {/* <pre>{JSON.stringify(bury, null, 2)}</pre> */}
     </AppShell>
   );
 }

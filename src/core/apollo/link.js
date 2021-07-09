@@ -62,7 +62,7 @@ export const buryShib = from([
 export const buryLeash = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/buryleas",
+    uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/buryleash",
     shouldBatch: true,
   }),
 ]);

@@ -123,19 +123,6 @@ export default function AppNavigation() {
           <ListItemText primary="Dashboard" />
         </ListItem>
 
-        <ListItem
-          key="/bar"
-          button
-          selected={router.pathname === "/bar"}
-          onClick={() => router.push("/bar")}
-        >
-          <ListItemIcon>
-            <FastfoodOutlined />
-          </ListItemIcon>
-          <ListItemText primary="Bar" />
-          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
-        </ListItem>
-
 
         <ListItem
           key="/bury-shib"
@@ -151,32 +138,32 @@ export default function AppNavigation() {
         </ListItem>
 
 
-        <ListItem
-          key="/bury-leash"
-          button
-          selected={router.pathname === "/bury-leash"}
-          onClick={() => router.push("/bury-leash")}
-        >
-          <ListItemIcon>
-            <FastfoodOutlined />
-          </ListItemIcon>
-          <ListItemText primary="Bury Leash" />
-          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
-        </ListItem>
+        {/*<ListItem*/}
+        {/*  key="/bury-leash"*/}
+        {/*  button*/}
+        {/*  selected={router.pathname === "/bury-leash"}*/}
+        {/*  onClick={() => router.push("/bury-leash")}*/}
+        {/*>*/}
+        {/*  <ListItemIcon>*/}
+        {/*    <FastfoodOutlined />*/}
+        {/*  </ListItemIcon>*/}
+        {/*  <ListItemText primary="Bury Leash" />*/}
+        {/*  /!* {open ? <ExpandLess /> : <ExpandMore />} *!/*/}
+        {/*</ListItem>*/}
 
 
-        <ListItem
-          key="/bury-bone"
-          button
-          selected={router.pathname === "/bury-bone"}
-          onClick={() => router.push("/bury-bone")}
-        >
-          <ListItemIcon>
-            <FastfoodOutlined />
-          </ListItemIcon>
-          <ListItemText primary="Bury Bone" />
-          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
-        </ListItem>
+        {/*<ListItem*/}
+        {/*  key="/bury-bone"*/}
+        {/*  button*/}
+        {/*  selected={router.pathname === "/bury-bone"}*/}
+        {/*  onClick={() => router.push("/bury-bone")}*/}
+        {/*>*/}
+        {/*  <ListItemIcon>*/}
+        {/*    <FastfoodOutlined />*/}
+        {/*  </ListItemIcon>*/}
+        {/*  <ListItemText primary="Bury Bone" />*/}
+        {/*  /!* {open ? <ExpandLess /> : <ExpandMore />} *!/*/}
+        {/*</ListItem>*/}
 
 
         {/* <Collapse in={open} timeout="auto" unmountOnExit>

@@ -247,7 +247,7 @@ function UserPage() {
 
       {!barData?.user?.bar ? (
         <Box mb={4}>
-          <Typography>Address isn't in the bar...</Typography>
+          <Typography>Address  isn't in the bar...</Typography>
         </Box>
       ) : (
         <>

@@ -57,7 +57,7 @@ export async function getFactory(client = getApollo()) {
 }
 
 export async function getSushiToken(client = getApollo()) {
-  return await getToken("0x6b3595068778dd592e39a122f4f5a5cf09c90fe2", client);
+  return await getToken("0x9813037ee2218799597d83d4a5b6f3b6778218d9", client);
 }
 
 export async function getShibToken(client = getApollo()) {

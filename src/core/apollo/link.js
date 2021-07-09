@@ -21,7 +21,7 @@ export const bar = from([
 export const masterchef = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/master-chef",
+    uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/topdog",
     shouldBatch: true,
   }),
 ]);
@@ -29,7 +29,7 @@ export const masterchef = from([
 export const exchange = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/exchange",
+    uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/exchange",
     shouldBatch: true,
   }),
 ]);

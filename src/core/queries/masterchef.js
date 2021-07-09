@@ -13,7 +13,7 @@ export const lockupUserQuery = gql`
           totalAllocPoint
         }
         balance
-        accSushiPerShare
+        accBonePerShare
       }
     }
   }
@@ -27,15 +27,15 @@ const poolUserFragment = gql`
       id
       pair
       balance
-      accSushiPerShare
+      accBonePerShare
       lastRewardBlock
     }
     amount
     rewardDebt
     entryUSD
     exitUSD
-    sushiHarvested
-    sushiHarvestedUSD
+    boneHarvested
+    boneHarvestedUSD
   }
 `;
 
@@ -54,7 +54,7 @@ export const poolHistoryQuery = gql`
       id
       pool {
         id
-        accSushiPerShare
+        accBonePerShare
       }
       slpBalance
       slpAge
@@ -63,7 +63,7 @@ export const poolHistoryQuery = gql`
       slpWithdrawn
       entryUSD
       exitUSD
-      sushiHarvestedUSD
+      boneHarvestedUSD
       userCount
       timestamp
       block
@@ -78,12 +78,12 @@ export const poolQuery = gql`
       pair
       allocPoint
       lastRewardBlock
-      accSushiPerShare
+      accBonePerShare
       balance
       userCount
       owner {
         id
-        sushiPerBlock
+        bonePerBlock
         totalAllocPoint
       }
       users(orderBy: amount, orderDirection: desc) {
@@ -136,12 +136,12 @@ export const poolsQuery = gql`
       pair
       allocPoint
       lastRewardBlock
-      accSushiPerShare
+      accBonePerShare
       balance
       userCount
       owner {
         id
-        sushiPerBlock
+        bonePerBlock
         totalAllocPoint
       }
       liquidityPair @client

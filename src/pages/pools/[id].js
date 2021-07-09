@@ -87,7 +87,7 @@ function PoolPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+      id: "0x9813037ee2218799597d83d4a5b6f3b6778218d9",
     },
   });
 
@@ -172,7 +172,7 @@ function PoolPage() {
   return (
     <AppShell>
       <Head>
-        <title>Pool {id} | SushiSwap Analytics</title>
+        <title>Pool {id} | ShibaSwap Analytics</title>
       </Head>
 
       <PageHeader mb={3}>
@@ -249,7 +249,7 @@ function PoolPage() {
             )}
           />
         </Grid> */}
-        {/* 
+        {/*
         <Grid item xs={12}>
           <Paper
             variant="outlined"

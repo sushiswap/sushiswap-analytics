@@ -50,6 +50,49 @@ export const lockup = from([
   }),
 ]);
 
+
+export const buryShib = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/buryshib",
+    shouldBatch: true,
+  }),
+]);
+
+export const buryLeash = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/buryleas",
+    shouldBatch: true,
+  }),
+]);
+
+
+export const buryBone = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/burybone",
+    shouldBatch: true,
+  }),
+]);
+
+export const topDog = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/topdog",
+    shouldBatch: true,
+  }),
+]);
+
+export const shibaSwapExchange = from([
+  new RetryLink(),
+  new HttpLink({
+    uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/exchange",
+    shouldBatch: true,
+  }),
+]);
+
+
 export default split(
   (operation) => {
     return operation.getContext().clientName === "blocklytics";
@@ -70,50 +113,16 @@ export default split(
           return operation.getContext().clientName === "lockup";
         },
         lockup,
-        exchange
+        split(
+          (operation) => {
+            return operation.getContext().clientName === "buryShib";
+          },
+          buryShib,
+          exchange
+        ),
       )
     )
   )
 );
 
 
-export const buryShib = from([
-  new RetryLink(),
-  new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/kaaldhairya/buryshibkovanv7",
-    shouldBatch: true,
-  }),
-]);
-
-export const buryLeash = from([
-  new RetryLink(),
-  new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/kaaldhairya/buryleashkv1",
-    shouldBatch: true,
-  }),
-]);
-
-
-export const buryBone = from([
-  new RetryLink(),
-  new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/kaaldhairya/burybonekv1",
-    shouldBatch: true,
-  }),
-]);
-
-export const topDog = from([
-  new RetryLink(),
-  new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/kaaldhairya/topdogkovanv4",
-    shouldBatch: true,
-  }),
-]);
-
-export const shibaSwapExchange = from([
-  new RetryLink(),
-  new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/shibaswap/exchange",
-    shouldBatch: true,
-  }),
-]);

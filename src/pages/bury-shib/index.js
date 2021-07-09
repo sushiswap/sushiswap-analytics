@@ -62,11 +62,12 @@ function BuryShibPage() {
     data: { factory },
   } = useQuery(factoryQuery);
 
+  // TODO CHANGE
   const {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+      id: "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
     },
   });
 
@@ -78,7 +79,7 @@ function BuryShibPage() {
     data: { dayDatas },
   } = useQuery(dayDatasQuery);
 
-  const sushiPrice =
+  const shibPrice =
     parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   useInterval(async () => {
@@ -93,8 +94,8 @@ function BuryShibPage() {
   }, 60000);
 
   const {
-    sushiStakedUSD,
-    sushiHarvestedUSD,
+    shibStakedUSD,
+    shibHarvestedUSD,
     xShibMinted,
     xShibBurned,
     xShib,
@@ -105,13 +106,13 @@ function BuryShibPage() {
     (previousValue, currentValue) => {
       const date = currentValue.date * 1000;
       const dayData = dayDatas.find((d) => d.date === currentValue.date);
-      previousValue["sushiStakedUSD"].push({
+      previousValue["shibStakedUSD"].push({
         date,
-        value: parseFloat(currentValue.sushiStakedUSD),
+        value: parseFloat(currentValue.shibStakedUSD),
       });
-      previousValue["sushiHarvestedUSD"].push({
+      previousValue["shibHarvestedUSD"].push({
         date,
-        value: parseFloat(currentValue.sushiHarvestedUSD),
+        value: parseFloat(currentValue.shibHarvestedUSD),
       });
 
       previousValue["xShibMinted"].push({
@@ -129,7 +130,7 @@ function BuryShibPage() {
       const apr =
         (((dayData.volumeUSD * 0.05 * 0.01) / currentValue.xShibSupply) *
           365) /
-        (currentValue.ratio * sushiPrice);
+        (currentValue.ratio * shibPrice);
       previousValue["apr"].push({
         date,
         value: parseFloat(apr * 100),
@@ -145,8 +146,8 @@ function BuryShibPage() {
       return previousValue;
     },
     {
-      sushiStakedUSD: [],
-      sushiHarvestedUSD: [],
+      shibStakedUSD: [],
+      shibHarvestedUSD: [],
       xShibMinted: [],
       xShibBurned: [],
       xShib: [],
@@ -165,7 +166,7 @@ function BuryShibPage() {
 
   const APR =
     (((oneDayVolume * 0.05 * 0.01) / buryShib.totalSupply) * 365) /
-    (buryShib.ratio * sushiPrice);
+    (buryShib.ratio * shibPrice);
 
   const APY = Math.pow(1 + APR / 365, 365) - 1;
 
@@ -196,7 +197,7 @@ function BuryShibPage() {
             {/* <Grid item xs={12} sm={6} md={3}>
               <KPI
                 title="Shib"
-                value={parseInt(buryShib.sushiStaked).toLocaleString()}
+                value={parseInt(buryShib.shibStaked).toLocaleString()}
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
@@ -289,7 +290,7 @@ function BuryShibPage() {
                 <Curves
                   width={width}
                   height={height}
-                  data={[sushiStakedUSD, sushiHarvestedUSD]}
+                  data={[shibStakedUSD, shibHarvestedUSD]}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   labels={["Shib Staked (USD)", "Shib Harvested (USD)"]}
                 />

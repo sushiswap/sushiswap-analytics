@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const buryBoneQuery = gql`
-  query buryBoneQuery($id: String! = "0xaFd395a2a95Cbd13721f8077fb6f55e14d48E554") {
-    buries(id: $id) {
+  query buryBoneQuery($id: String! = "0xf7a0383750fef5abace57cc4c9ff98e3790202b3") {
+    bury(id: $id) {
       id
       totalSupply
       ratio

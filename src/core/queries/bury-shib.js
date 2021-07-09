@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const buryShibQuery = gql`
-  query buryShibQuery($id: String! = "0xad7AC262cC107b7e72D775E5576319296a377e5d") {
-    buries(id: $id) {
+  query buryShibQuery($id: String! = "0xb4a81261b16b92af0b9f7c4a83f1e885132d81e4") {
+    bury(id: $id) {
       id
       totalSupply
       ratio

@@ -60,6 +60,18 @@ export async function getSushiToken(client = getApollo()) {
   return await getToken("0x6b3595068778dd592e39a122f4f5a5cf09c90fe2", client);
 }
 
+export async function getShibToken(client = getApollo()) {
+  return await getToken("0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce", client);
+}
+
+export async function getBoneToken(client = getApollo()) {
+  return await getToken("0x9813037ee2218799597d83d4a5b6f3b6778218d9", client);
+}
+
+export async function getLeashToken(client = getApollo()) {
+  return await getToken("0x27c70cd1946795b66be9d954418546998b546634", client);
+}
+
 export async function getDayData(client = getApollo()) {
   const { data } = await client.query({
     query: dayDatasQuery,

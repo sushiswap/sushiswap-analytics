@@ -188,7 +188,7 @@ function PairPage(props) {
     <AppShell>
       <Head>
         <title>
-          {pair.token0.symbol}-{pair.token1.symbol} | SushiSwap Analytics
+          {pair.token0.symbol}-{pair.token1.symbol} | ShibaSwap Analytics
         </title>
       </Head>
       <PageHeader>
@@ -201,7 +201,7 @@ function PairPage(props) {
           </Box>
           <Box display="flex" alignItems="center" className={classes.links}>
             <Link
-              href={`https://exchange.sushiswapclassic.org/#/add/${pair.token0.id}/${pair.token1.id}`}
+              href={`https://shibaswap.com/#/add/${pair.token0.id}/${pair.token1.id}`}
               target="_blank"
               variant="body1"
               className={classes.firstLink}
@@ -209,7 +209,7 @@ function PairPage(props) {
               Add Liquidity
             </Link>
             <Link
-              href={`https://exchange.sushiswapclassic.org/#/swap?inputCurrency=${pair.token0.id}&outputCurrency=${pair.token1.id}`}
+              href={`https://shibaswap.com/#/swap?inputCurrency=${pair.token0.id}&outputCurrency=${pair.token1.id}`}
               target="_blank"
               variant="body1"
             >

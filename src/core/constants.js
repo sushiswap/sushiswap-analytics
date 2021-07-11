@@ -5,11 +5,11 @@ export const TOKEN_DENY = [
   "0xfc989fbb6b3024de5ca0144dc23c18a063942ac1",
 ];
 
-export const PAIR_DENY = ["0xb6a741f37d6e455ebcc9f17e2c16d0586c3f57a5"];
+export const PAIR_DENY = []; //"0xb6a741f37d6e455ebcc9f17e2c16d0586c3f57a5"
 
 export const EXCHANGE_CREATED_TIMESTAMP = 1599214239;
 
-export const POOL_DENY = ["14", "29", "45", "30"];
+export const POOL_DENY = []; //"14", "29", "45", "30"
 
 export const BONE_TOKEN = "0x9813037ee2218799597d83d4a5b6f3b6778218d9";
 

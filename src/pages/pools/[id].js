@@ -32,7 +32,7 @@ import {
 } from "app/core";
 
 import Head from "next/head";
-import { POOL_DENY } from "app/core/constants";
+import {BONE_TOKEN_ADDRESS, POOL_DENY} from "app/core/constants";
 import { ParentSize } from "@visx/responsive";
 import { deepPurple } from "@material-ui/core/colors";
 import { useQuery } from "@apollo/client";
@@ -87,7 +87,7 @@ function PoolPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0x9813037ee2218799597d83d4a5b6f3b6778218d9",
+      id: BONE_TOKEN_ADDRESS,
     },
   });
 

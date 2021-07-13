@@ -14,6 +14,7 @@ import {
 } from "../api/blocks";
 
 import { getApollo } from "../apollo";
+import {BONE_TOKEN_ADDRESS} from "app/core/constants";
 
 export async function getFactory(client = getApollo()) {
   const {
@@ -57,7 +58,7 @@ export async function getFactory(client = getApollo()) {
 }
 
 export async function getSushiToken(client = getApollo()) {
-  return await getToken("0x9813037ee2218799597d83d4a5b6f3b6778218d9", client);
+  return await getToken(BONE_TOKEN_ADDRESS, client);
 }
 
 export async function getShibToken(client = getApollo()) {
@@ -65,7 +66,7 @@ export async function getShibToken(client = getApollo()) {
 }
 
 export async function getBoneToken(client = getApollo()) {
-  return await getToken("0x9813037ee2218799597d83d4a5b6f3b6778218d9", client);
+  return await getToken(BONE_TOKEN_ADDRESS, client);
 }
 
 export async function getLeashToken(client = getApollo()) {

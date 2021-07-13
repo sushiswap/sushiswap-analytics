@@ -139,7 +139,7 @@ export default function AppBar({
               justifyContent="space-around"
             >
               <IconButton edge={false} onClick={() => router.push("/")}>
-                <Sushi />
+                {/*<Sushi />*/}
               </IconButton>
               <Typography variant="subtitle1" color="textPrimary" noWrap>
                 ShibaSwap Analytics

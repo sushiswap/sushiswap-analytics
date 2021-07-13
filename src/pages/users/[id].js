@@ -26,7 +26,7 @@ import {
   getLatestBlock,
   getPairs,
   getPoolUser,
-  getBoneToken,
+  getSushiToken,
   getToken,
   getUser,
   latestBlockQuery,
@@ -119,7 +119,7 @@ function UserPage() {
   //   () =>
   //     Promise.all([
   //       getPairs,
-  //       getBoneToken,
+  //       getSushiToken,
   //       getPoolUser(id.toLowerCase()),
   //       getBarUser(id.toLocaleLowerCase()),
   //       getEthPrice,
@@ -131,18 +131,18 @@ function UserPage() {
     parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   // BAR
-  const xShib = parseFloat(barData?.user?.xShib);
+  const xSushi = parseFloat(barData?.user?.xSushi);
 
   const barPending =
-    (xShib * parseFloat(barData?.user?.bar?.sushiStaked)) /
+    (xSushi * parseFloat(barData?.user?.bar?.sushiStaked)) /
     parseFloat(barData?.user?.bar?.totalSupply);
 
-  const xShibTransfered =
-    barData?.user?.xShibIn > barData?.user?.xShibOut
-      ? parseFloat(barData?.user?.xShibIn) -
-        parseFloat(barData?.user?.xShibOut)
-      : parseFloat(barData?.user?.xShibOut) -
-        parseFloat(barData?.user?.xShibIn);
+  const xSushiTransfered =
+    barData?.user?.xSushiIn > barData?.user?.xSushiOut
+      ? parseFloat(barData?.user?.xSushiIn) -
+        parseFloat(barData?.user?.xSushiOut)
+      : parseFloat(barData?.user?.xSushiOut) -
+        parseFloat(barData?.user?.xSushiIn);
 
   const barStaked = barData?.user?.sushiStaked;
 
@@ -153,9 +153,9 @@ function UserPage() {
 
   const barPendingUSD = barPending > 0 ? barPending * sushiPrice : 0;
 
-  const buryRoiShib =
+  const barRoiSushi =
     barPending -
-    (parseFloat(barData?.user?.shibStaked) -
+    (parseFloat(barData?.user?.sushiStaked) -
       parseFloat(barData?.user?.sushiHarvested) +
       parseFloat(barData?.user?.sushiIn) -
       parseFloat(barData?.user?.sushiOut));
@@ -227,7 +227,7 @@ function UserPage() {
   return (
     <AppShell>
       <Head>
-        <title>User {id} | ShibaSwap Analytics</title>
+        <title>User {id} | SushiSwap Analytics</title>
       </Head>
 
       <PageHeader>
@@ -247,7 +247,7 @@ function UserPage() {
 
       {!barData?.user?.bar ? (
         <Box mb={4}>
-          <Typography>Address  isn't in the bar...</Typography>
+          <Typography>Address isn't in the bar...</Typography>
         </Box>
       ) : (
         <>
@@ -312,7 +312,7 @@ function UserPage() {
                         <Avatar
                           className={classes.avatar}
                           imgProps={{ loading: "lazy" }}
-                          alt="BONE"
+                          alt="SUSHI"
                           src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
                             "0x9813037ee2218799597d83D4a5B6F3b6778218d9"
                           )}/logo.png`}
@@ -322,7 +322,7 @@ function UserPage() {
                           variant="body2"
                           noWrap
                         >
-                          BONE
+                          SUSHI
                         </Link>
                         {/* <Link href={`/tokens/0x8798249c2e607446efb7ad49ec89dd1865ff4272`} variant="body2" noWrap>
                         xSUSHI
@@ -464,7 +464,7 @@ function UserPage() {
                     const token0 = pair.reserve0 * share;
                     const token1 = pair.reserve1 * share;
 
-                    const pendingBone =
+                    const pendingSushi =
                       ((user.amount * user.pool.accBonePerShare) / 1e12 -
                         user.rewardDebt) /
                       1e18;
@@ -474,7 +474,7 @@ function UserPage() {
                     //   user,
                     //   user.entryUSD,
                     //   user.exitUSD,
-                    //   pendingBone * sushiPrice
+                    //   pendingSushi * sushiPrice
                     // );
 
                     return (
@@ -524,17 +524,17 @@ function UserPage() {
                         </TableCell>
                         <TableCell align="right">
                           <Typography noWrap variant="body2">
-                            {decimalFormatter.format(pendingBone)} (
+                            {decimalFormatter.format(pendingSushi)} (
                             {currencyFormatter.format(
-                              pendingBone * sushiPrice
+                              pendingSushi * sushiPrice
                             )}
                             )
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
                           <Typography noWrap variant="body2">
-                            {decimalFormatter.format(user.sushiHarvested)} (
-                            {currencyFormatter.format(user.sushiHarvestedUSD)})
+                            {decimalFormatter.format(user.boneHarvested)} (
+                            {currencyFormatter.format(user.boneHarvestedUSD)})
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
@@ -542,8 +542,8 @@ function UserPage() {
                             {currencyFormatter.format(
                               parseFloat(pair.reserveUSD * share) +
                                 parseFloat(user.exitUSD) +
-                                parseFloat(user.sushiHarvestedUSD) +
-                                parseFloat(pendingBone * sushiPrice) -
+                                parseFloat(user.boneHarvestedUSD) +
+                                parseFloat(pendingSushi * sushiPrice) -
                                 parseFloat(user.entryUSD)
                             )}
                           </Typography>
@@ -569,7 +569,7 @@ export async function getStaticProps({ params }) {
 
   await getEthPrice(client);
 
-  await getBoneToken(client);
+  await getSushiToken(client);
 
   await getBarUser(id.toLowerCase(), client);
 

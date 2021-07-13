@@ -133,7 +133,7 @@ export default function AppNavigation() {
           <ListItemIcon>
             <FastfoodOutlined />
           </ListItemIcon>
-          <ListItemText primary="BURIED Shib" />
+          <ListItemText primary="Bury Shib" />
           {/* {open ? <ExpandLess /> : <ExpandMore />} */}
         </ListItem>
 

@@ -158,7 +158,7 @@ export default function AppBar({
             {page.charAt(0).toUpperCase() + page.slice(1)}
           </Typography>
         </div>
-        <Tooltip title="Toggle theme" enterDelay={300}>
+        {/* <Tooltip title="Toggle theme" enterDelay={300}>
           <IconButton
             edge="end"
             onClick={onToggleDarkMode}
@@ -167,7 +167,7 @@ export default function AppBar({
           >
             {!darkMode ? <Brightness4Outlined /> : <Brightness7Outlined />}
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
       </Toolbar>
     </MuiAppBar>
   );

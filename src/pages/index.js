@@ -129,6 +129,14 @@ function IndexPage() {
         </Grid>
 
         <Grid item xs={12}>
+          <PairTable title="Top Sushi Liquidity Pairs" pairs={pairs} />
+        </Grid>
+
+        <Grid item xs={12}>
+          <TokenTable title="Top Tokens" tokens={tokens} />
+        </Grid>
+
+        <Grid item xs={12}>
           <PoolTable
             title="Sushi Reward Pools"
             pools={pools}
@@ -136,14 +144,6 @@ function IndexPage() {
             order="desc"
             rowsPerPage={25}
           />
-        </Grid>
-
-        <Grid item xs={12}>
-          <PairTable title="Top Sushi Liquidity Pairs" pairs={pairs} />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TokenTable title="Top Tokens" tokens={tokens} />
         </Grid>
       </Grid>
     </AppShell>

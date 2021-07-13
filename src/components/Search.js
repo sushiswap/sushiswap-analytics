@@ -120,12 +120,7 @@ export default function Search({ pairs, tokens }) {
       })}
       groupBy={(option) => option.__typename}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Looking for something?"
-          variant="outlined"
-          size="small"
-        />
+        <></>
       )}
       getOptionLabel={(option) => option.text}
       renderOption={(option, { inputValue }) => {

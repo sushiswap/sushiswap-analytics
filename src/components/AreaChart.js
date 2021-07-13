@@ -149,7 +149,8 @@ function AreaChart({
         <ChartOverlay overlay={overlay} onTimespanChange={onTimespanChange} />
       )}
       <svg width={width} height={height}>
-        <GradientTealBlue id="teal" fromOffset={0.5} />
+        <GradientTealBlue id="teal" fromOffset={0.5} from="#e7a128"
+          to="#cc7317"/>
         <rect x={0} y={0} width={width} height={height} fill="transparent" />
 
         <Group top={margin.top} left={margin.left}>

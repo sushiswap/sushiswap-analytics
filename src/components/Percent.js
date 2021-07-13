@@ -10,16 +10,9 @@ export default function Percent({ percent, ...props }) {
       ? Number(percent).toFixed(2)
       : 0;
 
-  let color = "inherit";
-
-  if (value > 0) {
-    color = theme.palette.positive.main;
-  } else if (value < 0) {
-    color = theme.palette.negative.main;
-  }
 
   return (
-    <Box style={{ color }} {...props}>
+    <Box style={{ color: "#e7a128" }} {...props}>
       {value}%
     </Box>
   );

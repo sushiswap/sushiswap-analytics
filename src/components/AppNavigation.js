@@ -133,7 +133,7 @@ export default function AppNavigation() {
           <ListItemIcon>
             <FastfoodOutlined />
           </ListItemIcon>
-          <ListItemText primary="Bury Shib" />
+          <ListItemText primary="BURIED Shib" />
           {/* {open ? <ExpandLess /> : <ExpandMore />} */}
         </ListItem>
 
@@ -194,7 +194,7 @@ export default function AppNavigation() {
           <ListItemIcon>
             <WavesOutlined />
           </ListItemIcon>
-          <ListItemText primary="Pools" />
+          <ListItemText primary="WOOF Pools" />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -288,7 +288,7 @@ export default function AppNavigation() {
               <ListItemIcon>
                 <TrendingUpOutlined />
               </ListItemIcon>
-              <ListItemText primary="Gainers" />
+              <ListItemText primary="Doggos" />
             </ListItem>
             <ListItem
               button
@@ -299,7 +299,7 @@ export default function AppNavigation() {
               <ListItemIcon>
                 <TrendingDownOutlined />
               </ListItemIcon>
-              <ListItemText primary="Losers" />
+              <ListItemText primary="Puppies" />
             </ListItem>
           </List>
         </Collapse>

@@ -12,14 +12,14 @@ export default function Percent({ percent, ...props }) {
 
   let color = "inherit";
 
-  if (value > 0) {
-    color = theme.palette.positive.main;
-  } else if (value < 0) {
-    color = theme.palette.negative.main;
-  }
+  // if (value > 0) {
+  //   color = theme.palette.positive.main;
+  // } else if (value < 0) {
+  //   color = theme.palette.negative.main;
+  // }
 
   return (
-    <Box style={{ color }} {...props}>
+    <Box style={{ color: "#e7a128" }} {...props}>
       {value}%
     </Box>
   );

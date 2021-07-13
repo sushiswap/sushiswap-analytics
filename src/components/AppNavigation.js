@@ -120,7 +120,7 @@ export default function AppNavigation() {
           <ListItemIcon>
             <DashboardOutlined />
           </ListItemIcon>
-          <ListItemText primary="Dashboard" />
+          <ListItemText primary="Dog Park" />
         </ListItem>
 
 

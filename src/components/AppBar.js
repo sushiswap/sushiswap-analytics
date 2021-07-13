@@ -25,6 +25,7 @@ import { darkModeVar } from "app/core";
 import useDetect from "../core/hooks/useDetect";
 import { useReactiveVar } from "@apollo/client";
 import { useRouter } from "next/router";
+import { Avatar } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -139,7 +140,7 @@ export default function AppBar({
               justifyContent="space-around"
             >
               <IconButton edge={false} onClick={() => router.push("/")}>
-                <Sushi />
+                {/* <Avatar src={logo.png/> */}
               </IconButton>
               <Typography variant="subtitle1" color="textPrimary" noWrap>
                 ShibaSwap Analytics

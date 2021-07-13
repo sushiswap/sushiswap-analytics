@@ -12,7 +12,7 @@ import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
 export const palette = {
   primary: {
-    main: "#B93CF6",
+    main: "#e7a128",
   },
   positive: {
     main: green[500],

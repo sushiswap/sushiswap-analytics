@@ -78,7 +78,7 @@ export default class MyDocument extends Document {
 
           <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
 
-          <link rel="shortcut icon" href="/favicon.ico" />
+          <link rel="shortcut icon" href="/favicon-16x16.png" />
 
           {/* TWITTER */}
           <meta name="twitter:card" content="summary" />
@@ -130,7 +130,7 @@ export default class MyDocument extends Document {
                 try {
                   var query = window.matchMedia("(prefers-color-scheme: dark)");
                   var darkMode = window.localStorage.getItem("darkMode") === "true";
-                
+
                   if (darkMode) {
                     document.documentElement.classList.add("dark-theme");
                   }

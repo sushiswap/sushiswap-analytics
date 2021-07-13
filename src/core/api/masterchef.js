@@ -12,7 +12,7 @@ import {
   poolsQuery,
 } from "../queries/masterchef";
 
-import { POOL_DENY } from "app/core/constants";
+import {BONE_TOKEN_ADDRESS, POOL_DENY, TOPDOG_ADDRESS} from "app/core/constants";
 import { getApollo } from "../apollo";
 import { sub } from "date-fns";
 
@@ -155,7 +155,7 @@ export async function getPools(client = getApollo()) {
   const ethPrice = bundles[0].ethPrice;
 
   const { token } = await getToken(
-    "0x9813037ee2218799597d83d4a5b6f3b6778218d9"
+    BONE_TOKEN_ADDRESS
   );
 
   const bonePrice = ethPrice * token.derivedETH;
@@ -165,7 +165,7 @@ export async function getPools(client = getApollo()) {
     data: { liquidityPositions },
   } = await client.query({
     query: liquidityPositionSubsetQuery,
-    variables: { user: "0x94235659cf8b805b2c658f9ea2d6d6ddbb17c8d7" },
+    variables: { user: TOPDOG_ADDRESS },
   });
 
   await client.cache.writeQuery({

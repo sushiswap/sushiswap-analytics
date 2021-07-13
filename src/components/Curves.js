@@ -32,7 +32,7 @@ const PATTERN_ID = "brush_pattern";
 const accentColor = deepPurple[400];
 
 const selectedBrushStyle = {
-  fill: `url(#${PATTERN_ID})`,
+  fill: `#14182438`,
   stroke: "currentColor",
 };
 
@@ -59,8 +59,8 @@ const axisLeftTickLabelProps = {
   fill: axisColor,
 };
 
-const purple1 = "#6c5efb";
-const purple2 = "#c998ff";
+const purple1 = "#bb7928";
+const purple2 = "#edb341";
 const purple3 = "#a44afe";
 
 const Curves = ({

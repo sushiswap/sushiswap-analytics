@@ -103,7 +103,7 @@ export default function AppBar({
   }
 
   const page =
-    router.pathname === "/" ? "Dashboard" : router.pathname.split("/")[1];
+    router.pathname === "/" ? "Dog Park" : router.pathname.split("/")[1];
   const { isDesktop } = useDetect();
   return (
     <MuiAppBar
@@ -156,7 +156,7 @@ export default function AppBar({
             /
           </Typography>
           <Typography variant="subtitle1" color="textPrimary" noWrap>
-            {page.charAt(0).toUpperCase() + page.slice(1)}
+            {router.pathname === "/bury-shib" ? 'BURIED Shib' : page.charAt(0).toUpperCase() + page.slice(1) }
           </Typography>
         </div>
         {/* <Tooltip title="Toggle theme" enterDelay={300}>

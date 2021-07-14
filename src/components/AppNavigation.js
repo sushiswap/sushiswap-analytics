@@ -92,9 +92,9 @@ export default function AppNavigation() {
       <div className={classes.toolbar}>
         <Hidden smUp implementation="css">
           <Box display="flex" alignItems="center" py={0.5}>
-            <IconButton edge={false} onClick={() => router.push("/")}>
+            {/* <IconButton edge={false} onClick={() => router.push("/")}>
               <Sushi />
-            </IconButton>
+            </IconButton> */}
             <Typography variant="subtitle1" color="textPrimary" noWrap>
               Bone Analytics
             </Typography>
@@ -117,9 +117,9 @@ export default function AppNavigation() {
           selected={router.pathname === "/"}
           onClick={() => router.push("/")}
         >
-          <ListItemIcon>
+          {/* <ListItemIcon>
             <DashboardOutlined />
-          </ListItemIcon>
+          </ListItemIcon> */}
           <ListItemText primary="Dog Park" />
         </ListItem>
 
@@ -130,10 +130,10 @@ export default function AppNavigation() {
           selected={router.pathname === "/bury-shib"}
           onClick={() => router.push("/bury-shib")}
         >
-          <ListItemIcon>
+          {/* <ListItemIcon>
             <FastfoodOutlined />
-          </ListItemIcon>
-          <ListItemText primary="Bury Shib" />
+          </ListItemIcon> */}
+          <ListItemText primary="BURIED Shib" />
           {/* {open ? <ExpandLess /> : <ExpandMore />} */}
         </ListItem>
 
@@ -191,9 +191,9 @@ export default function AppNavigation() {
         </Collapse> */}
 
         <ListItem button>
-          <ListItemIcon>
+          {/* <ListItemIcon>
             <WavesOutlined />
-          </ListItemIcon>
+          </ListItemIcon> */}
           <ListItemText primary="WOOF Pools" />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
@@ -205,9 +205,9 @@ export default function AppNavigation() {
               onClick={() => router.push("/pools/recent")}
               className={classes.nested}
             >
-              <ListItemIcon>
+              {/* <ListItemIcon>
                 <FiberNewOutlined />
-              </ListItemIcon>
+              </ListItemIcon> */}
               <ListItemText primary="Recent" />
             </ListItem>
             <ListItem
@@ -216,9 +216,9 @@ export default function AppNavigation() {
               onClick={() => router.push("/pools")}
               className={classes.nested}
             >
-              <ListItemIcon>
+              {/* <ListItemIcon>
                 <DetailsOutlined />
-              </ListItemIcon>
+              </ListItemIcon> */}
               <ListItemText primary="All" />
             </ListItem>
 
@@ -248,9 +248,9 @@ export default function AppNavigation() {
         </Collapse>
 
         <ListItem button>
-          <ListItemIcon>
+          {/* <ListItemIcon>
             <LinkOutlined />
-          </ListItemIcon>
+          </ListItemIcon> */}
           <ListItemText primary="Pairs" />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
@@ -262,9 +262,9 @@ export default function AppNavigation() {
               onClick={() => router.push("/pairs/recent")}
               className={classes.nested}
             >
-              <ListItemIcon>
+              {/* <ListItemIcon>
                 <FiberNewOutlined />
-              </ListItemIcon>
+              </ListItemIcon> */}
               <ListItemText primary="Recent" />
             </ListItem>
             <ListItem
@@ -273,9 +273,9 @@ export default function AppNavigation() {
               onClick={() => router.push("/pairs")}
               className={classes.nested}
             >
-              <ListItemIcon>
+              {/* <ListItemIcon>
                 <DetailsOutlined />
-              </ListItemIcon>
+              </ListItemIcon> */}
               <ListItemText primary="All" />
             </ListItem>
 
@@ -285,9 +285,9 @@ export default function AppNavigation() {
               onClick={() => router.push("/pairs/gainers")}
               className={classes.nested}
             >
-              <ListItemIcon>
+              {/* <ListItemIcon>
                 <TrendingUpOutlined />
-              </ListItemIcon>
+              </ListItemIcon> */}
               <ListItemText primary="Doggos" />
             </ListItem>
             <ListItem
@@ -296,9 +296,9 @@ export default function AppNavigation() {
               onClick={() => router.push("/pairs/losers")}
               className={classes.nested}
             >
-              <ListItemIcon>
+              {/* <ListItemIcon>
                 <TrendingDownOutlined />
-              </ListItemIcon>
+              </ListItemIcon> */}
               <ListItemText primary="Puppies" />
             </ListItem>
           </List>
@@ -309,9 +309,9 @@ export default function AppNavigation() {
           selected={router.pathname.includes("tokens")}
           onClick={() => router.push("/tokens")}
         >
-          <ListItemIcon>
+          {/* <ListItemIcon>
             <MoneyOutlined />
-          </ListItemIcon>
+          </ListItemIcon> */}
           <ListItemText primary="Tokens" />
         </ListItem>
         <ListItem
@@ -327,9 +327,9 @@ export default function AppNavigation() {
             }
           }}
         >
-          <ListItemIcon>
+          {/* <ListItemIcon>
             <AccountTreeOutlined />
-          </ListItemIcon>
+          </ListItemIcon> */}
           <ListItemText primary="Portfolio" />
         </ListItem>
       </List>

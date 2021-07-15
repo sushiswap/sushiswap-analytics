@@ -1,18 +1,18 @@
 import { AppShell, Curves, KPI } from "app/components";
 import { Grid, Paper, useTheme } from "@material-ui/core";
 import {
-  buryShibHistoriesQuery,
-  buryShibQuery,
+  buryLeashHistoriesQuery,
+  buryLeashQuery,
   dayDatasQuery,
   ethPriceQuery,
   factoryQuery,
   getApollo,
-  getBuryShib,
-  getBuryShibHistories,
+  getBuryLeash,
+  getBuryLeashHistories,
   getDayData,
   getEthPrice,
   getFactory,
-  getShibToken,
+  getLeashToken,
   tokenQuery,
   useInterval,
 } from "app/core";
@@ -23,7 +23,7 @@ import { ParentSize } from "@visx/responsive";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from "@apollo/client";
-import {SHIB_TOKEN_ADDRESS} from "app/core/constants";
+import {LEASH_TOKEN_ADDRESS} from "app/core/constants";
 
 const useStyles = makeStyles((theme) => ({
   charts: {
@@ -37,24 +37,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function BuryShibPage() {
+function BuryLeashPage() {
   const classes = useStyles();
 
   const theme = useTheme();
 
-  const {
-    data: { bury },
-  } = useQuery(buryShibQuery, {
+  const results = useQuery(buryLeashQuery, {
     context: {
-      clientName: "buryShib",
+      clientName: "buryLeash",
     },
   });
 
+  // console.log(results);
+
+  const {
+    data: { bury },
+  } = results
+
   const {
     data: { histories },
-  } = useQuery(buryShibHistoriesQuery, {
+  } = useQuery(buryLeashHistoriesQuery, {
     context: {
-      clientName: "buryShib",
+      clientName: "buryLeash",
     },
   });
 
@@ -67,7 +71,7 @@ function BuryShibPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: SHIB_TOKEN_ADDRESS,
+      id: LEASH_TOKEN_ADDRESS,
     },
   });
 
@@ -79,26 +83,26 @@ function BuryShibPage() {
     data: { dayDatas },
   } = useQuery(dayDatasQuery);
 
-  const shibPrice =
+  const leashPrice =
     parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   useInterval(async () => {
     await Promise.all([
-      getBuryShib,
-      getBuryShibHistories,
+      getBuryLeash,
+      getBuryLeashHistories,
       getDayData,
       getFactory,
-      getShibToken,
+      getLeashToken,
       getEthPrice,
     ]);
   }, 60000);
 
   const {
-    shibStakedUSD,
-    shibHarvestedUSD,
-    xShibMinted,
-    xShibBurned,
-    xShib,
+    leashStakedUSD,
+    leashHarvestedUSD,
+    xLeashMinted,
+    xLeashBurned,
+    xLeash,
     apr,
     apy,
     fees,
@@ -106,31 +110,31 @@ function BuryShibPage() {
     (previousValue, currentValue) => {
       const date = currentValue.date * 1000;
       const dayData = dayDatas.find((d) => d.date === currentValue.date);
-      previousValue["shibStakedUSD"].push({
+      previousValue["leashStakedUSD"].push({
         date,
-        value: parseFloat(currentValue.shibStakedUSD),
+        value: parseFloat(currentValue.leashStakedUSD),
       });
-      previousValue["shibHarvestedUSD"].push({
+      previousValue["leashHarvestedUSD"].push({
         date,
-        value: parseFloat(currentValue.shibHarvestedUSD),
+        value: parseFloat(currentValue.leashHarvestedUSD),
       });
 
-      previousValue["xShibMinted"].push({
+      previousValue["xLeashMinted"].push({
         date,
-        value: parseFloat(currentValue.xShibMinted),
+        value: parseFloat(currentValue.xLeashMinted),
       });
-      previousValue["xShibBurned"].push({
+      previousValue["xLeashBurned"].push({
         date,
-        value: parseFloat(currentValue.xShibBurned),
+        value: parseFloat(currentValue.xLeashBurned),
       });
-      previousValue["xShib"].push({
+      previousValue["xLeash"].push({
         date,
-        value: parseFloat(currentValue.xShibSupply),
+        value: parseFloat(currentValue.xLeashSupply),
       });
       const apr =
-        (((dayData.volumeUSD * 0.01 * 0.01) / currentValue.xShibSupply) *
+        (((dayData.volumeUSD * 0.01 * 0.01) / currentValue.xLeashSupply) *
           365) /
-        (currentValue.ratio * shibPrice);
+        (currentValue.ratio * leashPrice);
       previousValue["apr"].push({
         date,
         value: parseFloat(apr * 100),
@@ -146,11 +150,11 @@ function BuryShibPage() {
       return previousValue;
     },
     {
-      shibStakedUSD: [],
-      shibHarvestedUSD: [],
-      xShibMinted: [],
-      xShibBurned: [],
-      xShib: [],
+      leashStakedUSD: [],
+      leashHarvestedUSD: [],
+      xLeashMinted: [],
+      xLeashBurned: [],
+      xLeash: [],
       apr: [],
       apy: [],
       fees: [],
@@ -166,14 +170,14 @@ function BuryShibPage() {
 
   const APR =
     (((oneDayVolume * 0.05 * 0.01) / bury.totalSupply) * 365) /
-    (bury.ratio * shibPrice);
+    (bury.ratio * leashPrice);
 
   const APY = Math.pow(1 + APR / 365, 365) - 1;
 
   return (
     <AppShell>
       <Head>
-        <title>Bury Shib | ShibaSwap Analytics</title>
+        <title>Bury Leash | ShibaSwap Analytics</title>
       </Head>
 
       <Grid container spacing={3}>
@@ -181,8 +185,8 @@ function BuryShibPage() {
           <Grid container spacing={3}>
             {/* <Grid item xs>
               <KPI
-                title="xShib Age"
-                value={parseFloat(bury.xShibAge).toLocaleString()}
+                title="xLeash Age"
+                value={parseFloat(bury.xLeashAge).toLocaleString()}
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
@@ -192,16 +196,16 @@ function BuryShibPage() {
               <KPI title="APY (Avg)" value={averageApy} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="xShib" value={bury.totalSupply} format="integer" />
+              <KPI title="xLeash" value={bury.totalSupply} format="integer" />
             </Grid>
             {/* <Grid item xs={12} sm={6} md={3}>
               <KPI
-                title="Shib"
-                value={parseInt(bury.shibStaked).toLocaleString()}
+                title="Leash"
+                value={parseInt(bury.leashStaked).toLocaleString()}
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="xShib:Shib" value={Number(bury.ratio).toFixed(4)} />
+              <KPI title="xLeash:Leash" value={Number(bury.ratio).toFixed(4)} />
             </Grid>
           </Grid>
         </Grid>
@@ -212,13 +216,13 @@ function BuryShibPage() {
             style={{ height: 300, position: "relative" }}
           >
             <Lines
-              title="xShib Age & xShib Age Destroyed"
+              title="xLeash Age & xLeash Age Destroyed"
               margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
               strokes={[
                 theme.palette.positive.light,
                 theme.palette.negative.light,
               ]}
-              lines={[xShibAge, xShibAgeDestroyed]}
+              lines={[xLeashAge, xLeashAgeDestroyed]}
             />
           </Paper>
         </Grid> */}
@@ -271,9 +275,9 @@ function BuryShibPage() {
                 <Curves
                   width={width}
                   height={height}
-                  title="xShib:Shib & Shib:xShib"
+                  title="xLeash:Leash & Leash:xLeash"
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[xShibShib, xShibPerShib]}
+                  data={[xLeashLeash, xLeashPerLeash]}
                 />
               )}
             </ParentSize>
@@ -290,9 +294,9 @@ function BuryShibPage() {
                 <Curves
                   width={width}
                   height={height}
-                  data={[shibStakedUSD, shibHarvestedUSD]}
+                  data={[leashStakedUSD, leashHarvestedUSD]}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  labels={["Shib Staked (USD)", "Shib Harvested (USD)"]}
+                  labels={["Leash Staked (USD)", "Leash Harvested (USD)"]}
                 />
               )}
             </ParentSize>
@@ -310,8 +314,8 @@ function BuryShibPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[xShibMinted, xShibBurned]}
-                  labels={["xShib Minted", "xShib Burned"]}
+                  data={[xLeashMinted, xLeashBurned]}
+                  labels={["xLeash Minted", "xLeash Burned"]}
                 />
               )}
             </ParentSize>
@@ -328,17 +332,17 @@ function BuryShibPage() {
                 <Curves
                   width={width}
                   height={height}
-                  title="xShib Total Supply"
+                  title="xLeash Total Supply"
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[xShib]}
+                  data={[xLeash]}
                 />
               )}
             </ParentSize>
           </Paper>
 
           {/* <Chart
-            title="xShib Total Supply"
-            data={xShib}
+            title="xLeash Total Supply"
+            data={xLeash}
             height={400}
             margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
             tooptip
@@ -354,11 +358,11 @@ function BuryShibPage() {
 
 export async function getStaticProps() {
   const client = getApollo();
-  await getBuryShib(client);
-  await getBuryShibHistories(client);
+  await getBuryLeash(client);
+  await getBuryLeashHistories(client);
   await getFactory(client);
   await getDayData(client);
-  await getShibToken(client);
+  await getLeashToken(client);
   await getEthPrice(client);
   return {
     props: {
@@ -368,4 +372,4 @@ export async function getStaticProps() {
   };
 }
 
-export default BuryShibPage;
+export default BuryLeashPage;

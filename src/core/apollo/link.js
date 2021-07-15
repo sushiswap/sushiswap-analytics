@@ -118,7 +118,19 @@ export default split(
             return operation.getContext().clientName === "buryShib";
           },
           buryShib,
-          exchange
+          split(
+            (operation) => {
+              return operation.getContext().clientName === "buryLeash";
+            },
+            buryLeash,
+            split(
+              (operation) => {
+                return operation.getContext().clientName === "buryBone";
+              },
+              buryBone,
+              exchange
+            )
+          )
         ),
       )
     )

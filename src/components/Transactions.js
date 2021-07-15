@@ -39,7 +39,7 @@ export default function Transactions({ transactions, txCount }) {
 
   const now = new Date();
 
- 
+
 
   return (
     <div className={classes.root}>
@@ -50,8 +50,8 @@ export default function Transactions({ transactions, txCount }) {
           {
             key: "__typename",
             label: "Type",
-            render: (row) => { 
-              console.log(row)
+            render: (row) => {
+              // console.log(row)
               return (
               <Typography variant="body2" noWrap>
                 {row.__typename}{" "}

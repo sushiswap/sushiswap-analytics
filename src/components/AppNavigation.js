@@ -123,7 +123,6 @@ export default function AppNavigation() {
           <ListItemText primary="Dog Park" />
         </ListItem>
 
-
         <ListItem
           key="/bury-shib"
           button
@@ -133,23 +132,37 @@ export default function AppNavigation() {
           {/* <ListItemIcon>
             <FastfoodOutlined />
           </ListItemIcon> */}
-          <ListItemText primary="BURIED Shib" />
+          <ListItemText primary="Bury Shib" />
+          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+        </ListItem>
+
+        <ListItem
+          key="/bury-leash"
+          button
+          selected={router.pathname === "/bury-leash"}
+          onClick={() => router.push("/bury-leash")}
+        >
+          {/*<ListItemIcon>*/}
+          {/*<FastfoodOutlined />*/}
+          {/*</ListItemIcon>*/}
+          <ListItemText primary="Bury Leash" />
           {/* {open ? <ExpandLess /> : <ExpandMore />} */}
         </ListItem>
 
 
-        {/*<ListItem*/}
-        {/*  key="/bury-leash"*/}
-        {/*  button*/}
-        {/*  selected={router.pathname === "/bury-leash"}*/}
-        {/*  onClick={() => router.push("/bury-leash")}*/}
-        {/*>*/}
-        {/*  <ListItemIcon>*/}
-        {/*    <FastfoodOutlined />*/}
-        {/*  </ListItemIcon>*/}
-        {/*  <ListItemText primary="Bury Leash" />*/}
-        {/*  /!* {open ? <ExpandLess /> : <ExpandMore />} *!/*/}
-        {/*</ListItem>*/}
+        <ListItem
+          key="/bury-bone"
+          button
+          selected={router.pathname === "/bury-bone"}
+          onClick={() => router.push("/bury-bone")}
+        >
+          {/*<ListItemIcon>*/}
+          {/*<FastfoodOutlined />*/}
+          {/*</ListItemIcon>*/}
+          <ListItemText primary="Bury Bone" />
+          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+        </ListItem>
+
 
 
         {/*<ListItem*/}

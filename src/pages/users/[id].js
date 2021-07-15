@@ -37,13 +37,13 @@ import {
   tokenQuery,
   useInterval,
   userIdsQuery,
-  userQuery,
+  userQuery, buryShibUserQuery,
 } from "app/core";
 import { getUnixTime, startOfMinute, startOfSecond } from "date-fns";
 
 import { AvatarGroup } from "@material-ui/lab";
 import Head from "next/head";
-import { POOL_DENY } from "app/core/constants";
+import {BONE_TOKEN_ADDRESS, POOL_DENY} from "app/core/constants";
 import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -77,14 +77,15 @@ function UserPage() {
     pollInterval: 60000,
   });
 
-  const { data: barData } = useQuery(barUserQuery, {
+  const { data: barData } = useQuery(buryShibUserQuery, {
     variables: {
       id: id.toLowerCase(),
     },
     context: {
-      clientName: "bar",
+      clientName: "buryShib",
     },
   });
+  console.log(barData)
 
   const { data: poolData } = useQuery(poolUserQuery, {
     variables: {
@@ -99,7 +100,7 @@ function UserPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0x9813037ee2218799597d83d4a5b6f3b6778218d9",
+      id: BONE_TOKEN_ADDRESS,
     },
   });
 
@@ -127,33 +128,33 @@ function UserPage() {
   //   60000
   // );
 
-  const sushiPrice =
+  const bonePrice =
     parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   // BAR
-  const xSushi = parseFloat(barData?.user?.xSushi);
+  const xShib = parseFloat(barData?.user?.xShib);
 
   const barPending =
-    (xSushi * parseFloat(barData?.user?.bar?.sushiStaked)) /
+    (xShib * parseFloat(barData?.user?.bar?.shibStaked)) /
     parseFloat(barData?.user?.bar?.totalSupply);
 
-  const xSushiTransfered =
-    barData?.user?.xSushiIn > barData?.user?.xSushiOut
-      ? parseFloat(barData?.user?.xSushiIn) -
-        parseFloat(barData?.user?.xSushiOut)
-      : parseFloat(barData?.user?.xSushiOut) -
-        parseFloat(barData?.user?.xSushiIn);
+  const xShibTransfered =
+    barData?.user?.xShibIn > barData?.user?.xShibOut
+      ? parseFloat(barData?.user?.xShibIn) -
+        parseFloat(barData?.user?.xShibOut)
+      : parseFloat(barData?.user?.xShibOut) -
+        parseFloat(barData?.user?.xShibIn);
 
-  const barStaked = barData?.user?.sushiStaked;
+  const barStaked = barData?.user?.shibStaked;
 
-  const barStakedUSD = barData?.user?.sushiStakedUSD;
+  const barStakedUSD = barData?.user?.shibStakedUSD;
 
-  const barHarvested = barData?.user?.sushiHarvested;
-  const barHarvestedUSD = barData?.user?.sushiHarvestedUSD;
+  const barHarvested = barData?.user?.shibHarvested;
+  const barHarvestedUSD = barData?.user?.shibHarvestedUSD;
 
   const barPendingUSD = barPending > 0 ? barPending * sushiPrice : 0;
 
-  const barRoiSushi =
+  const barRoiShib =
     barPending -
     (parseFloat(barData?.user?.sushiStaked) -
       parseFloat(barData?.user?.sushiHarvested) +
@@ -198,7 +199,7 @@ function UserPage() {
           currentValue.rewardDebt) /
           1e18
       );
-    }, 0) * sushiPrice;
+    }, 0) * bonePrice;
 
   const [
     poolEntriesUSD,
@@ -210,7 +211,7 @@ function UserPage() {
       return [
         entries + parseFloat(currentValue.entryUSD),
         exits + parseFloat(currentValue.exitUSD),
-        harvested + parseFloat(currentValue.sushiHarvestedUSD),
+        harvested + parseFloat(currentValue.boneHarvestedUSD),
       ];
     },
     [0, 0, 0]
@@ -227,7 +228,7 @@ function UserPage() {
   return (
     <AppShell>
       <Head>
-        <title>User {id} | SushiSwap Analytics</title>
+        <title>User {id} | ShibaSwap Analytics</title>
       </Head>
 
       <PageHeader>
@@ -236,14 +237,14 @@ function UserPage() {
         </Typography>
       </PageHeader>
 
-      <Typography
-        variant="h6"
-        component="h2"
-        color="textSecondary"
-        gutterBottom
-      >
-        Bar
-      </Typography>
+      {/*<Typography*/}
+      {/*  variant="h6"*/}
+      {/*  component="h2"*/}
+      {/*  color="textSecondary"*/}
+      {/*  gutterBottom*/}
+      {/*>*/}
+      {/*  Bar*/}
+      {/*</Typography>*/}
 
       {!barData?.user?.bar ? (
         <Box mb={4}>

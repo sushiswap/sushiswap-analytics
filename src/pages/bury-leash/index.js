@@ -168,11 +168,14 @@ function BuryLeashPage() {
 
   const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
 
+  const leashApr = dayDatas && (((parseFloat(dayDatas[0]?.volumeUSD) * (0.05 / 3) * 0.2) / parseFloat(bury?.totalSupply)) * 365) 
+  / (parseFloat(bury?.ratio) * leashPrice)
+
   const APR =
     (((oneDayVolume * 0.05 * 0.01) / bury.totalSupply) * 365) /
     (bury.ratio * leashPrice);
 
-  const APY = Math.pow(1 + APR / 365, 365) - 1;
+  const APY = Math.pow(1 + leashApr / 365, 365) - 1;
 
   return (
     <AppShell>
@@ -192,8 +195,11 @@ function BuryLeashPage() {
             <Grid item xs={12} sm={6} md={3}>
               <KPI title="APY (24h)" value={APY * 100} format="percent" />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            {/* <Grid item xs={12} sm={6} md={3}>
               <KPI title="APY (Avg)" value={averageApy} format="percent" />
+            </Grid> */}
+            <Grid item xs={12} sm={6} md={3}>
+              <KPI title="APR (24h)" value={leashApr} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <KPI title="xLeash" value={bury.totalSupply} format="integer" />

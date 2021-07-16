@@ -25,7 +25,7 @@ import {
   getPoolHistories,
   getPoolIds,
   getPools,
-  getSushiToken,
+  getBoneToken,
   poolHistoryQuery,
   poolQuery,
   tokenQuery,
@@ -437,7 +437,7 @@ function PoolPage() {
 export async function getStaticProps({ params: { id } }) {
   const client = getApollo();
   await getEthPrice(client);
-  await getSushiToken(client);
+  await getBoneToken(client);
   await getPool(id, client);
   await getPoolHistories(id, client);
   return {

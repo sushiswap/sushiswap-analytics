@@ -1,20 +1,20 @@
 import { AppShell, Curves, KPI } from "app/components";
 import { Grid, Paper, useTheme } from "@material-ui/core";
 import {
-  buryShibHistoriesQuery,
-  buryShibQuery,
+  buryBoneHistoriesQuery,
+  buryBoneQuery,
   dayDatasQuery,
   ethPriceQuery,
   factoryQuery,
   getApollo,
-  getBuryShib,
-  getBuryShibHistories,
+  getBuryBone,
+  getBuryBoneHistories,
   getDayData,
   getEthPrice,
   getFactory,
-  getShibToken,
+  getBoneToken,
   tokenQuery,
-  useInterval
+  useInterval,
 } from "app/core";
 
 import Chart from "../../components/Chart";
@@ -23,7 +23,7 @@ import { ParentSize } from "@visx/responsive";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from "@apollo/client";
-import {SHIB_TOKEN_ADDRESS} from "app/core/constants";
+import {BONE_TOKEN_ADDRESS} from "app/core/constants";
 
 const useStyles = makeStyles((theme) => ({
   charts: {
@@ -37,24 +37,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function BuryShibPage() {
+function BuryBonePage() {
   const classes = useStyles();
 
   const theme = useTheme();
 
-  const {
-    data: { bury },
-  } = useQuery(buryShibQuery, {
+  const results = useQuery(buryBoneQuery, {
     context: {
-      clientName: "buryShib",
+      clientName: "buryBone",
     },
   });
 
+
+  const {
+    data: { bury },
+  } = results
+
   const {
     data: { histories },
-  } = useQuery(buryShibHistoriesQuery, {
+  } = useQuery(buryBoneHistoriesQuery, {
     context: {
-      clientName: "buryShib",
+      clientName: "buryBone",
     },
   });
 
@@ -67,7 +70,7 @@ function BuryShibPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: SHIB_TOKEN_ADDRESS,
+      id: BONE_TOKEN_ADDRESS,
     },
   });
 
@@ -79,26 +82,26 @@ function BuryShibPage() {
     data: { dayDatas },
   } = useQuery(dayDatasQuery);
 
-  const shibPrice =
+  const bonePrice =
     parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   useInterval(async () => {
     await Promise.all([
-      getBuryShib,
-      getBuryShibHistories,
+      getBuryBone,
+      getBuryBoneHistories,
       getDayData,
       getFactory,
-      getShibToken,
+      getBoneToken,
       getEthPrice,
     ]);
   }, 60000);
 
   const {
-    shibStakedUSD,
-    shibHarvestedUSD,
-    xShibMinted,
-    xShibBurned,
-    xShib,
+    boneStakedUSD,
+    boneHarvestedUSD,
+    tBoneMinted,
+    tBoneBurned,
+    tBone,
     apr,
     apy,
     fees,
@@ -106,31 +109,31 @@ function BuryShibPage() {
     (previousValue, currentValue) => {
       const date = currentValue.date * 1000;
       const dayData = dayDatas.find((d) => d.date === currentValue.date);
-      previousValue["shibStakedUSD"].push({
+      previousValue["boneStakedUSD"].push({
         date,
-        value: parseFloat(currentValue.shibStakedUSD),
+        value: parseFloat(currentValue.boneStakedUSD),
       });
-      previousValue["shibHarvestedUSD"].push({
+      previousValue["boneHarvestedUSD"].push({
         date,
-        value: parseFloat(currentValue.shibHarvestedUSD),
+        value: parseFloat(currentValue.boneHarvestedUSD),
       });
 
-      previousValue["xShibMinted"].push({
+      previousValue["tBoneMinted"].push({
         date,
-        value: parseFloat(currentValue.xShibMinted),
+        value: parseFloat(currentValue.tBoneMinted),
       });
-      previousValue["xShibBurned"].push({
+      previousValue["tBoneBurned"].push({
         date,
-        value: parseFloat(currentValue.xShibBurned),
+        value: parseFloat(currentValue.tBoneBurned),
       });
-      previousValue["xShib"].push({
+      previousValue["tBone"].push({
         date,
-        value: parseFloat(currentValue.xShibSupply),
+        value: parseFloat(currentValue.tBoneSupply),
       });
       const apr =
-        (((dayData.volumeUSD * 0.01 * 0.01) / currentValue.xShibSupply) *
+        (((dayData.volumeUSD * 0.01 * 0.01) / currentValue.tBoneSupply) *
           365) /
-        (currentValue.ratio * shibPrice);
+        (currentValue.ratio * bonePrice);
       previousValue["apr"].push({
         date,
         value: parseFloat(apr * 100),
@@ -146,11 +149,11 @@ function BuryShibPage() {
       return previousValue;
     },
     {
-      shibStakedUSD: [],
-      shibHarvestedUSD: [],
-      xShibMinted: [],
-      xShibBurned: [],
-      xShib: [],
+      boneStakedUSD: [],
+      boneHarvestedUSD: [],
+      tBoneMinted: [],
+      tBoneBurned: [],
+      tBone: [],
       apr: [],
       apy: [],
       fees: [],
@@ -164,19 +167,19 @@ function BuryShibPage() {
 
   const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
 
-  const shibApr = dayDatas && (((parseFloat(dayDatas[0]?.volumeUSD) * (0.05 / 3) * 0.2) / parseFloat(bury?.totalSupply)) * 365) 
-  / (parseFloat(bury?.ratio) * shibPrice)
+  const boneApr = dayDatas && (((parseFloat(dayDatas[0]?.volumeUSD) * (0.05 / 3) * 0.2) / parseFloat(bury?.totalSupply)) * 365) 
+  / (parseFloat(bury?.ratio) * bonePrice)
 
   const APR =
-    (((oneDayVolume * (0.05 / 3) * 0.2) / bury.totalSupply) * 365) /
-    (bury.ratio * shibPrice);
+    (((oneDayVolume * 0.05 * 0.01) / bury.totalSupply) * 365) /
+    (bury.ratio * bonePrice);
 
-  const APY = Math.pow(1 + shibApr / 365, 365) - 1;
+  const APY = Math.pow(1 + boneApr / 365, 365) - 1;
 
   return (
     <AppShell>
       <Head>
-        <title>Bury Shib | ShibaSwap Analytics</title>
+        <title>Bury Bone | ShibaSwap Analytics</title>
       </Head>
 
       <Grid container spacing={3}>
@@ -184,8 +187,8 @@ function BuryShibPage() {
           <Grid container spacing={3}>
             {/* <Grid item xs>
               <KPI
-                title="xShib Age"
-                value={parseFloat(bury.xShibAge).toLocaleString()}
+                title="tBone Age"
+                value={parseFloat(bury.tBoneAge).toLocaleString()}
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
@@ -195,19 +198,19 @@ function BuryShibPage() {
               <KPI title="APY (Avg)" value={averageApy} format="percent" />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="APR (24h)" value={shibApr} format="percent" />
+              <KPI title="APR (24h)" value={boneApr} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="xShib" value={bury.totalSupply} format="integer" />
+              <KPI title="tBone" value={bury.totalSupply} format="integer" />
             </Grid>
             {/* <Grid item xs={12} sm={6} md={3}>
               <KPI
-                title="Shib"
-                value={parseInt(bury.shibStaked).toLocaleString()}
+                title="Bone"
+                value={parseInt(bury.boneStaked).toLocaleString()}
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="xShib:Shib" value={Number(bury.ratio).toFixed(4)} />
+              <KPI title="tBone:Bone" value={Number(bury.ratio).toFixed(4)} />
             </Grid>
           </Grid>
         </Grid>
@@ -218,13 +221,13 @@ function BuryShibPage() {
             style={{ height: 300, position: "relative" }}
           >
             <Lines
-              title="xShib Age & xShib Age Destroyed"
+              title="tBone Age & tBone Age Destroyed"
               margin={{ top: 64, right: 32, bottom: 32, left: 64 }}
               strokes={[
                 theme.palette.positive.light,
                 theme.palette.negative.light,
               ]}
-              lines={[xShibAge, xShibAgeDestroyed]}
+              lines={[tBoneAge, tBoneAgeDestroyed]}
             />
           </Paper>
         </Grid> */}
@@ -277,9 +280,9 @@ function BuryShibPage() {
                 <Curves
                   width={width}
                   height={height}
-                  title="xShib:Shib & Shib:xShib"
+                  title="tBone:Bone & Bone:tBone"
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[xShibShib, xShibPerShib]}
+                  data={[tBoneBone, tBonePerBone]}
                 />
               )}
             </ParentSize>
@@ -296,9 +299,9 @@ function BuryShibPage() {
                 <Curves
                   width={width}
                   height={height}
-                  data={[shibStakedUSD, shibHarvestedUSD]}
+                  data={[boneStakedUSD, boneHarvestedUSD]}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  labels={["Shib Staked (USD)", "Shib Woofed (USD)"]}
+                  labels={["Bone Staked (USD)", "Bone Harvested (USD)"]}
                 />
               )}
             </ParentSize>
@@ -316,8 +319,8 @@ function BuryShibPage() {
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[xShibMinted, xShibBurned]}
-                  labels={["xShib Minted", "xShib Burned"]}
+                  data={[tBoneMinted, tBoneBurned]}
+                  labels={["tBone Minted", "tBone Burned"]}
                 />
               )}
             </ParentSize>
@@ -334,17 +337,17 @@ function BuryShibPage() {
                 <Curves
                   width={width}
                   height={height}
-                  title="xShib Total Supply"
+                  title="tBone Total Supply"
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  data={[xShib]}
+                  data={[tBone]}
                 />
               )}
             </ParentSize>
           </Paper>
 
           {/* <Chart
-            title="xShib Total Supply"
-            data={xShib}
+            title="tBone Total Supply"
+            data={tBone}
             height={400}
             margin={{ top: 56, right: 24, bottom: 0, left: 56 }}
             tooptip
@@ -360,11 +363,11 @@ function BuryShibPage() {
 
 export async function getStaticProps() {
   const client = getApollo();
-  await getBuryShib(client);
-  await getBuryShibHistories(client);
+  await getBuryBone(client);
+  await getBuryBoneHistories(client);
   await getFactory(client);
   await getDayData(client);
-  await getShibToken(client);
+  await getBoneToken(client);
   await getEthPrice(client);
   return {
     props: {
@@ -374,4 +377,4 @@ export async function getStaticProps() {
   };
 }
 
-export default BuryShibPage;
+export default BuryBonePage;

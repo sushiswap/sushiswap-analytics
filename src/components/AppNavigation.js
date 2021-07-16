@@ -132,7 +132,6 @@ export default function AppNavigation() {
           <ListItemText primary="Dog Park" />
         </ListItem>
 
-
         <ListItem
           key="/bury-shib"
           button
@@ -142,24 +141,36 @@ export default function AppNavigation() {
           <ListItemIcon>
             <StarIcon />
           </ListItemIcon>
-          <ListItemText primary="BURIED Shib" />
+          <ListItemText primary="Bury Shib" />
+          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+        </ListItem>
+
+        <ListItem
+          key="/bury-leash"
+          button
+          selected={router.pathname === "/bury-leash"}
+          onClick={() => router.push("/bury-leash")}
+        >
+          <ListItemIcon>
+            <StarIcon />
+          </ListItemIcon>
+          <ListItemText primary="Bury Leash" />
           {/* {open ? <ExpandLess /> : <ExpandMore />} */}
         </ListItem>
 
 
-        {/*<ListItem*/}
-        {/*  key="/bury-leash"*/}
-        {/*  button*/}
-        {/*  selected={router.pathname === "/bury-leash"}*/}
-        {/*  onClick={() => router.push("/bury-leash")}*/}
-        {/*>*/}
-        {/*  <ListItemIcon>*/}
-        {/*    <StarIcon />*/}
-        {/*  </ListItemIcon>*/}
-        {/*  <ListItemText primary="Bury Leash" />*/}
-        {/*  /!* {open ? <ExpandLess /> : <ExpandMore />} *!/*/}
-        {/*</ListItem>*/}
-
+        <ListItem
+          key="/bury-bone"
+          button
+          selected={router.pathname === "/bury-bone"}
+          onClick={() => router.push("/bury-bone")}
+        >
+          <ListItemIcon>
+            <StarIcon />
+          </ListItemIcon>
+          <ListItemText primary="Bury Bone" />
+          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+        </ListItem>
 
         {/*<ListItem*/}
         {/*  key="/bury-bone"*/}
@@ -173,7 +184,6 @@ export default function AppNavigation() {
         {/*  <ListItemText primary="Bury Bone" />*/}
         {/*  /!* {open ? <ExpandLess /> : <ExpandMore />} *!/*/}
         {/*</ListItem>*/}
-
 
         {/* <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>

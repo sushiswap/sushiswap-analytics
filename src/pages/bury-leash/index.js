@@ -15,6 +15,7 @@ import {
   getLeashToken,
   tokenQuery,
   useInterval,
+  getBoneToken
 } from "app/core";
 
 import Chart from "../../components/Chart";
@@ -23,7 +24,7 @@ import { ParentSize } from "@visx/responsive";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from "@apollo/client";
-import {LEASH_TOKEN_ADDRESS} from "app/core/constants";
+import {LEASH_TOKEN_ADDRESS, BONE_TOKEN_ADDRESS} from "app/core/constants";
 
 const useStyles = makeStyles((theme) => ({
   charts: {
@@ -94,6 +95,7 @@ function BuryLeashPage() {
       getFactory,
       getLeashToken,
       getEthPrice,
+      getBoneToken
     ]);
   }, 60000);
 
@@ -177,6 +179,17 @@ function BuryLeashPage() {
 
   const APY = Math.pow(1 + leashApr / 365, 365) - 1;
 
+  const boneToken = useQuery(tokenQuery, {
+    variables: {
+      id: BONE_TOKEN_ADDRESS,
+    },
+  });
+
+  const bonePrice =
+    parseFloat(boneToken?.data?.token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+
+  const leashBoneApr = ((10 * parseInt(bonePrice))/(bury?.leashStakedUSD)) * 277 * 24 * 30 * 12 * 100;
+
   return (
     <AppShell>
       <Head>
@@ -193,13 +206,16 @@ function BuryLeashPage() {
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="APY (24h)" value={APY * 100} format="percent" />
+              <KPI title="LEASH APY (24h)" value={APY * 100} format="percent" />
             </Grid>
             {/* <Grid item xs={12} sm={6} md={3}>
               <KPI title="APY (Avg)" value={averageApy} format="percent" />
             </Grid> */}
-            <Grid item xs={12} sm={6} md={3}>
+            {/* <Grid item xs={12} sm={6} md={3}>
               <KPI title="APR (24h)" value={leashApr} format="percent" />
+            </Grid> */}
+            <Grid item xs={12} sm={6} md={3}>
+              <KPI title="Additional BONE APR (24h)" value={leashBoneApr} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <KPI title="xLeash" value={bury.totalSupply} format="integer" />
@@ -370,6 +386,7 @@ export async function getStaticProps() {
   await getDayData(client);
   await getLeashToken(client);
   await getEthPrice(client);
+  await getBoneToken(client);
   return {
     props: {
       initialApolloState: client.cache.extract(),

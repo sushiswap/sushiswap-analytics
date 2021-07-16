@@ -121,19 +121,15 @@ function UserPage() {
     },
   });
 
-  console.log("token:: ", token)
+  // console.log("token:: ", token)
 
-  const {
-    data: { shibToken },
-  } = useQuery(tokenQuery, {
+  const shibTokenData = useQuery(tokenQuery, {
     variables: {
       id: SHIB_TOKEN_ADDRESS,
     },
   });
 
-  const {
-    data: { leashToken },
-  } = useQuery(tokenQuery, {
+  const leashTokenData = useQuery(tokenQuery, {
     variables: {
       id: LEASH_TOKEN_ADDRESS,
     },
@@ -166,9 +162,9 @@ function UserPage() {
   const bonePrice =
     parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
   const shibPrice =
-    parseFloat(shibToken?.derivedETH) * parseFloat(bundles[0].ethPrice);
+    parseFloat(shibTokenData?.data?.token?.derivedETH) * parseFloat(bundles[0].ethPrice);
   const leashPrice =
-    parseFloat(leashToken?.derivedETH) * parseFloat(bundles[0].ethPrice);
+    parseFloat(leashTokenData?.data?.token.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   const { data: blocksData } = useQuery(latestBlockQuery, {
     context: {

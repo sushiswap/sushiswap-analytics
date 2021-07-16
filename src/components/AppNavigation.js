@@ -54,7 +54,7 @@ import Sushi from "./Sushi";
 import { useRouter } from "next/router";
 import LandscapeIcon from '@material-ui/icons/Landscape';
 import StarIcon from '@material-ui/icons/Star';
-import GradeIcon from '@material-ui/icons/Grade';
+import PetsIcon from '@material-ui/icons/Pets';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import TripOriginIcon from '@material-ui/icons/TripOrigin';
 import ViewAgendaIcon from '@material-ui/icons/ViewAgenda';
@@ -211,7 +211,7 @@ export default function AppNavigation() {
 
         <ListItem button>
           <ListItemIcon>
-            <GradeIcon />
+            <PetsIcon />
           </ListItemIcon>
           <ListItemText primary="WOOF Pools" />
           {open ? <ExpandLess /> : <ExpandMore />}

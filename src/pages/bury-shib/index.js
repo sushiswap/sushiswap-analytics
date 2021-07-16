@@ -292,7 +292,7 @@ function BuryShibPage() {
                   height={height}
                   data={[shibStakedUSD, shibHarvestedUSD]}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  labels={["Shib Staked (USD)", "Shib Harvested (USD)"]}
+                  labels={["Shib Staked (USD)", "Shib Woofed (USD)"]}
                 />
               )}
             </ParentSize>

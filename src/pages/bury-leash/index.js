@@ -302,7 +302,7 @@ function BuryLeashPage() {
                   height={height}
                   data={[leashStakedUSD, leashHarvestedUSD]}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  labels={["Leash Staked (USD)", "Leash Harvested (USD)"]}
+                  labels={["Leash Staked (USD)", "Leash Woofed (USD)"]}
                 />
               )}
             </ParentSize>

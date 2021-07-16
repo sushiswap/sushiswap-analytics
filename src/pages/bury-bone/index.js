@@ -301,7 +301,7 @@ function BuryBonePage() {
                   height={height}
                   data={[boneStakedUSD, boneHarvestedUSD]}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
-                  labels={["Bone Staked (USD)", "Bone Harvested (USD)"]}
+                  labels={["Bone Staked (USD)", "Bone Woofed (USD)"]}
                 />
               )}
             </ParentSize>

@@ -38,7 +38,7 @@ export const buryShibHistoriesQuery = gql`
   }
 `;
 
-export const buryShibUserQuery = gql`
+export const buryShibUserQuery1 = gql`
   query buryShibUserQuery($id: String!) {
     user(id: $id) {
       id
@@ -62,6 +62,33 @@ export const buryShibUserQuery = gql`
       usdOut
       createdAt
       createdAtBlock
+    }
+  }
+`;
+
+
+export const buryShibUserQuery = gql`
+  query buryShibUserQuery($id: String!) {
+    user(id: $id) {
+      id
+      bury {
+        totalSupply
+        shibStaked
+      }
+      xShib
+      shibStaked
+      shibStakedUSD
+      shibHarvested
+      shibHarvestedUSD
+      xShibIn
+      xShibOut
+      xShibOffset
+      xShibMinted
+      xShibBurned
+      shibIn
+      shibOut
+      usdIn
+      usdOut
     }
   }
 `;

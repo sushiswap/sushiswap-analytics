@@ -38,7 +38,7 @@ export const buryBoneHistoriesQuery = gql`
   }
 `;
 
-export const buryBoneUserQuery = gql`
+export const buryBoneUserQuery1 = gql`
   query buryBoneUserQuery($id: String!) {
     user(id: $id) {
       id
@@ -62,6 +62,32 @@ export const buryBoneUserQuery = gql`
       usdOut
       createdAt
       createdAtBlock
+    }
+  }
+`;
+
+export const buryBoneUserQuery = gql`
+  query buryBoneUserQuery($id: String!) {
+    user(id: $id) {
+      id
+      bury{
+        totalSupply
+        boneStaked
+      }
+      tBone
+      boneStaked
+      boneStakedUSD
+      boneHarvested
+      boneHarvestedUSD
+      tBoneIn
+      tBoneOut
+      tBoneOffset
+      tBoneMinted
+      tBoneBurned
+      boneIn
+      boneOut
+      usdIn
+      usdOut
     }
   }
 `;

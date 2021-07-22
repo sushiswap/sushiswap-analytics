@@ -42,7 +42,7 @@ export default function LiquidityProviderList({
                 <AddressAvatar address={row.address} />
 
                 <Link
-                  href={`https://etherscan.io/address/${row.address}`}
+                  href={`https://blockscout.com/xdai/mainnet/address/${row.address}`}
                   target="_blank"
                 >
                   {row.address}

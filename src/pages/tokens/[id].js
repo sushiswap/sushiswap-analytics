@@ -297,7 +297,7 @@ function TokenPage() {
             token.name,
             token.symbol,
             token.id,
-            <Link href={`https://etherscan.io/address/${token.id}`}>View</Link>,
+            <Link href={`https://blockscout.com/xdai/mainnet/address/${token.id}`}>View</Link>,
           ]}
         />
       </Box>

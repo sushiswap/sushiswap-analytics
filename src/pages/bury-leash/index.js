@@ -170,7 +170,7 @@ function BuryLeashPage() {
 
   const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
 
-  const leashApr = dayDatas && (((parseFloat(dayDatas[0]?.volumeUSD) * (0.05 / 3) * 0.2) / parseFloat(bury?.totalSupply)) * 365) 
+  const leashApr = dayDatas && (((parseFloat(dayDatas[0]?.volumeUSD) * (0.05 / 3) * 0.05) / parseFloat(bury?.totalSupply)) * 365) 
   / (parseFloat(bury?.ratio) * leashPrice)
 
   const APR =
@@ -188,7 +188,7 @@ function BuryLeashPage() {
   const bonePrice =
     parseFloat(boneToken?.data?.token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
-  const leashBoneApr = ((10 * parseInt(bonePrice))/(bury?.leashStakedUSD)) * 277 * 24 * 30 * 12 * 100;
+  const leashBoneApr = ((0.9 * parseInt(bonePrice))/(bury?.leashStakedUSD)) * 277 * 24 * 30 * 12 * 100;
 
   return (
     <AppShell>

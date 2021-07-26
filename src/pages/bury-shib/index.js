@@ -172,7 +172,7 @@ function BuryShibPage() {
 
   const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
 
-  const shibApr = dayDatas && (((parseFloat(dayDatas[0]?.volumeUSD) * (0.05 / 3) * 0.2) / parseFloat(bury?.totalSupply)) * 365) 
+  const shibApr = dayDatas && (((parseFloat(dayDatas[0]?.volumeUSD) * (0.05 / 3) * 0.05) / parseFloat(bury?.totalSupply)) * 365) 
   / (parseFloat(bury?.ratio) * shibPrice)
 
   const APR =
@@ -184,7 +184,7 @@ function BuryShibPage() {
   const bonePrice =
     parseFloat(boneToken?.data?.token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
-  const shibBoneApr = ((30 * parseInt(bonePrice))/(bury?.shibStakedUSD)) * 277 * 24 * 30 * 12 * 100;
+  const shibBoneApr = ((2.7 * parseInt(bonePrice))/(bury?.shibStakedUSD)) * 277 * 24 * 30 * 12 * 100;
 
   const shibEthApr = dayDatas && (((dayDatas[0]?.volumeUSD * 0.1) / bury?.totalSupply) * 365) / (bury?.ratio * shibPrice)
   
@@ -218,8 +218,11 @@ function BuryShibPage() {
             <Grid item xs={12} sm={6} md={3}>
               <KPI title="Additional BONE APR (24h)" value={shibBoneApr} format="percent" />
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            {/* <Grid item xs={12} sm={6} md={3}>
               <KPI title="Additional ETH APY (24h)" value={EthAPY * 100} format="percent" />
+            </Grid> */}
+            <Grid item xs={12} sm={6} md={3}>
+              <KPI title="Additional ETH APR (24h)" value={shibEthApr} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <KPI title="xShib" value={bury.totalSupply} format="integer" />

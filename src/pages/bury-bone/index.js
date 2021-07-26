@@ -167,7 +167,7 @@ function BuryBonePage() {
 
   const oneDayVolume = factory.volumeUSD - factory.oneDay.volumeUSD;
 
-  const boneApr = dayDatas && (((parseFloat(dayDatas[0]?.volumeUSD) * (0.05 / 3) * 0.2) / parseFloat(bury?.totalSupply)) * 365) 
+  const boneApr = dayDatas && (((parseFloat(dayDatas[0]?.volumeUSD) * (0.05 / 3) * 0.05) / parseFloat(bury?.totalSupply)) * 365) 
   / (parseFloat(bury?.ratio) * bonePrice)
 
   const APR =
@@ -176,7 +176,7 @@ function BuryBonePage() {
 
   const APY = Math.pow(1 + boneApr / 365, 365) - 1;
 
-  const boneBoneApr = ((10 * parseInt(bonePrice))/(bury?.boneStakedUSD)) * 277 * 24 * 30 * 12 * 100;
+  const boneBoneApr = ((0.9 * parseInt(bonePrice))/(bury?.boneStakedUSD)) * 277 * 24 * 30 * 12 * 100;
 
   return (
     <AppShell>

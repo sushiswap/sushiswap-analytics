@@ -215,7 +215,7 @@ function BuryLeashPage() {
               <KPI title="APR (24h)" value={leashApr} format="percent" />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="Additional BONE APR (24h)" value={leashBoneApr} format="percent" />
+              <KPI title="+ BONE APR (24h)" value={leashBoneApr} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <KPI title="xLeash" value={bury.totalSupply} format="integer" />

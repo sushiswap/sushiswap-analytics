@@ -216,13 +216,13 @@ function BuryShibPage() {
               <KPI title="APR (24h)" value={shibApr} format="percent" />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="Additional BONE APR (24h)" value={shibBoneApr} format="percent" />
+              <KPI title="+ BONE APR (24h)" value={shibBoneApr} format="percent" />
             </Grid>
             {/* <Grid item xs={12} sm={6} md={3}>
               <KPI title="Additional ETH APY (24h)" value={EthAPY * 100} format="percent" />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="Additional ETH APR (24h)" value={shibEthApr} format="percent" />
+              <KPI title="+ ETH APR (24h)" value={shibEthApr} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <KPI title="xShib" value={bury.totalSupply} format="integer" />

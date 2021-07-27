@@ -178,6 +178,8 @@ function BuryBonePage() {
 
   const boneBoneApr = ((0.9 * parseInt(bonePrice))/(bury?.boneStakedUSD)) * 277 * 24 * 30 * 12 * 100;
 
+  const boneBoneApy = Math.pow(1 + boneBoneApr / 365, 365) - 1;
+
   return (
     <AppShell>
       <Head>
@@ -203,7 +205,7 @@ function BuryBonePage() {
               <KPI title="APR (24h)" value={boneApr} format="percent" />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="+ BONE APR (24h)" value={boneBoneApr} format="percent" />
+              <KPI title="+ BONE APY (24h)" value={boneBoneApy * 100} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <KPI title="tBone" value={bury.totalSupply} format="integer" />

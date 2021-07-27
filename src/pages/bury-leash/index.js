@@ -190,6 +190,8 @@ function BuryLeashPage() {
 
   const leashBoneApr = ((0.9 * parseInt(bonePrice))/(bury?.leashStakedUSD)) * 277 * 24 * 30 * 12 * 100;
 
+  const leashBoneApy = Math.pow(1 + leashBoneApr / 365, 365) - 1;
+
   return (
     <AppShell>
       <Head>
@@ -215,7 +217,7 @@ function BuryLeashPage() {
               <KPI title="APR (24h)" value={leashApr} format="percent" />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="+ BONE APR (24h)" value={leashBoneApr} format="percent" />
+              <KPI title="+ BONE APY (24h)" value={leashBoneApy * 100} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <KPI title="xLeash" value={bury.totalSupply} format="integer" />

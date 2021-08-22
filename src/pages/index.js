@@ -73,7 +73,7 @@ function IndexPage() {
         });
         previousValue[1].unshift({
           date: currentValue.date,
-          value: parseFloat(currentValue.untrackedVolume),
+          value: parseFloat(currentValue.volumeUSD),
         });
         return previousValue;
       },

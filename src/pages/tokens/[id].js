@@ -297,7 +297,7 @@ function TokenPage() {
             token.name,
             token.symbol,
             token.id,
-            <Link href={`https://explorer-mainnet.maticvigil.com/address/${token.id}`}>View</Link>,
+            <Link href={`https://arbiscan.io/address/${token.id}`}>View</Link>,
           ]}
         />
       </Box>

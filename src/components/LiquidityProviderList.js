@@ -42,7 +42,7 @@ export default function LiquidityProviderList({
                 <AddressAvatar address={row.address} />
 
                 <Link
-                  href={`https://explorer-mainnet.maticvigil.com/address/${row.address}`}
+                  href={`https://arbiscan.io/address/${row.address}`}
                   target="_blank"
                 >
                   {row.address}

@@ -1,5 +1,4 @@
 import { Avatar } from "@material-ui/core";
-import HelpIcon from "@material-ui/icons/Help";
 import { makeStyles } from "@material-ui/core/styles";
 import { toChecksumAddress } from "web3-utils";
 import { useMemo } from "react";
@@ -15,7 +14,7 @@ export default function TokenIcon({ id, ...rest }) {
   const classes = useStyles();
   const src = useMemo(
     () =>
-      `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/polygon/assets/${toChecksumAddress(
+      `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/arbitrum/assets/${toChecksumAddress(
         id
       )}/logo.png`,
     [id]

@@ -101,7 +101,7 @@ export default function Transactions({ transactions, txCount }) {
             key: "to",
             label: "To",
             render: (row) => (
-              <Link href={`https://explorer-mainnet.maticvigil.com/address/${row.to}`}>
+              <Link href={`https://arbiscan.io/address/${row.to}`}>
                 {row.to}
               </Link>
             ),

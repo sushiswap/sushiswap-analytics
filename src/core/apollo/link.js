@@ -13,7 +13,7 @@ export const uniswap = from([
 export const exchange = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/matic-exchange",
+    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/arbitrum-exchange",
     shouldBatch: true,
   }),
 ]);
@@ -21,7 +21,7 @@ export const exchange = from([
 export const blocklytics = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/polygon-blocks",
+    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/arbitrum-blocks",
     shouldBatch: true,
   }),
 ]);

@@ -21,7 +21,7 @@ export const exchange = from([
 export const blocklytics = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://sushi.graph.t.hmny.io/subgraphs/name/sushiswap/harmony-blocks-fs",
+    uri: "https://sushi.graph.t.hmny.io/subgraphs/name/sushiswap/harmony-blocks",
     shouldBatch: true,
   }),
 ]);

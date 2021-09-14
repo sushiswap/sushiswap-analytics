@@ -3,7 +3,15 @@ import { HttpLink, from, split } from "@apollo/client";
 import { RetryLink } from "@apollo/client/link/retry";
 
 export const uniswap = from([
-  new RetryLink(),
+  new RetryLink({
+    delay: (count, operation, error) => {
+      return count * 1000 * Math.random();
+    },
+    attempts: {
+      max: 5,
+      retryIf: (error, _operation) => !!error
+    }
+  }),
   new HttpLink({
     uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
     shouldBatch: true,
@@ -11,7 +19,15 @@ export const uniswap = from([
 ]);
 
 export const bar = from([
-  new RetryLink(),
+  new RetryLink({
+    delay: (count, operation, error) => {
+      return count * 1000 * Math.random();
+    },
+    attempts: {
+      max: 5,
+      retryIf: (error, _operation) => !!error
+    }
+  }),
   new HttpLink({
     uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/bar",
     shouldBatch: true,
@@ -19,7 +35,15 @@ export const bar = from([
 ]);
 
 export const masterchef = from([
-  new RetryLink(),
+  new RetryLink({
+    delay: (count, operation, error) => {
+      return count * 1000 * Math.random();
+    },
+    attempts: {
+      max: 5,
+      retryIf: (error, _operation) => !!error
+    }
+  }),
   new HttpLink({
     uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/topdog",
     shouldBatch: true,
@@ -27,7 +51,15 @@ export const masterchef = from([
 ]);
 
 export const exchange = from([
-  new RetryLink(),
+  new RetryLink({
+    delay: (count, operation, error) => {
+      return count * 1000 * Math.random();
+    },
+    attempts: {
+      max: 5,
+      retryIf: (error, _operation) => !!error
+    }
+  }),
   new HttpLink({
     uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/exchange",
     shouldBatch: true,
@@ -35,7 +67,15 @@ export const exchange = from([
 ]);
 
 export const blocklytics = from([
-  new RetryLink(),
+  new RetryLink({
+    delay: (count, operation, error) => {
+      return count * 1000 * Math.random();
+    },
+    attempts: {
+      max: 5,
+      retryIf: (error, _operation) => !!error
+    }
+  }),
   new HttpLink({
     uri: "https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks",
     shouldBatch: true,
@@ -43,7 +83,15 @@ export const blocklytics = from([
 ]);
 
 export const lockup = from([
-  new RetryLink(),
+  new RetryLink({
+    delay: (count, operation, error) => {
+      return count * 1000 * Math.random();
+    },
+    attempts: {
+      max: 5,
+      retryIf: (error, _operation) => !!error
+    }
+  }),
   new HttpLink({
     uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/lockup",
     shouldBatch: true,
@@ -52,7 +100,15 @@ export const lockup = from([
 
 
 export const buryShib = from([
-  new RetryLink(),
+  new RetryLink({
+    delay: (count, operation, error) => {
+      return count * 1000 * Math.random();
+    },
+    attempts: {
+      max: 5,
+      retryIf: (error, _operation) => !!error
+    }
+  }),
   new HttpLink({
     uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/buryshib",
     shouldBatch: true,
@@ -60,7 +116,15 @@ export const buryShib = from([
 ]);
 
 export const buryLeash = from([
-  new RetryLink(),
+  new RetryLink({
+    delay: (count, operation, error) => {
+      return count * 1000 * Math.random();
+    },
+    attempts: {
+      max: 5,
+      retryIf: (error, _operation) => !!error
+    }
+  }),
   new HttpLink({
     uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/buryleash",
     shouldBatch: true,
@@ -69,7 +133,15 @@ export const buryLeash = from([
 
 
 export const buryBone = from([
-  new RetryLink(),
+  new RetryLink({
+    delay: (count, operation, error) => {
+      return count * 1000 * Math.random();
+    },
+    attempts: {
+      max: 5,
+      retryIf: (error, _operation) => !!error
+    }
+  }),
   new HttpLink({
     uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/burybone",
     shouldBatch: true,
@@ -77,7 +149,15 @@ export const buryBone = from([
 ]);
 
 export const topDog = from([
-  new RetryLink(),
+  new RetryLink({
+    delay: (count, operation, error) => {
+      return count * 1000 * Math.random();
+    },
+    attempts: {
+      max: 5,
+      retryIf: (error, _operation) => !!error
+    }
+  }),
   new HttpLink({
     uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/topdog",
     shouldBatch: true,
@@ -85,7 +165,15 @@ export const topDog = from([
 ]);
 
 export const shibaSwapExchange = from([
-  new RetryLink(),
+  new RetryLink({
+    delay: (count, operation, error) => {
+      return count * 1000 * Math.random();
+    },
+    attempts: {
+      max: 5,
+      retryIf: (error, _operation) => !!error
+    }
+  }),
   new HttpLink({
     uri: "https://api.thegraph.com/subgraphs/name/shibaswaparmy/exchange",
     shouldBatch: true,

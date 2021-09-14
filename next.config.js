@@ -8,4 +8,5 @@ module.exports = withPWA({
     // scope: "/",
     // sw: "service-worker.js",
   },
+  ignoreBuildErrors: true,
 });

@@ -5,7 +5,6 @@ import {
   GradientPinkBlue,
   GradientPurpleTeal,
   GradientSteelPurple,
-  GradientTealBlue,
   LinearGradient,
 } from "@visx/gradient";
 import { Grid, GridColumns, GridRows } from "@visx/grid";
@@ -135,9 +134,8 @@ export default function BarChart({
       {overlayEnabled && (
         <ChartOverlay overlay={overlay} onTimespanChange={onTimespanChange} />
       )}
-
-      <svg ref={containerRef} width={width} height={height}>
-        <GradientTealBlue id="bar-gradient" />
+      <svg ref={containerRef} width={width} height={height} style={{borderRadius: 20}}>
+        <GradientPinkBlue id="bar-gradient" />
         {/* <LinearGradient
           id="bar-gradient"
           from="#37ecba"

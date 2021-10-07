@@ -7,7 +7,7 @@ import {
   Search,
   TokenTable,
 } from "app/components";
-import { Box, Grid, Paper } from "@material-ui/core";
+import { makeStyles, Box, Grid, Paper } from "@material-ui/core";
 import React, { useState } from "react";
 import {
   dayDatasQuery,
@@ -29,7 +29,16 @@ import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
 import { useQuery } from "@apollo/client";
 
+const useStyles = makeStyles((theme) => ({
+  chartContainer: {
+    borderRadius: 20,
+    background: '#35234f4f'
+  }
+}));
+
 function IndexPage() {
+  const classes = useStyles();
+
   const {
     data: { tokens },
   } = useQuery(tokensQuery);
@@ -83,7 +92,7 @@ function IndexPage() {
   return (
     <AppShell>
       <Head>
-        <title>Dashboard | SushiSwap Analytics</title>
+        <title>Analytics</title>
       </Head>
       <Box mb={3}>
         <Search pairs={pairs} tokens={tokens} />
@@ -91,7 +100,10 @@ function IndexPage() {
 
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={6}>
-          <Paper variant="outlined" style={{ height: 300 }}>
+          <Paper 
+            style={{ height: 300 }} 
+            className={classes.chartContainer}
+          >
             <ParentSize>
               {({ width, height }) => (
                 <AreaChart
@@ -109,8 +121,8 @@ function IndexPage() {
         </Grid>
         <Grid item xs={12} sm={12} md={6}>
           <Paper
-            variant="outlined"
             style={{ height: 300, position: "relative" }}
+            className={classes.chartContainer}
           >
             <ParentSize>
               {({ width, height }) => (
@@ -129,7 +141,7 @@ function IndexPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <PairTable title="Top Sushi Liquidity Pairs" pairs={pairs} />
+          <PairTable title="Top STND Liquidity Pairs" pairs={pairs} />
         </Grid>
 
         <Grid item xs={12}>
@@ -138,7 +150,7 @@ function IndexPage() {
 
         <Grid item xs={12}>
           <PoolTable
-            title="Sushi Reward Pools"
+            title="STND Reward Pools"
             pools={pools}
             orderBy="tvl"
             order="desc"
@@ -146,6 +158,7 @@ function IndexPage() {
           />
         </Grid>
       </Grid>
+      <div className={'gradient1'}></div>
     </AppShell>
   );
 }

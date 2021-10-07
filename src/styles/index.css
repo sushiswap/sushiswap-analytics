@@ -11,9 +11,7 @@ body {
 /* DARK */
 
 .dark-theme body,
-.dark-theme .MuiInputBase-root,
-.dark-theme .MuiPaper-root {
-  background: #050709;
+.dark-theme .MuiInputBase-root{
   color: #fff;
 }
 
@@ -70,10 +68,6 @@ body {
   color: #fff;
 }
 
-.dark-theme .MuiTableCell-root {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-
 .dark-theme .MuiTableCell-body {
   color: #fff;
 }
@@ -125,4 +119,26 @@ body {
 
 .dark-theme .MuiListItemIcon-root {
   color: #fff;
+}
+
+.MuiTableCell-root {
+  border: none;
+}
+
+.gradient1 {
+  position: absolute;
+    width: 627.65px;
+    height: 532.84px;
+    right: 0%;
+    bottom: -20%;
+    z-index: -1;
+    background: conic-gradient(from 61.21deg at 34.58% 54.69%, rgb(97, 67, 188) 
+-72.28deg, rgb(255, 0, 156) 
+2.21deg, rgb(97, 67, 188) 
+287.72deg, rgb(255, 0, 156) 
+362.21deg);
+    opacity: 0.3;
+    filter: blur(180px);
+    transform: rotate(
+-29.96deg);
 }

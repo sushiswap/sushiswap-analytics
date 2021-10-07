@@ -15,7 +15,6 @@ import { darkTheme, lightTheme } from "../theme";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Head from "next/head";
-import fontTheme from "../styles/font";
 import { useRouter } from 'next/router'
 
 function MyApp({ Component, pageProps }) {
@@ -74,9 +73,6 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </ThemeProvider>
       </ApolloProvider>
-      <style jsx global>
-        {fontTheme}
-      </style>
     </>
   );
 }

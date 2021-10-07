@@ -21,9 +21,20 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     marginBottom: theme.spacing(2),
   },
-  // table: {
-  //   minWidth: 750,
-  // },
+  tableContainer: {
+    background: '#35234f4f',
+    borderRadius: 20
+  },
+  table: {
+    borderSpacing: '0 8px',
+    borderCollapse: 'separate',
+  },
+  tableRow:{
+    background: 'linear-gradient(270deg, #402656 24.32%, rgba(64, 38, 86, 0.25) 85.97%)'
+  },
+  tableCell: {
+    border: 'none'
+  },
   avatar: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
@@ -114,7 +125,9 @@ export default function SortableTable({
           {title}
         </Typography>
       )}
-      <TableContainer>
+      <TableContainer
+        className={classes.tableContainer}
+      >
         <Table className={classes.table} aria-label={`${title} table`}>
           <SortableTableHead
             columns={columns}
@@ -132,7 +145,10 @@ export default function SortableTable({
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 return (
-                  <TableRow key={row.id}>
+                  <TableRow 
+                    key={row.id}
+                    className={classes.tableRow}
+                  >
                     {columns.map((column, i) => {
                       return (
                         <TableCell
@@ -142,6 +158,7 @@ export default function SortableTable({
                             : {})}
                           align={column.align || "left"}
                           // variant="body"
+                          className={classes.tableCell}
                         >
                           {typeof column.render === "function"
                             ? column.render(row, index)

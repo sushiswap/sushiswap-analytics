@@ -12,17 +12,17 @@ import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
 export const palette = {
   primary: {
-    main: "#B93CF6",
+    main: "rgba(243,101,189,1)",
   },
   positive: {
-    main: green[500],
+    main: "#8DE7D8",
   },
   negative: {
     main: red[500],
   },
 
   seaweed: {
-    main: "#050709",
+    main: "rgba(17,17,35,1)",
   },
   rice: {
     main: "white",
@@ -49,18 +49,7 @@ export const palette = {
 };
 
 const fontFamily = [
-  "Inter",
-  "-apple-system",
-  "BlinkMacSystemFont",
-  "Segoe UI",
-  "Roboto",
-  "Oxygen",
-  "Ubuntu",
-  "Cantarell",
-  "Fira Sans",
-  "Droid Sans",
-  "Helvetica Neue",
-  "sans-serif",
+  "Poppins"
 ];
 
 const overrides = {
@@ -108,8 +97,8 @@ export const darkTheme = responsiveFontSizes(
         disabledBackground: "rgba(255, 255, 255, 0.12)",
       },
       background: {
-        default: "#050709",
-        paper: "#050709",
+        default: "rgba(17,17,35,1)",
+        paper: "rgba(17,17,35,1)",
       },
       divider: "rgba(255, 255, 255, 0.12)",
       ...palette,
@@ -130,7 +119,7 @@ export const lightTheme = responsiveFontSizes(
         paper: "#FFFFFF",
       },
       text: {
-        primary: "#050709",
+        primary: "rgba(17,17,35,1)",
         secondary: "rgba(5, 7, 9, 0.7)",
         disabled: "rgba(5, 7, 9, 0.5)",
       },

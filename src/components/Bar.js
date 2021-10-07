@@ -9,7 +9,7 @@ import {
 import { scaleBand, scaleLinear } from "@visx/scale";
 
 import { Bar } from "@visx/shape";
-import { GradientTealBlue } from "@visx/gradient";
+import { GradientPinkBlue } from "@visx/gradient";
 import { Group } from "@visx/group";
 import millify from "millify";
 import { useMemo } from "react";
@@ -56,7 +56,7 @@ export default function BarChart({
   if (width < 10) return null;
   return (
     <Group left={left} top={top}>
-      <GradientTealBlue id="gradient" />
+      <GradientPinkBlue id="gradient" />
       {data.map((d) => {
         const date = getX(d);
         const barWidth = xScale.bandwidth();

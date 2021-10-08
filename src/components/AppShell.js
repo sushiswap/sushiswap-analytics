@@ -7,7 +7,7 @@ import AppFooter from "./AppFooter";
 import AppNavigation from "./AppNavigation";
 import clsx from "clsx";
 
-const drawerWidth = 240;
+const drawerWidth = 220;
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   tableContainer: {
-    background: '#35234f4f',
+    background: 'rgba(255,255,255,.04)',
     borderRadius: 20
   },
   table: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     borderCollapse: 'separate',
   },
   tableRow:{
-    background: 'linear-gradient(270deg, #402656 24.32%, rgba(64, 38, 86, 0.25) 85.97%)'
+    background: 'rgba(222,199,239,.05)'
   },
   tableCell: {
     border: 'none'

@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     border: 'none',
     borderRadius: 20,
-    background: '#35234f4f'
+    background: 'rgba(255,255,255,.04);'
   },
 
   cardContent: {

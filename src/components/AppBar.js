@@ -19,7 +19,6 @@ import {
 import React, { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import Sushi from "./Sushi";
 import clsx from "clsx";
 import { darkModeVar } from "app/core";
 import useDetect from "../core/hooks/useDetect";
@@ -139,7 +138,7 @@ export default function AppBar({
               justifyContent="space-around"
             >
               <IconButton edge={false} onClick={() => router.push("/")}>
-                <Sushi />
+                <img src='/icons/stnd/stnd.svg' alt='stnd logo' style={{width: 50}} />
               </IconButton>
               <Typography variant="subtitle1" color="textPrimary" noWrap>
                 Analytics

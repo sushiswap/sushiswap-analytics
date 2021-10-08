@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     borderRadius: 20,
-    background: '#35234f4f',
+    background: 'rgba(255,255,255,.04)',
     border: 'none'
   },
   reserve: {
@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
   },
   chartContainer: {
     borderRadius: 20,
-    background: '#35234f4f',
+    background: 'rgba(255,255,255,.04)',
     border: 'none'
   }
 }));

@@ -54,15 +54,13 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Sushi from "./Sushi";
 import { useRouter } from "next/router";
 
-const drawerWidth = 220;
-
 const useStyles = makeStyles((theme) => ({
   root: {},
   list: {
     // "& > *": {
     //   paddingLeft: theme.spacing(3),
     // },
-    padding: 0
+    paddingTop: theme.spacing(3)
   },
   nested: {
     paddingLeft: theme.spacing(3),
@@ -95,10 +93,10 @@ export default function AppNavigation() {
         <Hidden smUp implementation="css">
           <Box display="flex" alignItems="center" py={0.5}>
             <IconButton edge={false} onClick={() => router.push("/")}>
-              <Sushi />
+            <img src='/icons/stnd/stnd.svg' alt='stnd logo' style={{width: 30}} />
             </IconButton>
             <Typography variant="subtitle1" color="textPrimary" noWrap>
-              Sushi Analytics
+              Analytics
             </Typography>
           </Box>
         </Hidden>
@@ -120,7 +118,7 @@ export default function AppNavigation() {
           onClick={() => router.push("/")}
         >
           <ListItemIcon>
-            <DashboardOutlined />
+            <img src='/icons/stnd/dashboard.svg' alt='stnd dashboard' style={{width: 20}} />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItem>
@@ -132,7 +130,7 @@ export default function AppNavigation() {
           onClick={() => router.push("/bar")}
         >
           <ListItemIcon>
-            <FastfoodOutlined />
+            <img src='/icons/stnd/dividend.svg' alt='stnd dividend' style={{width: 20}} />
           </ListItemIcon>
           <ListItemText primary="Dividend" />
           {/* {open ? <ExpandLess /> : <ExpandMore />} */}
@@ -164,7 +162,7 @@ export default function AppNavigation() {
 
         <ListItem button onClick={()=>{setFarmOpen(!farmOpen)}}>
           <ListItemIcon>
-            <WavesOutlined />
+            <img src='/icons/stnd/farm.svg' alt='stnd farm' style={{width: 20}} />
           </ListItemIcon>
           <ListItemText primary="Farm" />
           {farmOpen ? <ExpandLess /> : <ExpandMore />}

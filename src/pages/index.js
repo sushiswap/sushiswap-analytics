@@ -32,7 +32,7 @@ import { useQuery } from "@apollo/client";
 const useStyles = makeStyles((theme) => ({
   chartContainer: {
     borderRadius: 20,
-    background: '#35234f4f'
+    background: 'rgba(255,255,255,.04)'
   }
 }));
 

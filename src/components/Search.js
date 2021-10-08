@@ -86,7 +86,6 @@ const renderGroup = (params) => [
 const useStyles = makeStyles((theme) => ({
   input: {
     borderRadius: 20,
-    background: '#35234f4f',
     border: 'none'
   }
 }));

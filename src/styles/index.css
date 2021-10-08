@@ -16,10 +16,9 @@ body {
 }
 
 .dark-theme .MuiAppBar-root {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  background-color: transparent;
+  background-color: rgb(53 29 71);
+  filter: drop-shadow(0px 4px 50px rgba(243, 101, 189, 0.15));
 }
-
 .dark-theme .MuiAppBar-colorTransparent {
   color: inherit;
   background-color: transparent;
@@ -27,6 +26,7 @@ body {
 
 .dark-theme .MuiPaper-root {
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border: none;
 }
 
 .dark-theme .MuiFormLabel-root {
@@ -42,8 +42,9 @@ body {
 }
 
 .dark-theme .MuiDrawer-paperAnchorDockedLeft {
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
-  background-color: transparent;
+  background-color: rgba(23,12,52,1);
+  border: none;
+  filter: drop-shadow(0px 4px 50px rgba(243, 101, 189, 0.15));
 }
 
 .dark-theme .MuiListItem-root.Mui-selected,
@@ -110,7 +111,6 @@ body {
 }
 
 .dark-theme .MuiToggleButton-root {
-  border: 1px solid rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.38);
 }
 
@@ -127,22 +127,17 @@ body {
   border: none;
 }
 
-.gradient1 {
-  position: absolute;
-    width: 627.65px;
-    height: 532.84px;
-    right: 0%;
-    bottom: -20%;
-    z-index: -1;
-    background: conic-gradient(from 61.21deg at 34.58% 54.69%, rgb(97, 67, 188) 
--72.28deg, rgb(255, 0, 156) 
-2.21deg, rgb(97, 67, 188) 
-287.72deg, rgb(255, 0, 156) 
-362.21deg);
-    opacity: 0.3;
-    filter: blur(180px);
-    transform: rotate(
--29.96deg);
+.gradient1 { 
+  position: absolute; 
+  width: 627.65px; 
+  height: 532.84px; 
+  right: 0%; 
+  bottom: -20%; 
+  z-index: -1; 
+  background: conic-gradient(from 61.21deg at 34.58% 54.69%, rgb(97, 67, 188) -72.28deg, rgb(255, 0, 156) 2.21deg, rgb(97, 67, 188) 287.72deg, rgb(255, 0, 156) 362.21deg); 
+  opacity: 0.3; 
+  filter: blur(180px); 
+  transform: rotate(-29.96deg);
 }
 
 .gradient2 {
@@ -152,13 +147,7 @@ body {
   left: 0px;
   top: 50%;
   z-index: -1;
-  background: conic-gradient(from 
-161.21deg at 34.58% 54.69%, rgb(97, 67, 188) 
--72.28deg, rgb(255, 0, 156) 
-2.21deg, rgb(97, 67, 188) 
-287.72deg, rgb(255, 0, 156) 
-362.21deg);
+  background: conic-gradient(from  161.21deg at 34.58% 54.69%, rgb(97, 67, 188) -72.28deg, rgb(255, 0, 156) 2.21deg, rgb(97, 67, 188) 287.72deg, rgb(255, 0, 156) 362.21deg);
   filter: blur(180px);
-  transform: rotate(
--29.96deg);
+  transform: rotate(-29.96deg);
 }

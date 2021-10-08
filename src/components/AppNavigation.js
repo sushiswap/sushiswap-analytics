@@ -54,7 +54,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Sushi from "./Sushi";
 import { useRouter } from "next/router";
 
-const drawerWidth = 240;
+const drawerWidth = 220;
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
     // "& > *": {
     //   paddingLeft: theme.spacing(3),
     // },
+    padding: 0
   },
   nested: {
     paddingLeft: theme.spacing(3),

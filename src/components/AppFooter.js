@@ -19,7 +19,7 @@ export default function AppFooter() {
           <Typography variant="body2" color="textSecondary" align="center">
             {"Copyright © "}
             <MuiLink color="inherit" href="/">
-              SushiSwap Analytics
+              Analytics
             </MuiLink>{" "}
             {new Date().getFullYear()}
             {"."}

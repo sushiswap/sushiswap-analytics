@@ -17,6 +17,7 @@ body {
 
 .dark-theme .MuiAppBar-root {
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: transparent;
 }
 
 .dark-theme .MuiAppBar-colorTransparent {
@@ -28,16 +29,12 @@ body {
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
-.dark-theme .MuiPaper-outlined {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
 .dark-theme .MuiFormLabel-root {
   color: rgba(255, 255, 255, 0.7);
 }
 
 .dark-theme .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(255, 255, 255, 0.23);
+  border-color: transparent;
 }
 
 .dark-theme .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
@@ -46,6 +43,7 @@ body {
 
 .dark-theme .MuiDrawer-paperAnchorDockedLeft {
   border-right: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: transparent;
 }
 
 .dark-theme .MuiListItem-root.Mui-selected,
@@ -74,6 +72,10 @@ body {
 
 .dark-theme .MuiTablePagination-root {
   color: #fff;
+}
+
+.MuiSelect-select.MuiSelect-select {
+  background: #1c1631;
 }
 
 .dark-theme .MuiIconButton-root.Mui-disabled {
@@ -140,5 +142,23 @@ body {
     opacity: 0.3;
     filter: blur(180px);
     transform: rotate(
+-29.96deg);
+}
+
+.gradient2 {
+  position: absolute;
+  width: 308.46px;
+  height: 326.36px;
+  left: 0px;
+  top: 50%;
+  z-index: -1;
+  background: conic-gradient(from 
+161.21deg at 34.58% 54.69%, rgb(97, 67, 188) 
+-72.28deg, rgb(255, 0, 156) 
+2.21deg, rgb(97, 67, 188) 
+287.72deg, rgb(255, 0, 156) 
+362.21deg);
+  filter: blur(180px);
+  transform: rotate(
 -29.96deg);
 }

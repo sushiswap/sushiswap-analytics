@@ -86,7 +86,7 @@ const renderGroup = (params) => [
 const useStyles = makeStyles((theme) => ({
   input: {
     borderRadius: 20,
-    background: '#35234F',
+    background: '#35234f4f',
     border: 'none'
   }
 }));
@@ -115,7 +115,7 @@ export default function Search({ pairs, tokens }) {
   return (
     <Autocomplete
       id="search"
-      style={{ width: "100%", borderRadius: 20, background: '#35234F' }}
+      style={{ width: "100%", borderRadius: 20, background: '#35234f4f' }}
       disableListWrap
       ListboxComponent={ListboxComponent}
       renderGroup={renderGroup}

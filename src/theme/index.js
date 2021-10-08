@@ -18,7 +18,7 @@ export const palette = {
     main: "#8DE7D8",
   },
   negative: {
-    main: red[500],
+    main: "#FF979E",
   },
 
   seaweed: {

@@ -65,7 +65,7 @@ export default function PoolTable({ pools, ...rest }) {
             key: "rewardPerThousand",
             label: "Reward per $1000",
             render: (row) =>
-              `${Number(row.rewardPerThousand).toFixed(2)} SUSHI per day`,
+              `${Number(row.rewardPerThousand).toFixed(2)} STND per day`,
           },
           {
             key: "roi",

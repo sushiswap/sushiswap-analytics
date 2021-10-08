@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: "row",
     },
   },
+  title: {
+    fontWeight: 700
+  }
 }));
 export default function ChartOverlay({ overlay, onTimespanChange }) {
   const { title, value, date } = overlay;
@@ -27,7 +30,7 @@ export default function ChartOverlay({ overlay, onTimespanChange }) {
   return (
     <>
       <div style={{ position: "absolute", top: 14, left: 14 }}>
-        <Typography variant="h5" color="textPrimary">
+        <Typography variant="h5" color="textPrimary" className={classes.title}>
           {title}
         </Typography>
         <Typography variant="subtitle1" color="textSecondary">

@@ -22,7 +22,7 @@ function RecentPairsPage() {
   return (
     <AppShell>
       <Head>
-        <title>Recently Added Pairs | SushiSwap Analytics</title>
+        <title>Recently Added Pairs | Analytics</title>
       </Head>
       <PairTable pairs={pairs} orderBy="timestamp" order="desc" />
     </AppShell>

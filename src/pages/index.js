@@ -159,6 +159,7 @@ function IndexPage() {
         </Grid>
       </Grid>
       <div className={'gradient1'}></div>
+      <div className={'gradient2'}></div>
     </AppShell>
   );
 }

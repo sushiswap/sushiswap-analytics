@@ -74,7 +74,8 @@ export default function AppNavigation() {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
-  const [open, setOpen] = useState(true);
+  const [pairsOpen, setPairsOpen] = useState(false);
+  const [farmOpen, setFarmOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const [address, setAddress] = React.useState("");
@@ -132,7 +133,7 @@ export default function AppNavigation() {
           <ListItemIcon>
             <FastfoodOutlined />
           </ListItemIcon>
-          <ListItemText primary="Bar" />
+          <ListItemText primary="Dividend" />
           {/* {open ? <ExpandLess /> : <ExpandMore />} */}
         </ListItem>
 
@@ -160,14 +161,14 @@ export default function AppNavigation() {
           </List>
         </Collapse> */}
 
-        <ListItem button>
+        <ListItem button onClick={()=>{setFarmOpen(!farmOpen)}}>
           <ListItemIcon>
             <WavesOutlined />
           </ListItemIcon>
-          <ListItemText primary="Pools" />
-          {open ? <ExpandLess /> : <ExpandMore />}
+          <ListItemText primary="Farm" />
+          {farmOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={farmOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItem
               button
@@ -217,14 +218,14 @@ export default function AppNavigation() {
           </List>
         </Collapse>
 
-        <ListItem button>
+        <ListItem button onClick={()=>{setPairsOpen(!pairsOpen)}}>
           <ListItemIcon>
             <LinkOutlined />
           </ListItemIcon>
           <ListItemText primary="Pairs" />
-          {open ? <ExpandLess /> : <ExpandMore />}
+          {pairsOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={pairsOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItem
               button

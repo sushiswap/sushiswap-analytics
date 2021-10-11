@@ -26,7 +26,9 @@ import {
   getLatestBlock,
   getPairs,
   getPoolUser,
-  getSushiToken,
+  getBoneToken,
+  getShibToken,
+  getLeashToken,
   getToken,
   getUser,
   latestBlockQuery,
@@ -37,13 +39,19 @@ import {
   tokenQuery,
   useInterval,
   userIdsQuery,
-  userQuery,
+  userQuery, 
+  buryShibUserQuery, 
+  buryLeashUserQuery, 
+  buryBoneUserQuery, 
+  getBuryBoneUser,
+  getBuryShibUser,
+  getBuryLeashUser
 } from "app/core";
 import { getUnixTime, startOfMinute, startOfSecond } from "date-fns";
 
 import { AvatarGroup } from "@material-ui/lab";
 import Head from "next/head";
-import { POOL_DENY } from "app/core/constants";
+import {BONE_TOKEN_ADDRESS, SHIB_TOKEN_ADDRESS, LEASH_TOKEN_ADDRESS, POOL_DENY} from "app/core/constants";
 import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -77,14 +85,35 @@ function UserPage() {
     pollInterval: 60000,
   });
 
-  const { data: barData } = useQuery(barUserQuery, {
+  const { data: buryShibData } = useQuery(buryShibUserQuery, {
     variables: {
       id: id.toLowerCase(),
     },
+    fetchPolicy: "no-cache",
     context: {
-      clientName: "bar",
+      clientName: "buryShib",
     },
   });
+
+  const { data: buryBoneData } = useQuery(buryBoneUserQuery, {
+    variables: {
+      id: id.toLowerCase(),
+    },
+    fetchPolicy: "no-cache",
+    context: {
+      clientName: "buryBone",
+    },
+  });
+  const { data: buryLeashData } = useQuery(buryLeashUserQuery, {
+    variables: {
+      id: id.toLowerCase(),
+    },
+    fetchPolicy: "no-cache",
+    context: {
+      clientName: "buryLeash",
+    },
+  });
+
 
   const { data: poolData } = useQuery(poolUserQuery, {
     variables: {
@@ -99,7 +128,21 @@ function UserPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+      id: BONE_TOKEN_ADDRESS,
+    },
+  });
+
+  // console.log("token:: ", token)
+
+  const shibTokenData = useQuery(tokenQuery, {
+    variables: {
+      id: SHIB_TOKEN_ADDRESS,
+    },
+  });
+
+  const leashTokenData = useQuery(tokenQuery, {
+    variables: {
+      id: LEASH_TOKEN_ADDRESS,
     },
   });
 
@@ -119,7 +162,7 @@ function UserPage() {
   //   () =>
   //     Promise.all([
   //       getPairs,
-  //       getSushiToken,
+  //       getBoneToken,
   //       getPoolUser(id.toLowerCase()),
   //       getBarUser(id.toLocaleLowerCase()),
   //       getEthPrice,
@@ -127,45 +170,12 @@ function UserPage() {
   //   60000
   // );
 
-  const sushiPrice =
+  const bonePrice =
     parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
-
-  // BAR
-  const xSushi = parseFloat(barData?.user?.xSushi);
-
-  const barPending =
-    (xSushi * parseFloat(barData?.user?.bar?.sushiStaked)) /
-    parseFloat(barData?.user?.bar?.totalSupply);
-
-  const xSushiTransfered =
-    barData?.user?.xSushiIn > barData?.user?.xSushiOut
-      ? parseFloat(barData?.user?.xSushiIn) -
-        parseFloat(barData?.user?.xSushiOut)
-      : parseFloat(barData?.user?.xSushiOut) -
-        parseFloat(barData?.user?.xSushiIn);
-
-  const barStaked = barData?.user?.sushiStaked;
-
-  const barStakedUSD = barData?.user?.sushiStakedUSD;
-
-  const barHarvested = barData?.user?.sushiHarvested;
-  const barHarvestedUSD = barData?.user?.sushiHarvestedUSD;
-
-  const barPendingUSD = barPending > 0 ? barPending * sushiPrice : 0;
-
-  const barRoiSushi =
-    barPending -
-    (parseFloat(barData?.user?.sushiStaked) -
-      parseFloat(barData?.user?.sushiHarvested) +
-      parseFloat(barData?.user?.sushiIn) -
-      parseFloat(barData?.user?.sushiOut));
-
-  const barRoiUSD =
-    barPendingUSD -
-    (parseFloat(barData?.user?.sushiStakedUSD) -
-      parseFloat(barData?.user?.sushiHarvestedUSD) +
-      parseFloat(barData?.user?.usdIn) -
-      parseFloat(barData?.user?.usdOut));
+  const shibPrice =
+    parseFloat(shibTokenData?.data?.token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+  const leashPrice =
+    parseFloat(leashTokenData?.data?.token.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   const { data: blocksData } = useQuery(latestBlockQuery, {
     context: {
@@ -173,11 +183,136 @@ function UserPage() {
     },
   });
 
-  const blockDifference =
-    parseInt(blocksData?.blocks[0].number) -
-    parseInt(barData?.user?.createdAtBlock);
+  // BAR - Bury Bone
+  const tBone = parseFloat(buryBoneData?.user?.tBone);
 
-  const barRoiDailySushi = (barRoiSushi / blockDifference) * 6440;
+  const buryBonePending =
+    (tBone * parseFloat(buryBoneData?.user?.bury?.boneStaked)) /
+    parseFloat(buryBoneData?.user?.bury?.totalSupply);
+
+  const tBoneTransfered =
+  buryBoneData?.user?.tBoneIn > buryBoneData?.user?.tBoneOut
+      ? parseFloat(buryBoneData?.user?.tBoneIn) -
+        parseFloat(buryBoneData?.user?.tBoneOut)
+      : parseFloat(buryBoneData?.user?.tBoneOut) -
+        parseFloat(buryBoneData?.user?.tBoneIn);
+
+  const buryBoneStaked = buryBoneData?.user?.boneStaked;
+
+  const buryBoneStakedUSD = buryBoneData?.user?.boneStakedUSD;
+
+  const buryBoneHarvested = buryBoneData?.user?.boneHarvested;
+  const buryBoneHarvestedUSD = buryBoneData?.user?.boneHarvestedUSD;
+
+  const buryBonePendingUSD = buryBonePending > 0 ? buryBonePending * bonePrice : 0;
+
+  const buryBoneRoiBone =
+    buryBonePending -
+    (parseFloat(buryBoneData?.user?.boneStaked) -
+      parseFloat(buryBoneData?.user?.boneHarvested) +
+      parseFloat(buryBoneData?.user?.boneIn) -
+      parseFloat(buryBoneData?.user?.boneOut));
+
+  const buryBoneRoiUSD =
+    buryBonePendingUSD -
+    (parseFloat(buryBoneData?.user?.boneStakedUSD) -
+      parseFloat(buryBoneData?.user?.boneHarvestedUSD) +
+      parseFloat(buryBoneData?.user?.usdIn) -
+      parseFloat(buryBoneData?.user?.usdOut));
+
+  // const buryBoneBlockDifference =
+  //   parseInt(blocksData?.blocks[0].number) -
+  //   parseInt(buryBoneData?.user?.createdAtBlock);
+
+  // const buryBoneRoiDailyBone = (buryBoneRoiBone / buryBoneBlockDifference) * 6440;
+
+  // Bury Shib
+  const xShib = parseFloat(buryShibData?.user?.xShib);
+
+  const buryShibPending =
+    (xShib * parseFloat(buryShibData?.user?.bury?.shibStaked)) /
+    parseFloat(buryShibData?.user?.bury?.totalSupply);
+
+  const xShibTransfered =
+  buryShibData?.user?.xShibIn > buryShibData?.user?.xShibOut
+      ? parseFloat(buryShibData?.user?.xShibIn) -
+        parseFloat(buryShibData?.user?.xShibOut)
+      : parseFloat(buryShibData?.user?.xShibOut) -
+        parseFloat(buryShibData?.user?.xShibIn);
+
+  const buryShibStaked = buryShibData?.user?.shibStaked;
+
+  const buryShibStakedUSD = buryShibData?.user?.shibStakedUSD;
+
+  const buryShibHarvested = buryShibData?.user?.shibHarvested;
+  const buryShibHarvestedUSD = buryShibData?.user?.shibHarvestedUSD;
+
+  const buryShibPendingUSD = buryShibPending > 0 ? buryShibPending * shibPrice : 0;
+
+  const buryShibRoiShib =
+  buryShibPending -
+    (parseFloat(buryShibData?.user?.shibStaked) -
+      parseFloat(buryShibData?.user?.shibHarvested) +
+      parseFloat(buryShibData?.user?.shibIn) -
+      parseFloat(buryShibData?.user?.shibOut));
+
+  const buryShibRoiUSD =
+  buryShibPendingUSD -
+    (parseFloat(buryShibData?.user?.shibStakedUSD) -
+      parseFloat(buryShibData?.user?.shibHarvestedUSD) +
+      parseFloat(buryShibData?.user?.usdIn) -
+      parseFloat(buryShibData?.user?.usdOut));
+
+
+  // const buryShibBlockDifference =
+  //   parseInt(blocksData?.blocks[0].number) -
+  //   parseInt(buryShibData?.user?.createdAtBlock);
+
+  // const buryShibRoiDailyShib = (buryShibRoiShib / buryShibBlockDifference) * 6440;
+
+
+  // Bury Leash
+  const xLeash = parseFloat(buryLeashData?.user?.xLeash);
+
+  const buryLeashPending =
+    (xLeash * parseFloat(buryLeashData?.user?.bury?.leashStaked)) /
+    parseFloat(buryLeashData?.user?.bury?.totalSupply);
+
+  const xLeashTransfered =
+  buryLeashData?.user?.xLeashIn > buryLeashData?.user?.xLeashOut
+      ? parseFloat(buryLeashData?.user?.xLeashIn) -
+        parseFloat(buryLeashData?.user?.xLeashOut)
+      : parseFloat(buryLeashData?.user?.xLeashOut) -
+        parseFloat(buryLeashData?.user?.xLeashIn);
+
+  const buryLeashStaked = buryLeashData?.user?.leashStaked;
+
+  const buryLeashStakedUSD = buryLeashData?.user?.leashStakedUSD;
+
+  const buryLeashHarvested = buryLeashData?.user?.leashHarvested;
+  const buryLeashHarvestedUSD = buryLeashData?.user?.leashHarvestedUSD;
+
+  const buryLeashPendingUSD = buryLeashPending > 0 ? buryLeashPending * leashPrice : 0;
+
+  const buryLeashRoiLeash =
+  buryLeashPending -
+    (parseFloat(buryLeashData?.user?.leashStaked) -
+      parseFloat(buryLeashData?.user?.leashHarvested) +
+      parseFloat(buryLeashData?.user?.leashIn) -
+      parseFloat(buryLeashData?.user?.leashOut));
+
+  const buryLeashRoiUSD =
+  buryLeashPendingUSD -
+    (parseFloat(buryLeashData?.user?.leashStakedUSD) -
+      parseFloat(buryLeashData?.user?.leashHarvestedUSD) +
+      parseFloat(buryLeashData?.user?.usdIn) -
+      parseFloat(buryLeashData?.user?.usdOut));
+
+  // const buryLeashBlockDifference =
+  //   parseInt(blocksData?.blocks[0].number) -
+  //   parseInt(buryLeashData?.user?.createdAtBlock);
+
+  // const buryLeashRoiDailyLeash = (buryLeashRoiLeash / buryLeashBlockDifference) * 6440;
 
   // POOLS
 
@@ -194,11 +329,11 @@ function UserPage() {
     poolUsers?.reduce((previousValue, currentValue) => {
       return (
         previousValue +
-        ((currentValue.amount * currentValue.pool.accSushiPerShare) / 1e12 -
+        ((currentValue.amount * currentValue.pool.accBonePerShare) / 1e12 -
           currentValue.rewardDebt) /
           1e18
       );
-    }, 0) * sushiPrice;
+    }, 0) * bonePrice;
 
   const [
     poolEntriesUSD,
@@ -210,7 +345,7 @@ function UserPage() {
       return [
         entries + parseFloat(currentValue.entryUSD),
         exits + parseFloat(currentValue.exitUSD),
-        harvested + parseFloat(currentValue.sushiHarvestedUSD),
+        harvested + parseFloat(currentValue.boneHarvestedUSD),
       ];
     },
     [0, 0, 0]
@@ -219,15 +354,26 @@ function UserPage() {
   // Global
 
   // const originalInvestments =
-  //   parseFloat(barData?.user?.sushiStakedUSD) + parseFloat(poolEntriesUSD);
+  //   parseFloat(barData?.user?.boneStakedUSD) + parseFloat(poolEntriesUSD);
 
-  const investments =
-    poolEntriesUSD + barPendingUSD + poolsPendingUSD + poolExitsUSD;
+  // const investments =
+  //   poolEntriesUSD + barPendingUSD + poolsPendingUSD + poolExitsUSD;
+
+  const buryBoneInvestments =
+    poolEntriesUSD + buryBonePendingUSD + poolsPendingUSD + poolExitsUSD;
+  const buryShibInvestments =
+    poolEntriesUSD + buryShibPendingUSD + poolsPendingUSD + poolExitsUSD;
+  const buryLeashInvestments =
+    poolEntriesUSD + buryLeashPendingUSD + poolsPendingUSD + poolExitsUSD;
+
+  const buryShibComing = false
+  const buryLeashComing = false
+  const buryBoneComing = false
 
   return (
     <AppShell>
       <Head>
-        <title>User {id} | SushiSwap Analytics</title>
+        <title>User {id} | ShibaSwap Analytics</title>
       </Head>
 
       <PageHeader>
@@ -236,18 +382,24 @@ function UserPage() {
         </Typography>
       </PageHeader>
 
-      <Typography
-        variant="h6"
-        component="h2"
-        color="textSecondary"
-        gutterBottom
-      >
-        Bar
-      </Typography>
+      {/*<Typography*/}
+      {/*  variant="h6"*/}
+      {/*  component="h2"*/}
+      {/*  color="textSecondary"*/}
+      {/*  gutterBottom*/}
+      {/*>*/}
+      {/*  Bar*/}
+      {/*</Typography>*/}
 
-      {!barData?.user?.bar ? (
+      {/* Bury Bone */}
+      {
+      buryBoneComing ? (
         <Box mb={4}>
-          <Typography>Address isn't in the bar...</Typography>
+          <Typography>BuryBone: Coming Soon...</Typography>
+        </Box>
+      ):!buryBoneData?.user ? (
+        <Box mb={4}>
+          <Typography>Address isn't in the Bury Bone...</Typography>
         </Box>
       ) : (
         <>
@@ -256,22 +408,22 @@ function UserPage() {
               <Grid item xs={12} sm={6} md={3}>
                 <KPI
                   title="Value"
-                  value={formatCurrency(sushiPrice * barPending)}
+                  value={buryBoneData?.user?.bury ? formatCurrency(bonePrice * buryBonePending): "-"}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
-                <KPI title="Invested" value={formatCurrency(barStakedUSD)} />
+                <KPI title="Invested" value={formatCurrency(buryBoneStakedUSD)} />
               </Grid>
 
               <Grid item xs={12} sm={6} md={3}>
                 <KPI
-                  title="xSUSHI"
-                  value={Number(xSushi.toFixed(2)).toLocaleString()}
+                  title="tBONE"
+                  value={Number(tBone.toFixed(2)).toLocaleString()}
                 />
               </Grid>
 
               <Grid item xs={12} sm={6} md={3}>
-                <KPI title="Profit/Loss" value={formatCurrency(barRoiUSD)} />
+                <KPI title="Profit/Loss" value={formatCurrency(buryBoneRoiUSD)} />
               </Grid>
             </Grid>
           </Box>
@@ -291,16 +443,16 @@ function UserPage() {
                     <TableCell key="pending" align="right">
                       Pending
                     </TableCell>
-                    <TableCell key="barRoiYearly" align="right">
+                    {/* <TableCell key="buryBoneRoiYearly" align="right">
                       ROI (Yearly)
                     </TableCell>
-                    <TableCell key="barRoiMonthly" align="right">
+                    <TableCell key="buryBoneRoiMonthly" align="right">
                       ROI (Monthly)
                     </TableCell>
-                    <TableCell key="barRoiDaily" align="right">
+                    <TableCell key="buryBoneRoiDaily" align="right">
                       ROI (Daily)
-                    </TableCell>
-                    <TableCell key="barRoiSushi" align="right">
+                    </TableCell> */}
+                    <TableCell key="buryBoneRoiBone" align="right">
                       ROI (All-time)
                     </TableCell>
                   </TableRow>
@@ -312,63 +464,354 @@ function UserPage() {
                         <Avatar
                           className={classes.avatar}
                           imgProps={{ loading: "lazy" }}
-                          alt="SUSHI"
+                          alt="BONE"
                           src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
-                            "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                            "0x9813037ee2218799597d83D4a5B6F3b6778218d9"
                           )}/logo.png`}
                         />
                         <Link
-                          href={`/tokens/0x6b3595068778dd592e39a122f4f5a5cf09c90fe2`}
+                          href={`/tokens/0x9813037ee2218799597d83D4a5B6F3b6778218d9`}
                           variant="body2"
                           noWrap
                         >
-                          SUSHI
+                          BONE
                         </Link>
                         {/* <Link href={`/tokens/0x8798249c2e607446efb7ad49ec89dd1865ff4272`} variant="body2" noWrap>
-                        xSUSHI
+                        tBONE
                       </Link> */}
                       </Box>
                     </TableCell>
                     <TableCell align="right">
                       <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barStaked)} (
-                        {formatCurrency(barStakedUSD)})
+                        {decimalFormatter.format(buryBoneStaked)} (
+                        {formatCurrency(buryBoneStakedUSD)})
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
                       <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barHarvested)} (
-                        {formatCurrency(barHarvestedUSD)})
+                        {decimalFormatter.format(buryBoneHarvested)} (
+                        {formatCurrency(buryBoneHarvestedUSD)})
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
                       <Typography noWrap variant="body2">
-                        {Number(barPending.toFixed(2)).toLocaleString()} (
-                        {formatCurrency(sushiPrice * barPending)})
+                        {buryBoneData?.user?.bury ? 
+                          Number(buryBonePending.toFixed(2)).toLocaleString()+" ("+formatCurrency(bonePrice * buryBonePending)+")"
+                          : "-"
+                        }
+                      </Typography>
+                    </TableCell>
+                    {/* <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(buryBoneRoiDailyBone * 365)} (
+                        {formatCurrency(buryBoneRoiDailyBone * 365 * bonePrice)})
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
                       <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barRoiDailySushi * 365)} (
-                        {formatCurrency(barRoiDailySushi * 365 * sushiPrice)})
+                        {decimalFormatter.format(buryBoneRoiDailyBone * 30)} (
+                        {formatCurrency(buryBoneRoiDailyBone * 30 * bonePrice)})
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
                       <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barRoiDailySushi * 30)} (
-                        {formatCurrency(barRoiDailySushi * 30 * sushiPrice)})
+                        {decimalFormatter.format(buryBoneRoiDailyBone)} (
+                        {formatCurrency(buryBoneRoiDailyBone * bonePrice)})
                       </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography noWrap variant="body2">
-                        {decimalFormatter.format(barRoiDailySushi)} (
-                        {formatCurrency(barRoiDailySushi * sushiPrice)})
-                      </Typography>
-                    </TableCell>
+                    </TableCell> */}
 
                     <TableCell align="right">
-                      {decimalFormatter.format(barRoiSushi)} (
-                      {formatCurrency(barRoiSushi * sushiPrice)})
+                        {buryBoneData?.user?.bury ? 
+                          decimalFormatter.format(buryBoneRoiBone)+" ("+formatCurrency(buryBoneRoiBone * bonePrice)+")"
+                          : "-"
+                        }
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </>
+      )}
+
+      {/* Bury Shib */}
+      {
+      buryShibComing ? (
+        <Box mb={4}>
+          <Typography>BuryShib: Coming Soon...</Typography>
+        </Box>
+      ): !buryShibData?.user ? (
+        <Box mb={4}>
+          <Typography>Address isn't in the Bury Shib...</Typography>
+        </Box>
+      ) : (
+        <>
+          <Box mb={4}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={3}>
+                <KPI
+                  title="Value"
+                  value={ buryShibData?.user?.bury ? formatCurrency(shibPrice * buryShibPending): "-"}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <KPI title="Invested" value={formatCurrency(buryShibStakedUSD)} />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={3}>
+                <KPI
+                  title="xSHIB"
+                  value={Number(xShib.toFixed(2)).toLocaleString()}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={3}>
+                <KPI title="Profit/Loss" value={formatCurrency(buryShibRoiUSD)} />
+              </Grid>
+            </Grid>
+          </Box>
+
+          <Box my={4}>
+            <TableContainer variant="outlined">
+              <Table aria-label="farming">
+                <TableHead>
+                  <TableRow>
+                    <TableCell key="token">Token</TableCell>
+                    <TableCell key="staked" align="right">
+                      Deposited
+                    </TableCell>
+                    <TableCell key="harvested" align="right">
+                      Withdrawn
+                    </TableCell>
+                    <TableCell key="pending" align="right">
+                      Pending
+                    </TableCell>
+                    {/* <TableCell key="buryShibRoiYearly" align="right">
+                      ROI (Yearly)
+                    </TableCell>
+                    <TableCell key="buryShibRoiMonthly" align="right">
+                      ROI (Monthly)
+                    </TableCell>
+                    <TableCell key="buryShibRoiDaily" align="right">
+                      ROI (Daily)
+                    </TableCell>
+                    <TableCell key="buryShibRoiShib" align="right">
+                      ROI (All-time)
+                    </TableCell> */}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow key="12">
+                    <TableCell component="th" scope="row">
+                      <Box display="flex" alignItems="center">
+                        <Avatar
+                          className={classes.avatar}
+                          imgProps={{ loading: "lazy" }}
+                          alt="SHIB"
+                          src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                            "0x9813037ee2218799597d83D4a5B6F3b6778218d9"
+                          )}/logo.png`}
+                        />
+                        <Link
+                          href={`/tokens/0x9813037ee2218799597d83D4a5B6F3b6778218d9`}
+                          variant="body2"
+                          noWrap
+                        >
+                          SHIB
+                        </Link>
+                        {/* <Link href={`/tokens/0x8798249c2e607446efb7ad49ec89dd1865ff4272`} variant="body2" noWrap>
+                        xShib
+                      </Link> */}
+                      </Box>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(buryShibStaked)} (
+                        {formatCurrency(buryShibStakedUSD)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(buryShibHarvested)} (
+                        {formatCurrency(buryShibHarvestedUSD)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {buryShibData?.user?.bury ? 
+                            Number(buryShibPending.toFixed(2)).toLocaleString()+" ("+formatCurrency(shibPrice * buryShibPending)+")"
+                            : "-"
+                        }
+                      </Typography>
+                    </TableCell>
+                    {/* <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(buryShibRoiDailyShib * 365)} (
+                        {formatCurrency(buryShibRoiDailyShib * 365 * shibPrice)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(buryShibRoiDailyShib * 30)} (
+                        {formatCurrency(buryShibRoiDailyShib * 30 * shibPrice)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(buryShibRoiDailyShib)} (
+                        {formatCurrency(buryShibRoiDailyShib * shibPrice)})
+                      </Typography>
+                    </TableCell> */}
+
+                    <TableCell align="right">
+                      {buryShibData?.user?.bury ? 
+                          decimalFormatter.format(buryShibRoiShib)+" ("+formatCurrency(buryShibRoiShib * shibPrice)+")"
+                          : "-"
+                        }
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </>
+      )}
+
+      {/* Bury Leash */}
+
+      {
+      buryLeashComing ? (
+        <Box mb={4}>
+          <Typography>BuryLeash: Coming Soon...</Typography>
+        </Box>
+      ): !buryLeashData?.user ? (
+        <Box mb={4}>
+          <Typography>Address isn't in the Bury Leash...</Typography>
+        </Box>
+      ) : (
+        <>
+          <Box mb={4}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={3}>
+                <KPI
+                  title="Value"
+                  value={buryLeashData?.user?.bury ? formatCurrency(leashPrice * buryLeashPending): "-"}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <KPI title="Invested" value={formatCurrency(buryLeashStakedUSD)} />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={3}>
+                <KPI
+                  title="xLEASH"
+                  value={Number(xLeash.toFixed(2)).toLocaleString()}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={3}>
+                <KPI title="Profit/Loss" value={formatCurrency(buryLeashRoiUSD)} />
+              </Grid>
+            </Grid>
+          </Box>
+
+          <Box my={4}>
+            <TableContainer variant="outlined">
+              <Table aria-label="farming">
+                <TableHead>
+                  <TableRow>
+                    <TableCell key="token">Token</TableCell>
+                    <TableCell key="staked" align="right">
+                      Deposited
+                    </TableCell>
+                    <TableCell key="harvested" align="right">
+                      Withdrawn
+                    </TableCell>
+                    <TableCell key="pending" align="right">
+                      Pending
+                    </TableCell>
+                    {/* <TableCell key="buryLeashRoiYearly" align="right">
+                      ROI (Yearly)
+                    </TableCell>
+                    <TableCell key="buryLeashRoiMonthly" align="right">
+                      ROI (Monthly)
+                    </TableCell>
+                    <TableCell key="buryLeashRoiDaily" align="right">
+                      ROI (Daily)
+                    </TableCell> */}
+                    <TableCell key="buryLeashRoiLeash" align="right">
+                      ROI (All-time)
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow key="12">
+                    <TableCell component="th" scope="row">
+                      <Box display="flex" alignItems="center">
+                        <Avatar
+                          className={classes.avatar}
+                          imgProps={{ loading: "lazy" }}
+                          alt="LEASH"
+                          src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+                            "0x9813037ee2218799597d83D4a5B6F3b6778218d9"
+                          )}/logo.png`}
+                        />
+                        <Link
+                          href={`/tokens/0x9813037ee2218799597d83D4a5B6F3b6778218d9`}
+                          variant="body2"
+                          noWrap
+                        >
+                          LEASH
+                        </Link>
+                        {/* <Link href={`/tokens/0x8798249c2e607446efb7ad49ec89dd1865ff4272`} variant="body2" noWrap>
+                        xLEASH
+                      </Link> */}
+                      </Box>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(buryLeashStaked)} (
+                        {formatCurrency(buryLeashStakedUSD)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(buryLeashHarvested)} (
+                        {formatCurrency(buryLeashHarvestedUSD)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {buryLeashData?.user?.bury ? 
+                          Number(buryLeashPending.toFixed(2)).toLocaleString()+" ("+formatCurrency(leashPrice * buryLeashPending)+")"
+                          : "-"
+                        }
+                      </Typography>
+                    </TableCell>
+                    {/* <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(buryLeashRoiDailyLeash * 365)} (
+                        {formatCurrency(buryLeashRoiDailyLeash * 365 * leashPrice)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(buryLeashRoiDailyLeash * 30)} (
+                        {formatCurrency(buryLeashRoiDailyLeash * 30 * leashPrice)})
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography noWrap variant="body2">
+                        {decimalFormatter.format(buryLeashRoiDailyLeash)} (
+                        {formatCurrency(buryLeashRoiDailyLeash * leashPrice)})
+                      </Typography>
+                    </TableCell> */}
+
+                    <TableCell align="right">
+                      {buryLeashData?.user?.bury ? 
+                          decimalFormatter.format(buryLeashRoiLeash)+" ("+formatCurrency(buryLeashRoiLeash * leashPrice)+")"
+                          : "-"
+                        }
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -438,11 +881,11 @@ function UserPage() {
                     <TableCell key="value" align="right">
                       Value
                     </TableCell>
-                    <TableCell key="pendingSushi" align="right">
-                      Sushi Pending
+                    <TableCell key="pendingBone" align="right">
+                      Bone Pending
                     </TableCell>
-                    <TableCell key="sushiHarvested" align="right">
-                      Sushi Harvested
+                    <TableCell key="boneHarvested" align="right">
+                      Bone Harvested
                     </TableCell>
                     <TableCell key="pl" align="right">
                       Profit/Loss
@@ -464,17 +907,17 @@ function UserPage() {
                     const token0 = pair.reserve0 * share;
                     const token1 = pair.reserve1 * share;
 
-                    const pendingSushi =
-                      ((user.amount * user.pool.accSushiPerShare) / 1e12 -
+                    const pendingBone =
+                      ((user.amount * user.pool.accBonePerShare) / 1e12 -
                         user.rewardDebt) /
                       1e18;
-                    // user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
+                    // user.amount.mul(accBonePerShare).div(1e12).sub(user.rewardDebt);
 
                     // console.log(
                     //   user,
                     //   user.entryUSD,
                     //   user.exitUSD,
-                    //   pendingSushi * sushiPrice
+                    //   pendingBone * bonePrice
                     // );
 
                     return (
@@ -524,17 +967,17 @@ function UserPage() {
                         </TableCell>
                         <TableCell align="right">
                           <Typography noWrap variant="body2">
-                            {decimalFormatter.format(pendingSushi)} (
+                            {decimalFormatter.format(pendingBone)} (
                             {currencyFormatter.format(
-                              pendingSushi * sushiPrice
+                              pendingBone * bonePrice
                             )}
                             )
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
                           <Typography noWrap variant="body2">
-                            {decimalFormatter.format(user.sushiHarvested)} (
-                            {currencyFormatter.format(user.sushiHarvestedUSD)})
+                            {decimalFormatter.format(user.boneHarvested)} (
+                            {currencyFormatter.format(user.boneHarvestedUSD)})
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
@@ -542,8 +985,8 @@ function UserPage() {
                             {currencyFormatter.format(
                               parseFloat(pair.reserveUSD * share) +
                                 parseFloat(user.exitUSD) +
-                                parseFloat(user.sushiHarvestedUSD) +
-                                parseFloat(pendingSushi * sushiPrice) -
+                                parseFloat(user.boneHarvestedUSD) +
+                                parseFloat(pendingBone * bonePrice) -
                                 parseFloat(user.entryUSD)
                             )}
                           </Typography>
@@ -569,9 +1012,17 @@ export async function getStaticProps({ params }) {
 
   await getEthPrice(client);
 
-  await getSushiToken(client);
+  await getBoneToken(client);
 
-  await getBarUser(id.toLowerCase(), client);
+  await getShibToken(client);
+
+  await getLeashToken(client);
+
+  await getBuryBoneUser(id.toLowerCase(), client);
+
+  await getBuryShibUser(id.toLowerCase(), client);
+
+  await getBuryLeashUser(id.toLowerCase(), client);
 
   await getPoolUser(id.toLowerCase(), client);
 

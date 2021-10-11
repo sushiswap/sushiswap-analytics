@@ -13,7 +13,8 @@ body {
 .dark-theme body,
 .dark-theme .MuiInputBase-root,
 .dark-theme .MuiPaper-root {
-  background: #050709;
+  background-color: #202335;
+  background-image: linear-gradient(to bottom, #0d101a 20px, #141824 700px, #141824);
   color: #fff;
 }
 

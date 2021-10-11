@@ -5,10 +5,17 @@ export const TOKEN_DENY = [
   "0xfc989fbb6b3024de5ca0144dc23c18a063942ac1",
 ];
 
-export const PAIR_DENY = ["0xb6a741f37d6e455ebcc9f17e2c16d0586c3f57a5"];
+export const PAIR_DENY = []; //"0xb6a741f37d6e455ebcc9f17e2c16d0586c3f57a5"
 
 export const EXCHANGE_CREATED_TIMESTAMP = 1599214239;
 
-export const POOL_DENY = ["14", "29", "45", "30"];
+export const POOL_DENY = []; //"14", "29", "45", "30"
 
-export const SUSHI_TOKEN = "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2";
+export const BONE_TOKEN_ADDRESS = "0x9813037ee2218799597d83d4a5b6f3b6778218d9";
+export const LEASH_TOKEN_ADDRESS = "0x27c70cd1946795b66be9d954418546998b546634";
+export const SHIB_TOKEN_ADDRESS = "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce";
+
+export const BURY_SHIB_ADDRESS = "0xb4a81261b16b92af0b9f7c4a83f1e885132d81e4";
+export const BURY_LEASH_ADDRESS = "0xa57d319b3cf3ad0e4d19770f71e63cf847263a0b";
+export const BURY_BONE_ADDRESS = "0xf7a0383750fef5abace57cc4c9ff98e3790202b3";
+export const TOPDOG_ADDRESS = "0x94235659cf8b805b2c658f9ea2d6d6ddbb17c8d7";

@@ -12,7 +12,7 @@ import {
   poolsQuery,
 } from "../queries/masterchef";
 
-import { POOL_DENY } from "app/core/constants";
+import {BONE_TOKEN_ADDRESS, POOL_DENY, TOPDOG_ADDRESS} from "app/core/constants";
 import { getApollo } from "../apollo";
 import { sub } from "date-fns";
 
@@ -155,17 +155,17 @@ export async function getPools(client = getApollo()) {
   const ethPrice = bundles[0].ethPrice;
 
   const { token } = await getToken(
-    "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+    BONE_TOKEN_ADDRESS
   );
 
-  const sushiPrice = ethPrice * token.derivedETH;
+  const bonePrice = ethPrice * token.derivedETH;
 
   // MASTERCHEF
   const {
     data: { liquidityPositions },
   } = await client.query({
     query: liquidityPositionSubsetQuery,
-    variables: { user: "0xc2edad668740f1aa35e4d8f227fb8e17dca888cd" },
+    variables: { user: TOPDOG_ADDRESS },
   });
 
   await client.cache.writeQuery({
@@ -176,7 +176,7 @@ export async function getPools(client = getApollo()) {
           (pool) =>
             !POOL_DENY.includes(pool.id) &&
             pool.allocPoint !== "0" &&
-            pool.accSushiPerShare !== "0" &&
+            pool.accBonePerShare !== "0" &&
             pairs.find((pair) => pair?.id === pool.pair)
         )
         .map((pool) => {
@@ -205,11 +205,11 @@ export async function getPools(client = getApollo()) {
 
           const rewardPerBlock =
             ((pool.allocPoint / pool.owner.totalAllocPoint) *
-              pool.owner.sushiPerBlock) /
+              pool.owner.bonePerBlock) /
             1e18;
 
 
-          const roiPerBlock = (rewardPerBlock * sushiPrice) / balanceUSD;
+          const roiPerBlock = (rewardPerBlock * bonePrice) / balanceUSD;
 
           const roiPerHour = roiPerBlock * blocksPerHour;
 
@@ -227,7 +227,7 @@ export async function getPools(client = getApollo()) {
             roiPerDay,
             roiPerMonth,
             roiPerYear,
-            rewardPerThousand: 1 * roiPerDay * (1000 / sushiPrice),
+            rewardPerThousand: 1 * roiPerDay * (1000 / bonePrice),
             tvl:
               (pair.reserveUSD / pair.totalSupply) *
               liquidityPosition.liquidityTokenBalance,

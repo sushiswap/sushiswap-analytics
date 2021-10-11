@@ -25,6 +25,7 @@ import { darkModeVar } from "app/core";
 import useDetect from "../core/hooks/useDetect";
 import { useReactiveVar } from "@apollo/client";
 import { useRouter } from "next/router";
+import { Avatar } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,7 +103,7 @@ export default function AppBar({
   }
 
   const page =
-    router.pathname === "/" ? "Dashboard" : router.pathname.split("/")[1];
+    router.pathname === "/" ? "Dog Park" : router.pathname.split("/")[1];
   const { isDesktop } = useDetect();
   return (
     <MuiAppBar
@@ -139,10 +140,10 @@ export default function AppBar({
               justifyContent="space-around"
             >
               <IconButton edge={false} onClick={() => router.push("/")}>
-                <Sushi />
+                {/*<Sushi />*/}
               </IconButton>
               <Typography variant="subtitle1" color="textPrimary" noWrap>
-                SushiSwap Analytics
+                ShibaSwap Analytics
               </Typography>
             </Box>
           </Hidden>
@@ -155,10 +156,10 @@ export default function AppBar({
             /
           </Typography>
           <Typography variant="subtitle1" color="textPrimary" noWrap>
-            {page.charAt(0).toUpperCase() + page.slice(1)}
+            {router.pathname === "/bury-shib" ? 'BURIED Shib' : page.charAt(0).toUpperCase() + page.slice(1) }
           </Typography>
         </div>
-        <Tooltip title="Toggle theme" enterDelay={300}>
+        {/* <Tooltip title="Toggle theme" enterDelay={300}>
           <IconButton
             edge="end"
             onClick={onToggleDarkMode}
@@ -167,7 +168,7 @@ export default function AppBar({
           >
             {!darkMode ? <Brightness4Outlined /> : <Brightness7Outlined />}
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
       </Toolbar>
     </MuiAppBar>
   );

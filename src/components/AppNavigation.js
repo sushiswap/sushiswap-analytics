@@ -54,14 +54,13 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Sushi from "./Sushi";
 import { useRouter } from "next/router";
 
-const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
   root: {},
   list: {
     // "& > *": {
     //   paddingLeft: theme.spacing(3),
     // },
+    paddingTop: theme.spacing(3)
   },
   nested: {
     paddingLeft: theme.spacing(3),
@@ -74,7 +73,8 @@ export default function AppNavigation() {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
-  const [open, setOpen] = useState(true);
+  const [pairsOpen, setPairsOpen] = useState(false);
+  const [farmOpen, setFarmOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const [address, setAddress] = React.useState("");
@@ -93,10 +93,10 @@ export default function AppNavigation() {
         <Hidden smUp implementation="css">
           <Box display="flex" alignItems="center" py={0.5}>
             <IconButton edge={false} onClick={() => router.push("/")}>
-              <Sushi />
+            <img src='/icons/stnd/stnd.svg' alt='stnd logo' style={{width: 30}} />
             </IconButton>
             <Typography variant="subtitle1" color="textPrimary" noWrap>
-              Sushi Analytics
+              Analytics
             </Typography>
           </Box>
         </Hidden>
@@ -118,7 +118,7 @@ export default function AppNavigation() {
           onClick={() => router.push("/")}
         >
           <ListItemIcon>
-            <DashboardOutlined />
+            <img src='/icons/stnd/dashboard.svg' alt='stnd dashboard' style={{width: 20}} />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItem>
@@ -130,9 +130,9 @@ export default function AppNavigation() {
           onClick={() => router.push("/bar")}
         >
           <ListItemIcon>
-            <FastfoodOutlined />
+            <img src='/icons/stnd/dividend.svg' alt='stnd dividend' style={{width: 20}} />
           </ListItemIcon>
-          <ListItemText primary="Bar" />
+          <ListItemText primary="Dividend" />
           {/* {open ? <ExpandLess /> : <ExpandMore />} */}
         </ListItem>
 
@@ -160,14 +160,14 @@ export default function AppNavigation() {
           </List>
         </Collapse> */}
 
-        <ListItem button>
+        <ListItem button onClick={()=>{setFarmOpen(!farmOpen)}}>
           <ListItemIcon>
-            <WavesOutlined />
+            <img src='/icons/stnd/farm.svg' alt='stnd farm' style={{width: 20}} />
           </ListItemIcon>
-          <ListItemText primary="Pools" />
-          {open ? <ExpandLess /> : <ExpandMore />}
+          <ListItemText primary="Farm" />
+          {farmOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={farmOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItem
               button
@@ -217,14 +217,14 @@ export default function AppNavigation() {
           </List>
         </Collapse>
 
-        <ListItem button>
+        <ListItem button onClick={()=>{setPairsOpen(!pairsOpen)}}>
           <ListItemIcon>
             <LinkOutlined />
           </ListItemIcon>
           <ListItemText primary="Pairs" />
-          {open ? <ExpandLess /> : <ExpandMore />}
+          {pairsOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={pairsOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItem
               button

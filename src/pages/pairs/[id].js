@@ -49,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
+    borderRadius: 20,
+    background: 'rgba(255,255,255,.04)',
+    border: 'none'
   },
   reserve: {
     marginRight: theme.spacing(1),
@@ -68,6 +71,11 @@ const useStyles = makeStyles((theme) => ({
       margin: 0,
     },
   },
+  chartContainer: {
+    borderRadius: 20,
+    background: 'rgba(255,255,255,.04)',
+    border: 'none'
+  }
 }));
 
 function PairPage(props) {
@@ -188,7 +196,7 @@ function PairPage(props) {
     <AppShell>
       <Head>
         <title>
-          {pair.token0.symbol}-{pair.token1.symbol} | SushiSwap Analytics
+          {pair.token0.symbol}-{pair.token1.symbol} | Analytics
         </title>
       </Head>
       <PageHeader>
@@ -246,7 +254,7 @@ function PairPage(props) {
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Paper variant="outlined" className={classes.paper}>
+          <Paper variant="outlined" className={classes.paper} >
             <Box display="flex" alignItems="center">
               <TokenIcon className={classes.avatar} id={pair.token1.id} />
               <Typography
@@ -276,6 +284,7 @@ function PairPage(props) {
             <Paper
               variant="outlined"
               style={{ height: 300, position: "relative" }}
+              className={classes.chartContainer}
             >
               <ParentSize>
                 {({ width, height }) => (
@@ -298,6 +307,7 @@ function PairPage(props) {
             <Paper
               variant="outlined"
               style={{ height: 300, position: "relative" }}
+              className={classes.chartContainer}
             >
               <ParentSize>
                 {({ width, height }) => (

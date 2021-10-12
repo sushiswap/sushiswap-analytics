@@ -9,7 +9,7 @@ import parse from "autosuggest-highlight/parse";
 import PairIcon from "./PairIcon";
 import TokenIcon from "./TokenIcon";
 import { useRouter } from "next/router";
-import { Box } from '@material-ui/core';
+import { makeStyles, Box } from '@material-ui/core';
 
 const LISTBOX_PADDING = 8; // px
 
@@ -83,8 +83,16 @@ const renderGroup = (params) => [
   params.children,
 ];
 
+const useStyles = makeStyles((theme) => ({
+  input: {
+    borderRadius: 20,
+    border: 'none'
+  }
+}));
+
 export default function Search({ pairs, tokens }) {
   const router = useRouter();
+  const classes = useStyles();
 
   const options = [
     // ...pairs.slice(offset, limit),
@@ -106,7 +114,7 @@ export default function Search({ pairs, tokens }) {
   return (
     <Autocomplete
       id="search"
-      style={{ width: "100%" }}
+      style={{ width: "100%", borderRadius: 20, background: '#35234f4f' }}
       disableListWrap
       ListboxComponent={ListboxComponent}
       renderGroup={renderGroup}
@@ -124,7 +132,9 @@ export default function Search({ pairs, tokens }) {
           {...params}
           label="Looking for something?"
           variant="outlined"
-          size="small"
+          InputProps={{
+            className: classes.input,
+          }}
         />
       )}
       getOptionLabel={(option) => option.text}

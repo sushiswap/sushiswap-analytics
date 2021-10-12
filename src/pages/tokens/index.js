@@ -24,7 +24,7 @@ function TokensPage() {
   return (
     <AppShell>
       <Head>
-        <title>Tokens | SushiSwap Analytics</title>
+        <title>Tokens | Analytics</title>
       </Head>
       <TokenTable title="Tokens" tokens={tokens} />
     </AppShell>

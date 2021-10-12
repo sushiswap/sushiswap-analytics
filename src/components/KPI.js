@@ -9,6 +9,9 @@ import { makeStyles } from "@material-ui/styles";
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100%",
+    border: 'none',
+    borderRadius: 20,
+    background: 'rgba(255,255,255,.04);'
   },
 
   cardContent: {

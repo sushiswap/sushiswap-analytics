@@ -34,15 +34,10 @@ export default class MyDocument extends Document {
             name="keywords"
             content={process.env.NEXT_PUBLIC_APP_KEYWORDS}
           />
-
           <link
-            rel="preload"
-            href="/fonts/inter-var-latin.woff2"
-            as="font"
-            type="font/woff2"
-            crossOrigin="anonymous"
+            href="https://fonts.googleapis.com/css2?family=Poppins&display=optional"
+            rel="stylesheet"
           />
-
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
 

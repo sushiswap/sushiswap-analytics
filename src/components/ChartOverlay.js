@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: "row",
     },
   },
+  title: {
+    fontWeight: 700
+  }
 }));
 export default function ChartOverlay({ overlay, onTimespanChange }) {
   const { title, value, date } = overlay;
@@ -26,18 +29,20 @@ export default function ChartOverlay({ overlay, onTimespanChange }) {
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   return (
     <>
-      <div style={{ position: "absolute", top: 24, left: 24 }}>
-        <Typography variant="subtitle2" color="textSecondary">
+      <div style={{ position: "absolute", top: 14, left: 14 }}>
+        <Typography variant="h5" color="textPrimary" className={classes.title}>
           {title}
         </Typography>
-        <Typography variant="h5" color="textPrimary">
+        <Typography variant="subtitle1" color="textSecondary">
           {value}
         </Typography>
-        <Typography variant="subtitle1" color="textSecondary">
+      </div>
+      <div style={{ position: "absolute", top: 14, right: 14 }}>
+        <Typography variant="subtitle4" color="textSecondary">
           {formatDate(date * 1e3)}
         </Typography>
       </div>
-      <div style={{ position: "absolute", top: 20, right: 12 }}>
+      <div style={{ position: "absolute", top: 70, left: '50%', transform: 'translateX(-50%)' }}>
         <div className={classes.filter}>
           <Button
             type="button"

@@ -25,7 +25,7 @@
   padding: 40px 0;
   text-align: center;
   font-size: 20px;
-  font-family: 'Inter';
+  font-family: 'Poppins';
 }
 
 .dark-theme .not-supported {
@@ -39,7 +39,7 @@
 }
 
 .widget-container .itb-widget * {
-  font-family: "Inter", sans-serif;
+  font-family: "Poppins", sans-serif;
   max-width: unset;
 }
 

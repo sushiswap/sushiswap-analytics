@@ -172,7 +172,7 @@ function PoolPage() {
   return (
     <AppShell>
       <Head>
-        <title>Pool {id} | SushiSwap Analytics</title>
+        <title>Pool {id} | Analytics</title>
       </Head>
 
       <PageHeader mb={3}>

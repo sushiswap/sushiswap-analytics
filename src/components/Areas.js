@@ -1,6 +1,6 @@
 import { AreaClosed, LinePath } from "@visx/shape";
 import { AxisBottom, AxisLeft } from "@visx/axis";
-import { GradientTealBlue, LinearGradient } from "@visx/gradient";
+import { GradientPinkBlue, LinearGradient } from "@visx/gradient";
 import {
   MarkerArrow,
   MarkerCircle,
@@ -68,7 +68,7 @@ const Areas = withParentSize(({ parentWidth, parentHeight, margin, data }) => {
   return (
     <div style={{ position: "relative" }}>
       <svg width={parentWidth} height={parentHeight}>
-        <GradientTealBlue id="gradient" />
+        <GradientPinkBlue id="gradient" />
         <LinearGradient id="positive" from="#43e97b" to="#43e97b" rotate="0" />
         <LinearGradient id="negative" from="#ff0844" to="#ffb199" rotate="0" />
 

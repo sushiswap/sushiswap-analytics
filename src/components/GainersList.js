@@ -1,10 +1,10 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 
 import Link from "./Link";
 import PairIcon from "./PairIcon";
 import React from "react";
 import SortableTable from "./SortableTable";
-import TokenIcon from "./TokenIcon";
+// import TokenIcon from "./TokenIcon";
 import { formatCurrency } from "app/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -46,7 +46,8 @@ export default function GainersList({ pairs }) {
             align: "right",
             render: (row, index) => (
               <div className={classes.gained}>
-                +{formatCurrency(row.feesUSDGained - row.feesUSDGainedYesterday)}
+                +
+                {formatCurrency(row.feesUSDGained - row.feesUSDGainedYesterday)}
               </div>
             ),
           },

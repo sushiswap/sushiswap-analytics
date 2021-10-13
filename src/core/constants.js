@@ -12,3 +12,36 @@ export const EXCHANGE_CREATED_TIMESTAMP = 1599214239;
 export const POOL_DENY = ["14", "29", "45", "30"];
 
 export const SUSHI_TOKEN = "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2";
+
+export const DEFAULT_CHAIN_ID = 4;
+
+export const ChainId = {
+  RINKEBY: 4,
+  SHIBUYA: 81,
+};
+
+export const SCANNERS = {
+  [ChainId.RINKEBY]: {
+    name: "Etherscan",
+    url: "https://rinkeby.etherscan.io/",
+    getUrl: (id) => {
+      return `https://rinkeby.etherscan.io/address/${id}`;
+    },
+  },
+  [ChainId.SHIBUYA]: {
+    name: "Subscan",
+    url: "https://shibuya.subscan.io/",
+    getUrl: (id) => {
+      return `https://shibuya.subscan.io/account/${id}`;
+    },
+  },
+};
+
+export const MASTERPOOL_ADDRESS = {
+  [ChainId.RINKEBY]: "0x22079b36af1ab814350fff725cd8f67f3c70b753",
+};
+
+export const STND_ADDRESS = {
+  [ChainId.RINKEBY]: "0xc8aeedb09f4d90d59ee47fed8c70d10fd267b2ab",
+  [ChainId.SHIBUYA]: "0xb0a1aa4cb76c0e35d9ac9eba422bf76534bf155a",
+};

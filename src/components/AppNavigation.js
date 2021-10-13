@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     // "& > *": {
     //   paddingLeft: theme.spacing(3),
     // },
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
   },
   nested: {
     paddingLeft: theme.spacing(3),
@@ -93,7 +93,11 @@ export default function AppNavigation() {
         <Hidden smUp implementation="css">
           <Box display="flex" alignItems="center" py={0.5}>
             <IconButton edge={false} onClick={() => router.push("/")}>
-            <img src='/icons/stnd/stnd.svg' alt='stnd logo' style={{width: 30}} />
+              <img
+                src="/icons/stnd/stnd.svg"
+                alt="stnd logo"
+                style={{ width: 30 }}
+              />
             </IconButton>
             <Typography variant="subtitle1" color="textPrimary" noWrap>
               Analytics
@@ -118,12 +122,16 @@ export default function AppNavigation() {
           onClick={() => router.push("/")}
         >
           <ListItemIcon>
-            <img src='/icons/stnd/dashboard.svg' alt='stnd dashboard' style={{width: 20}} />
+            <img
+              src="/icons/stnd/dashboard.svg"
+              alt="stnd dashboard"
+              style={{ width: 20 }}
+            />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItem>
 
-        <ListItem
+        {/*<ListItem
           key="/bar"
           button
           selected={router.pathname === "/bar"}
@@ -132,9 +140,9 @@ export default function AppNavigation() {
           <ListItemIcon>
             <img src='/icons/stnd/dividend.svg' alt='stnd dividend' style={{width: 20}} />
           </ListItemIcon>
-          <ListItemText primary="Dividend" />
-          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
-        </ListItem>
+        <ListItemText primary="Dividend" />*/}
+        {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+        {/* </ListItem>*/}
 
         {/* <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
@@ -160,9 +168,18 @@ export default function AppNavigation() {
           </List>
         </Collapse> */}
 
-        <ListItem button onClick={()=>{setFarmOpen(!farmOpen)}}>
+        <ListItem
+          button
+          onClick={() => {
+            setFarmOpen(!farmOpen);
+          }}
+        >
           <ListItemIcon>
-            <img src='/icons/stnd/farm.svg' alt='stnd farm' style={{width: 20}} />
+            <img
+              src="/icons/stnd/farm.svg"
+              alt="stnd farm"
+              style={{ width: 20 }}
+            />
           </ListItemIcon>
           <ListItemText primary="Farm" />
           {farmOpen ? <ExpandLess /> : <ExpandMore />}
@@ -217,7 +234,12 @@ export default function AppNavigation() {
           </List>
         </Collapse>
 
-        <ListItem button onClick={()=>{setPairsOpen(!pairsOpen)}}>
+        <ListItem
+          button
+          onClick={() => {
+            setPairsOpen(!pairsOpen);
+          }}
+        >
           <ListItemIcon>
             <LinkOutlined />
           </ListItemIcon>
@@ -284,7 +306,7 @@ export default function AppNavigation() {
           </ListItemIcon>
           <ListItemText primary="Tokens" />
         </ListItem>
-        <ListItem
+        {/*<ListItem
           button
           key="/portfolio"
           selected={router.pathname.includes("/portfolio")}
@@ -301,7 +323,7 @@ export default function AppNavigation() {
             <AccountTreeOutlined />
           </ListItemIcon>
           <ListItemText primary="Portfolio" />
-        </ListItem>
+        </ListItem>*/}
       </List>
       <Dialog
         maxWidth="sm"

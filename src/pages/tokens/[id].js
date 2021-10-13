@@ -92,8 +92,6 @@ function TokenPage() {
     pollInterval: 60000,
   });
 
-  console.log({ token })
-
   const { data: oneDayEthPriceData } = useQuery(oneDayEthPriceQuery);
 
   useInterval(async () => {

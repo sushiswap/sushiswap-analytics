@@ -1,6 +1,6 @@
 import {
   AppShell,
-  Chart,
+  // Chart,
   Curves,
   KPI,
   Link,
@@ -17,14 +17,14 @@ import {
   useTheme,
 } from "@material-ui/core";
 import {
-  currencyFormatter,
+  // currencyFormatter,
   ethPriceQuery,
   getApollo,
   getEthPrice,
   getPool,
   getPoolHistories,
-  getPoolIds,
-  getPools,
+  // getPoolIds,
+  // getPools,
   getSushiToken,
   poolHistoryQuery,
   poolQuery,
@@ -32,17 +32,21 @@ import {
 } from "app/core";
 
 import Head from "next/head";
-import { POOL_DENY } from "app/core/constants";
+// import { POOL_DENY } from "app/core/constants";
 import { ParentSize } from "@visx/responsive";
-import { deepPurple } from "@material-ui/core/colors";
-import { useQuery } from "@apollo/client";
+import { useNetwork } from "state/network/hooks";
+import { STND_ADDRESS } from "app/core/constants";
 import { useRouter } from "next/router";
+// import { deepPurple } from "@material-ui/core/colors";
+// import { useQuery } from "@apollo/client";
+// import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
 }));
 
 function PoolPage() {
+  const chainId = useNetwork();
   const router = useRouter();
 
   if (router.isFallback) {
@@ -51,7 +55,7 @@ function PoolPage() {
 
   const classes = useStyles();
 
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const { id } = router.query;
 
@@ -87,7 +91,7 @@ function PoolPage() {
     data: { token },
   } = useQuery(tokenQuery, {
     variables: {
-      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+      id: STND_ADDRESS[chainId],
     },
   });
 

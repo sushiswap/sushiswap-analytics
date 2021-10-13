@@ -31,9 +31,11 @@ import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { toChecksumAddress } from "web3-utils";
+// import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import { useNetwork } from "state/network/hooks";
+import { SCANNERS } from "app/core/constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,8 +52,8 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     borderRadius: 20,
-    background: 'rgba(255,255,255,.04)',
-    border: 'none'
+    background: "rgba(255,255,255,.04)",
+    border: "none",
   },
   reserve: {
     marginRight: theme.spacing(1),
@@ -73,9 +75,9 @@ const useStyles = makeStyles((theme) => ({
   },
   chartContainer: {
     borderRadius: 20,
-    background: 'rgba(255,255,255,.04)',
-    border: 'none'
-  }
+    background: "rgba(255,255,255,.04)",
+    border: "none",
+  },
 }));
 
 function PairPage(props) {
@@ -86,6 +88,7 @@ function PairPage(props) {
   }
 
   const classes = useStyles();
+  const chainId = useNetwork();
 
   const id = router.query.id.toLowerCase();
 
@@ -254,7 +257,7 @@ function PairPage(props) {
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Paper variant="outlined" className={classes.paper} >
+          <Paper variant="outlined" className={classes.paper}>
             <Box display="flex" alignItems="center">
               <TokenIcon className={classes.avatar} id={pair.token1.id} />
               <Typography
@@ -402,7 +405,7 @@ function PairPage(props) {
               label: `${pair.token1.symbol} Address`,
               maxWidth: "250px",
             },
-            { key: "etherscan", label: "Etherscan", align: "right" },
+            { key: "etherscan", label: SCANNERS[chainId].name, align: "right" },
           ]}
           bodyCells={[
             <Typography variant="body2" noWrap>
@@ -414,13 +417,13 @@ function PairPage(props) {
             <Typography variant="body2" noWrap>
               {pair.token1.id}
             </Typography>,
-            <Link href={`https://etherscan.io/address/${pair.id}`}>View</Link>,
+            <Link href={SCANNERS[chainId].getUrl(pair.id)}>View</Link>,
           ]}
         />
       </Box>
-      <Box my={4}>
+      {/*<Box my={4}>
         <IntoTheBlock pairAddress={pair.id} />
-      </Box>
+        </Box>*/}
       <Box my={4}>
         <Transactions transactions={transactions} txCount={pair.txCount} />
       </Box>
@@ -431,7 +434,7 @@ function PairPage(props) {
 export async function getStaticProps({ params }) {
   const client = getApollo();
 
-  const id = params.id.toLowerCase()
+  const id = params.id.toLowerCase();
 
   // EthPrice
   await client.query({

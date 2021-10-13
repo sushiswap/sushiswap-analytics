@@ -79,13 +79,13 @@ export const poolQuery = gql`
       allocPoint
       lastRewardBlock
       accSushiPerShare
-      balance
+      # balance
       userCount
-      owner {
-        id
-        sushiPerBlock
-        totalAllocPoint
-      }
+      # owner {
+      #   id
+      #   sushiPerBlock
+      #   totalAllocPoint
+      # }
       users(orderBy: amount, orderDirection: desc) {
         id
         address
@@ -137,13 +137,19 @@ export const poolsQuery = gql`
       allocPoint
       lastRewardBlock
       accSushiPerShare
-      balance
+      slpBalance
+      # balance
       userCount
-      owner {
+      masterChef {
         id
         sushiPerBlock
         totalAllocPoint
       }
+      # owner {
+      #   id
+      #   sushiPerBlock
+      #   totalAllocPoint
+      # }
       # users {
       #   id
       #   address

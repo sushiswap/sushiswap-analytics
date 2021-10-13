@@ -1,35 +1,39 @@
 import "../styles/index.css";
 import "../styles/itb.css";
 
-import * as gtag from '../core/analytics'
+import * as gtag from "../core/analytics";
 
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
 import React, { useEffect } from "react";
 import {
-  StylesProvider,
+  // StylesProvider,
   ThemeProvider,
-  createGenerateClassName,
+  // createGenerateClassName,
 } from "@material-ui/core/styles";
 import { darkModeVar, useApollo } from "app/core";
 import { darkTheme, lightTheme } from "../theme";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Head from "next/head";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
+
+import { Provider as ReduxProvider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import store, { persistor } from "../state";
 
 function MyApp({ Component, pageProps }) {
   const client = useApollo(pageProps.initialApolloState);
 
-  const router = useRouter()
+  const router = useRouter();
   useEffect(() => {
     const handleRouteChange = (url) => {
-      gtag.pageview(url)
-    }
-    router.events.on('routeChangeComplete', handleRouteChange)
+      gtag.pageview(url);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange)
-    }
-  }, [router.events])
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
 
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -46,9 +50,10 @@ function MyApp({ Component, pageProps }) {
 
   const darkMode = useReactiveVar(darkModeVar);
 
-  const theme = React.useMemo(() => (darkMode ? darkTheme : lightTheme), [
-    darkMode,
-  ]);
+  const theme = React.useMemo(
+    () => (darkMode ? darkTheme : lightTheme),
+    [darkMode]
+  );
 
   return (
     <>
@@ -59,20 +64,25 @@ function MyApp({ Component, pageProps }) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <ApolloProvider client={client}>
-        <ThemeProvider
-          theme={{
-            ...theme,
-            // props: {
-            //   // Change the default options of useMediaQuery
-            //   MuiUseMediaQuery: { ssrMatchMedia },
-            // },
-          }}
-        >
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </ApolloProvider>
+
+      <ReduxProvider store={store}>
+        <PersistGate loading="loading" persistor={persistor}>
+          <ApolloProvider client={client}>
+            <ThemeProvider
+              theme={{
+                ...theme,
+                // props: {
+                //   // Change the default options of useMediaQuery
+                //   MuiUseMediaQuery: { ssrMatchMedia },
+                // },
+              }}
+            >
+              <CssBaseline />
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </ApolloProvider>
+        </PersistGate>
+      </ReduxProvider>
     </>
   );
 }

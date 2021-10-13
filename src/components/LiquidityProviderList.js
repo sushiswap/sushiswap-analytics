@@ -42,7 +42,7 @@ export default function LiquidityProviderList({
                 <AddressAvatar address={row.address} />
 
                 <Link
-                  href={`https://beta.explorer.harmony.one/address/${row.address}`}
+                  href={`https://explorer.celo.org/address/${row.address}`}
                   target="_blank"
                 >
                   {row.address}

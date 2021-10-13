@@ -15,7 +15,7 @@ export default function TokenIcon({ id, ...rest }) {
   const classes = useStyles();
   const src = useMemo(
     () =>
-      `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/harmony/assets/${toChecksumAddress(
+      `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/celo/assets/${toChecksumAddress(
         id
       )}/logo.png`,
     [id]

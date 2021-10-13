@@ -298,7 +298,7 @@ function TokenPage() {
             token.symbol,
             token.id,
             <Link
-              href={`https://beta.explorer.harmony.one//address/${token.id}`}
+              href={`https://explorer.celo.org/address/${token.id}`}
             >
               View
             </Link>,

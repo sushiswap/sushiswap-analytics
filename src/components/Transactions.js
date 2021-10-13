@@ -102,7 +102,7 @@ export default function Transactions({ transactions, txCount }) {
             key: "to",
             label: "To",
             render: (row) => (
-              <Link href={`https://explorer.harmony.one/#/address/${row.to}`}>
+              <Link href={`https://explorer.celo.org/address/${row.to}`}>
                 {row.to}
               </Link>
             ),

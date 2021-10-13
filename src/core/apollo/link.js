@@ -13,7 +13,7 @@ export const uniswap = from([
 export const exchange = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://sushi.graph.t.hmny.io/subgraphs/name/sushiswap/harmony-exchange",
+    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/celo-exchange",
     shouldBatch: true,
   }),
 ]);
@@ -21,7 +21,7 @@ export const exchange = from([
 export const blocklytics = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://sushi.graph.t.hmny.io/subgraphs/name/sushiswap/harmony-blocks",
+    uri: "https://api.thegraph.com/subgraphs/name/ubeswap/celo-blocks",
     shouldBatch: true,
   }),
 ]);

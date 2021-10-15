@@ -84,7 +84,11 @@ function PairPage(props) {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <AppShell />;
+    return (
+      <AppShell>
+        <div />
+      </AppShell>
+    );
   }
 
   const classes = useStyles();
@@ -193,8 +197,6 @@ function PairPage(props) {
     { liquidity: [], volume: [] }
   );
 
-  // console.log(pair);
-
   return (
     <AppShell>
       <Head>
@@ -212,7 +214,15 @@ function PairPage(props) {
           </Box>
           <Box display="flex" alignItems="center" className={classes.links}>
             <Link
-              href={`https://exchange.sushiswapclassic.org/#/add/${pair.token0.id}/${pair.token1.id}`}
+              href={`https://apps.standard.tech/add/${
+                pair.token0.symbol === "WETH" || pair.token0.symbol === "ETH"
+                  ? "ETH"
+                  : pair.token0.id
+              }/${
+                pair.token1.symbol === "WETH" || pair.token1.symbol === "ETH"
+                  ? "ETH"
+                  : pair.token1.id
+              }`}
               target="_blank"
               variant="body1"
               className={classes.firstLink}
@@ -220,7 +230,15 @@ function PairPage(props) {
               Add Liquidity
             </Link>
             <Link
-              href={`https://exchange.sushiswapclassic.org/#/swap?inputCurrency=${pair.token0.id}&outputCurrency=${pair.token1.id}`}
+              href={`https://apps.standard.tech/swap?inputCurrency=${
+                pair.token0.symbol === "WETH" || pair.token0.symbol === "ETH"
+                  ? "ETH"
+                  : pair.token0.id
+              }&outputCurrency=${
+                pair.token1.symbol === "WETH" || pair.token1.symbol === "ETH"
+                  ? "ETH"
+                  : pair.token1.id
+              }`}
               target="_blank"
               variant="body1"
             >
@@ -405,7 +423,11 @@ function PairPage(props) {
               label: `${pair.token1.symbol} Address`,
               maxWidth: "250px",
             },
-            { key: "etherscan", label: SCANNERS[chainId].name, align: "right" },
+            {
+              key: "etherscan",
+              label: SCANNERS[chainId].name,
+              align: "right",
+            },
           ]}
           bodyCells={[
             <Typography variant="body2" noWrap>

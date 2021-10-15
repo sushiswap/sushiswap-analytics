@@ -7,6 +7,8 @@ import Link from "./Link";
 import React from "react";
 import SortableTable from "./SortableTable";
 import { deepPurple } from "@material-ui/core/colors";
+import { useNetwork } from "state/network/hooks";
+import { SCANNERS } from "app/core/constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +27,9 @@ export default function LiquidityProviderList({
   title = "Liquidity Providers",
 }) {
   const classes = useStyles();
-  const theme = useTheme();
+  // const theme = useTheme();
+  const chainId = useNetwork();
+
   const pair = pool.liquidityPair;
   const shareValueUSD = pair.reserveUSD / pair.totalSupply;
   return (
@@ -42,7 +46,7 @@ export default function LiquidityProviderList({
                 <AddressAvatar address={row.address} />
 
                 <Link
-                  href={`https://etherscan.io/address/${row.address}`}
+                  href={SCANNERS[chainId].getUrl(row.address)}
                   target="_blank"
                 >
                   {row.address}
@@ -55,7 +59,7 @@ export default function LiquidityProviderList({
             label: "Pool Share",
             align: "right",
             render: (row) =>
-              `${((row.amount / pool.balance) * 100).toFixed(4)}%`,
+              `${((row.amount / pool.slpBalance) * 100).toFixed(4)}%`,
           },
           {
             key: "amount",

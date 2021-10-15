@@ -10,7 +10,7 @@ export const EXCHANGE = {
 };
 
 export const MASTERCHEF = {
-  [ChainId.RINKEBY]: "/billjhlee/rinkeby-master-pool",
+  [ChainId.RINKEBY]: "/billjhlee/rinkeby-master-pool2",
   [ChainId.SHIBUYA]: "/digitalnativeinc/shibuya-master-pool",
 };
 

@@ -6,8 +6,8 @@ import SortableTable from "./SortableTable";
 import { Typography } from "@material-ui/core";
 import formatDistance from "date-fns/formatDistance";
 import { makeStyles } from "@material-ui/core/styles";
-import { SCANNERS } from "app/core/constants";
 import { useNetwork } from "state/network/hooks";
+import { SCANNERS } from "app/core/constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Transactions({ transactions, txCount }) {
   const classes = useStyles();
   const chainId = useNetwork();
+
   const rows = [
     ...transactions.swaps,
     ...transactions.mints,

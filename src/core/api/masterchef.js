@@ -231,7 +231,6 @@ export async function getPools(
             roiPerMonth,
             roiPerYear,
             rewardPerThousand: 1 * roiPerDay * (1000 / sushiPrice),
-            // bjhl ?? 1
             tvl:
               (pair.reserveUSD / pair.totalSupply) *
                 liquidityPosition?.liquidityTokenBalance ?? 1,

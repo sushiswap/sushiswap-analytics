@@ -27,12 +27,18 @@ export const SCANNERS = {
     getUrl: (id) => {
       return `https://rinkeby.etherscan.io/address/${id}`;
     },
+    getTxUrl: (id) => {
+      return `https://rinkeby.etherscan.io/address/${id}`;
+    },
   },
   [ChainId.SHIBUYA]: {
     name: "Subscan",
     url: "https://shibuya.subscan.io/",
     getUrl: (id) => {
       return `https://shibuya.subscan.io/account/${id}`;
+    },
+    getTxUrl: (id) => {
+      return `https://shibuya.subscan.io/tx/${id}`;
     },
   },
 };

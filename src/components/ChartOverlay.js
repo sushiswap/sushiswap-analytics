@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   title: {
-    fontWeight: 700
-  }
+    fontWeight: 700,
+  },
 }));
 export default function ChartOverlay({ overlay, onTimespanChange }) {
   const { title, value, date } = overlay;
@@ -38,11 +38,18 @@ export default function ChartOverlay({ overlay, onTimespanChange }) {
         </Typography>
       </div>
       <div style={{ position: "absolute", top: 14, right: 14 }}>
-        <Typography variant="subtitle4" color="textSecondary">
+        <Typography variant="subtitle1" color="textSecondary">
           {formatDate(date * 1e3)}
         </Typography>
       </div>
-      <div style={{ position: "absolute", top: 70, left: '50%', transform: 'translateX(-50%)' }}>
+      <div
+        style={{
+          position: "absolute",
+          top: 70,
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
+      >
         <div className={classes.filter}>
           <Button
             type="button"

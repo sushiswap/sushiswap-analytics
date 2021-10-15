@@ -38,7 +38,7 @@ import { useNetwork } from "state/network/hooks";
 import { STND_ADDRESS } from "app/core/constants";
 import { useRouter } from "next/router";
 // import { deepPurple } from "@material-ui/core/colors";
-// import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 // import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
@@ -46,14 +46,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PoolPage() {
-  const chainId = useNetwork();
   const router = useRouter();
 
   if (router.isFallback) {
-    return <AppShell />;
+    return (
+      <AppShell>
+        <div />
+      </AppShell>
+    );
   }
 
   const classes = useStyles();
+  const chainId = useNetwork();
 
   // const theme = useTheme();
 
@@ -87,16 +91,17 @@ function PoolPage() {
     pollInterval: 60000,
   });
 
-  const {
-    data: { token },
-  } = useQuery(tokenQuery, {
-    variables: {
-      id: STND_ADDRESS[chainId],
-    },
-  });
+  // console.log(STND_ADDRESS[chainId]);
+  // const {
+  //   data: { token },
+  // } = useQuery(tokenQuery, {
+  //   variables: {
+  //     id: STND_ADDRESS[chainId],
+  //   },
+  // });
 
-  const sushiPrice =
-    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+  // const sushiPrice =
+  //   parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
 
   const {
     slpAge,
@@ -201,16 +206,21 @@ function PoolPage() {
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href={`https://sushiswapclassic.org/farms/${
-                pool.liquidityPair.token0.symbol
-              }-${pool.liquidityPair.token1.symbol.replace(
-                "WETH",
-                "ETH"
-              )}%20SLP`}
+              href={`https://apps.standard.tech/add/${
+                pool.liquidityPair.token0.symbol === "WETH" ||
+                pool.liquidityPair.token0.symbol === "ETH"
+                  ? "ETH"
+                  : pool.liquidityPair.token0.id
+              }/${
+                pool.liquidityPair.token1.symbol === "WETH" ||
+                pool.liquidityPair.token1.symbol === "ETH"
+                  ? "ETH"
+                  : pool.liquidityPair.token1.id
+              }`}
               target="_blank"
               variant="body1"
             >
-              Stake SLP
+              Stake LTR
             </Link>
           </Grid>
         </Grid>
@@ -232,7 +242,7 @@ function PoolPage() {
           <KPI
             title="~ SLP Age"
             value={`${(
-              parseFloat(pool.slpAge) / parseFloat(pool.balance / 1e18)
+              parseFloat(pool.slpAge) / parseFloat(pool.slpBalance / 1e18)
             ).toFixed(2)} Days`}
           />
         </Grid>
@@ -242,7 +252,7 @@ function PoolPage() {
         <Grid item xs={12} sm={4}>
           <KPI
             title="Staked"
-            value={`${(pool.balance / 1e18).toFixed(4)} SLP`}
+            value={`${(pool.slpBalance / 1e18).toFixed(4)} SLP`}
           />
         </Grid>
         {/* <Grid item xs={12} sm={4}>

@@ -12,7 +12,7 @@ export const lockupUserQuery = gql`
         lockup {
           totalAllocPoint
         }
-        balance
+        slpBalance
         accSushiPerShare
       }
     }
@@ -26,7 +26,7 @@ const poolUserFragment = gql`
     pool {
       id
       pair
-      balance
+      slpBalance
       accSushiPerShare
       lastRewardBlock
     }
@@ -56,7 +56,7 @@ export const poolHistoryQuery = gql`
         id
         accSushiPerShare
       }
-      slpBalance
+      slpBalanceDecimal
       slpAge
       slpAgeRemoved
       slpDeposited
@@ -79,13 +79,13 @@ export const poolQuery = gql`
       allocPoint
       lastRewardBlock
       accSushiPerShare
-      # balance
+      slpBalance
       userCount
-      # owner {
-      #   id
-      #   sushiPerBlock
-      #   totalAllocPoint
-      # }
+      masterChef {
+        id
+        sushiPerBlock
+        totalAllocPoint
+      }
       users(orderBy: amount, orderDirection: desc) {
         id
         address
@@ -138,18 +138,18 @@ export const poolsQuery = gql`
       lastRewardBlock
       accSushiPerShare
       slpBalance
-      # balance
+      slpBalanceDecimal
       userCount
       masterChef {
         id
         sushiPerBlock
         totalAllocPoint
       }
-      # owner {
-      #   id
-      #   sushiPerBlock
-      #   totalAllocPoint
-      # }
+      masterChef {
+        id
+        sushiPerBlock
+        totalAllocPoint
+      }
       # users {
       #   id
       #   address

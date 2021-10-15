@@ -102,7 +102,6 @@ function PoolPage() {
 
   // const sushiPrice =
   //   parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
-
   const {
     slpAge,
     slpAgeRemoved,
@@ -122,7 +121,8 @@ function PoolPage() {
       });
 
       const slpAgeAverage =
-        parseFloat(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
+        parseFloat(currentValue.slpAge) /
+        parseFloat(currentValue.slpBalanceDecimal);
 
       previousValue.slpAgeAverage.push({
         date,
@@ -136,7 +136,7 @@ function PoolPage() {
 
       previousValue.slpBalance.push({
         date,
-        value: parseFloat(currentValue.slpBalance),
+        value: parseFloat(currentValue.slpBalanceDecimal),
       });
 
       previousValue.slpDeposited.push({
@@ -154,7 +154,7 @@ function PoolPage() {
         value:
           (parseFloat(pool.liquidityPair.reserveUSD) /
             parseFloat(pool.liquidityPair.totalSupply)) *
-          parseFloat(currentValue.slpBalance),
+          parseFloat(currentValue.slpBalanceDecimal),
       });
 
       previousValue.userCount.push({

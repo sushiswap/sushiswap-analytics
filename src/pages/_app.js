@@ -97,7 +97,7 @@ function MyApp({ Component, pageProps }) {
         <meta
           key="twitter:description"
           name="twitter:description"
-          content="Standard Protocol, building the next multichain finance standard"
+          content="Analytics for Standard Protocol, building the next multichain finance standard"
         />
         {/* <meta key="twitter:image" name="twitter:image" content="https://app.sushi.com/icons/icon-192x192.png" /> */}
         <meta
@@ -116,7 +116,7 @@ function MyApp({ Component, pageProps }) {
         <meta
           key="og:description"
           property="og:description"
-          content="Standard Protocol, building the next multichain finance standard"
+          content="Analytics for Standard Protocol, building the next multichain finance standard"
         />
         {/* metamask image*/}
         <link rel="shortcut icon" href="https://i.imgur.com/hIKSt2P.png" />

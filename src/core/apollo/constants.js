@@ -5,7 +5,7 @@ export const GRAPH_HOST = {
 };
 
 export const EXCHANGE = {
-  [ChainId.RINKEBY]: "/billjhlee/rinkeby-exchange",
+  [ChainId.RINKEBY]: "/billjhlee/rinkeby-exchange2",
   [ChainId.SHIBUYA]: "/digitalnativeinc/shibuya-exchange",
 };
 

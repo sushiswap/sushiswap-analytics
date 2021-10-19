@@ -1,9 +1,7 @@
 import gql from "graphql-tag";
 
 export const factoryQuery = gql`
-  query factoryQuery(
-    $id: String! = "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac"
-  ) {
+  query factoryQuery($id: String!) {
     factory(id: $id) {
       id
       volumeUSD
@@ -14,10 +12,7 @@ export const factoryQuery = gql`
 `;
 
 export const factoryTimeTravelQuery = gql`
-  query factoryTimeTravelQuery(
-    $id: String! = "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac"
-    $block: Block_height!
-  ) {
+  query factoryTimeTravelQuery($id: String!, $block: Block_height!) {
     factory(id: $id, block: $block) {
       id
       volumeUSD

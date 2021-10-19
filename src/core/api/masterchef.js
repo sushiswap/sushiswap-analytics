@@ -13,12 +13,12 @@ import {
 } from "../queries/masterchef";
 
 import {
-  DEFAULT_CHAIN_ID,
   MASTERPOOL_ADDRESS,
   POOL_DENY,
   STND_ADDRESS,
 } from "app/core/constants";
 import { getApollo } from "../apollo";
+import { getNetwork } from "core/state";
 // import { sub } from "date-fns";
 
 export async function getPoolIds(client = getApollo()) {
@@ -124,10 +124,7 @@ export async function getPool(id, client = getApollo()) {
   });
 }
 
-export async function getPools(
-  client = getApollo(),
-  chainId = DEFAULT_CHAIN_ID
-) {
+export async function getPools(client = getApollo(), chainId = getNetwork()) {
   const {
     data: { pools },
   } = await client.query({

@@ -39,6 +39,8 @@ import { STND_ADDRESS } from "app/core/constants";
 import { useRouter } from "next/router";
 // import { deepPurple } from "@material-ui/core/colors";
 import { useQuery } from "@apollo/client";
+import { getNetwork } from "core/state";
+import { BigNumber } from "bignumber.js";
 // import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
@@ -151,10 +153,12 @@ function PoolPage() {
 
       previousValue.tvl.push({
         date,
-        value:
-          (parseFloat(pool.liquidityPair.reserveUSD) /
-            parseFloat(pool.liquidityPair.totalSupply)) *
-          parseFloat(currentValue.slpBalanceDecimal),
+        value: parseFloat(
+          BigNumber(pool.liquidityPair.reserveUSD)
+            .dividedBy(BigNumber(pool.liquidityPair.totalSupply))
+            .multipliedBy(BigNumber(currentValue.slpBalanceDecimal))
+            .toFixed(6)
+        ),
       });
 
       previousValue.userCount.push({

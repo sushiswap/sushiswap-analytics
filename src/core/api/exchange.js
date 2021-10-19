@@ -14,12 +14,17 @@ import {
 } from "../api/blocks";
 
 import { getApollo } from "../apollo";
+import { FACTORY_ADDRESS, STND_ADDRESS } from "../constants";
+import { getNetwork } from "core/state";
 
-export async function getFactory(client = getApollo()) {
+export async function getFactory(client = getApollo(), chainId = getNetwork()) {
   const {
     data: { factory },
   } = await client.query({
     query: factoryQuery,
+    variables: {
+      id: FACTORY_ADDRESS[chainId],
+    },
   });
 
   const {
@@ -27,6 +32,7 @@ export async function getFactory(client = getApollo()) {
   } = await client.query({
     query: factoryTimeTravelQuery,
     variables: {
+      id: FACTORY_ADDRESS[chainId],
       block: await getOneDayBlock(),
     },
   });
@@ -36,12 +42,16 @@ export async function getFactory(client = getApollo()) {
   } = await client.query({
     query: factoryTimeTravelQuery,
     variables: {
+      id: FACTORY_ADDRESS[chainId],
       block: await getTwoDayBlock(),
     },
   });
 
   await client.cache.writeQuery({
     query: factoryQuery,
+    variables: {
+      id: FACTORY_ADDRESS[chainId],
+    },
     data: {
       factory: {
         ...factory,
@@ -53,11 +63,17 @@ export async function getFactory(client = getApollo()) {
 
   return await client.cache.readQuery({
     query: factoryQuery,
+    variables: {
+      id: FACTORY_ADDRESS[chainId],
+    },
   });
 }
 
-export async function getSushiToken(client = getApollo()) {
-  return await getToken("0x6b3595068778dd592e39a122f4f5a5cf09c90fe2", client);
+export async function getSushiToken(
+  client = getApollo(),
+  chainId = getNetwork()
+) {
+  return await getToken(STND_ADDRESS[chainId], client);
 }
 
 export async function getDayData(client = getApollo()) {

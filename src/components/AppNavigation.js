@@ -131,18 +131,22 @@ export default function AppNavigation() {
           <ListItemText primary="Dashboard" />
         </ListItem>
 
-        {/*<ListItem
-          key="/bar"
+        <ListItem
+          key="/dividend"
           button
-          selected={router.pathname === "/bar"}
-          onClick={() => router.push("/bar")}
+          selected={router.pathname === "/dividend"}
+          onClick={() => router.push("/dividend")}
         >
           <ListItemIcon>
-            <img src='/icons/stnd/dividend.svg' alt='stnd dividend' style={{width: 20}} />
+            <img
+              src="/icons/stnd/dividend.svg"
+              alt="stnd dividend"
+              style={{ width: 20 }}
+            />
           </ListItemIcon>
-        <ListItemText primary="Dividend" />*/}
-        {/* {open ? <ExpandLess /> : <ExpandMore />} */}
-        {/* </ListItem>*/}
+          <ListItemText primary="Dividend" />
+          {/* {open ? <ExpandLess /> : <ExpandMore />}*/}
+        </ListItem>
 
         {/* <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>

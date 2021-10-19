@@ -1,4 +1,11 @@
-import { AppShell, KPI, Link, Loading, PageHeader, PairIcon } from "app/components";
+import {
+  AppShell,
+  KPI,
+  Link,
+  Loading,
+  PageHeader,
+  PairIcon,
+} from "app/components";
 import {
   Avatar,
   Box,
@@ -47,6 +54,7 @@ import { POOL_DENY } from "app/core/constants";
 import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import { getNetwork } from "core/state";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -69,7 +77,8 @@ function UserPage() {
   }
   const classes = useStyles();
 
-  const id = router && router.query && router.query.id && router.query.id.toLowerCase();
+  const id =
+    router && router.query && router.query.id && router.query.id.toLowerCase();
 
   const {
     data: { bundles },
@@ -200,21 +209,18 @@ function UserPage() {
       );
     }, 0) * sushiPrice;
 
-  const [
-    poolEntriesUSD,
-    poolExitsUSD,
-    poolHarvestedUSD,
-  ] = poolData?.users.reduce(
-    (previousValue, currentValue) => {
-      const [entries, exits, harvested] = previousValue;
-      return [
-        entries + parseFloat(currentValue.entryUSD),
-        exits + parseFloat(currentValue.exitUSD),
-        harvested + parseFloat(currentValue.sushiHarvestedUSD),
-      ];
-    },
-    [0, 0, 0]
-  );
+  const [poolEntriesUSD, poolExitsUSD, poolHarvestedUSD] =
+    poolData?.users.reduce(
+      (previousValue, currentValue) => {
+        const [entries, exits, harvested] = previousValue;
+        return [
+          entries + parseFloat(currentValue.entryUSD),
+          exits + parseFloat(currentValue.exitUSD),
+          harvested + parseFloat(currentValue.sushiHarvestedUSD),
+        ];
+      },
+      [0, 0, 0]
+    );
 
   // Global
 
@@ -564,7 +570,6 @@ function UserPage() {
 
 export async function getStaticProps({ params }) {
   const client = getApollo();
-
   const id = params.id.toLowerCase();
 
   await getEthPrice(client);

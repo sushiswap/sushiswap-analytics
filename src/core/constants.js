@@ -18,6 +18,7 @@ export const DEFAULT_CHAIN_ID = 4;
 export const ChainId = {
   RINKEBY: 4,
   SHIBUYA: 81,
+  SHIDEN: 336,
 };
 
 export const SCANNERS = {
@@ -43,6 +44,13 @@ export const SCANNERS = {
   },
 };
 
+// all addrs should be lowercase
+export const FACTORY_ADDRESS = {
+  [ChainId.RINKEBY]: "0xf659492744608b595670c1508aa0f5b92b84b94d",
+  [ChainId.SHIBUYA]: "0x0e60c35fcf3184dce5cf04d4b736e56f2de7caf7",
+  [ChainId.SHIDEN]: "0x1e3f3d16d8087752d8254906125b7fc39cb1bf59",
+};
+
 export const MASTERPOOL_ADDRESS = {
   [ChainId.RINKEBY]: "0x22079b36af1ab814350fff725cd8f67f3c70b753",
 };
@@ -50,4 +58,8 @@ export const MASTERPOOL_ADDRESS = {
 export const STND_ADDRESS = {
   [ChainId.RINKEBY]: "0xc8aeedb09f4d90d59ee47fed8c70d10fd267b2ab",
   [ChainId.SHIBUYA]: "0xb0a1aa4cb76c0e35d9ac9eba422bf76534bf155a",
+};
+
+export const DIVIDEND_POOL_ADDRESS = {
+  [ChainId.RINKEBY]: "0x45fa9f11b06dff3f4b04746629523c21fb2cadb9",
 };

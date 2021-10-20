@@ -42,7 +42,10 @@ export default function PairTable({ pairs: rows, ethPrice, title, ...rest }) {
           },
           {
             key: "remainingReward",
-            render: (row) => decimalFormatter.format(row.remainingReward),
+            render: (row) =>
+              !Number.isNaN(row.remainingReward)
+                ? parseInt(row.remainingReward)
+                : 0,
             align: "right",
             label: "Remaining Reward (LTR)",
           },
@@ -54,7 +57,10 @@ export default function PairTable({ pairs: rows, ethPrice, title, ...rest }) {
           },
           {
             key: "claimedReward",
-            render: (row) => decimalFormatter.format(row.claimedReward),
+            render: (row) =>
+              !Number.isNaN(row.claimedReward)
+                ? parseInt(row.claimedReward)
+                : 0,
             align: "right",
             label: "Claimed Reward (LTR)",
           },

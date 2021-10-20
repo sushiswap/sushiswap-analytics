@@ -2,6 +2,7 @@ import { AppShell, Curves, KPI } from "app/components";
 import { Grid, Paper } from "@material-ui/core";
 import {
   bondedStrategyHistoriesQuery,
+  bondedStrategyPairsQuery,
   bondedStrategyQuery,
   dayDatasQuery,
   ethPriceQuery,
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function BarPage() {
+function DividendPage() {
   // const classes = useStyles();
   const chainId = useNetwork();
 
@@ -52,13 +53,12 @@ function BarPage() {
     data: { bondedStrategyHistories: histories },
   } = useQuery(bondedStrategyHistoriesQuery);
 
-  const {
-    data: { factory },
-  } = useQuery(factoryQuery, {
-    variables: {
-      id: FACTORY_ADDRESS[chainId],
-    },
-  });
+  const { data: bondedStrategyPairsQueryResult } = useQuery(
+    bondedStrategyPairsQuery
+  );
+
+  const bondedStrategyPairs =
+    bondedStrategyPairsQueryResult?.bondedStrategyPairs ?? [];
 
   const {
     data: { token },
@@ -72,12 +72,27 @@ function BarPage() {
     data: { bundles },
   } = useQuery(ethPriceQuery);
 
-  const {
-    data: { dayDatas },
-  } = useQuery(dayDatasQuery);
-
   const sushiPrice =
     parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+
+  // const pairs = bondedStrategyPairs?.map((pair) => {
+  //   const claimedRewardUSD = parseFloat(pair?.claimedRewardUSD ?? "0");
+  //   const remainingRewardUSD =
+  //     parseFloat(pair?.remainingRewardETH) *
+  //     parseFloat(bundles[0]?.ethPrice ?? "0");
+  //   const claimedReward = parseFloat(pair?.claimedReward ?? "0") / 1e18;
+
+  //   const totalRewardShare =
+  //     claimedRewardUSD / parseFloat(bondedStrategy.totalRewardUSD);
+
+  //   return {
+  //     ...pair,
+  //     claimedRewardUSD,
+  //     remainingRewardUSD,
+  //     claimedReward,
+  //     totalRewardShare,
+  //   };
+  // });
 
   useInterval(async () => {
     await Promise.all([
@@ -130,6 +145,7 @@ function BarPage() {
       const totalRewardUSD =
         parseFloat(currentValue.totalClaimedUSD) +
         parseFloat(currentValue.remainingRewardUSD);
+
       previousValue["totalRewardUSD"].push({
         date,
         value: totalRewardUSD,
@@ -175,14 +191,12 @@ function BarPage() {
     }
   );
 
-  console.log(totalSupplyUSD, totalRewardUSD);
-
   const averageApy =
     apy.reduce((previousValue, currentValue) => {
       return previousValue + currentValue.value;
     }, 0) / apy.length;
 
-  const currentApy = apy[0] ?? 0;
+  const currentApy = apy[0].value ?? 0;
   const currentTotalSupply = totalSupply[0]?.value ?? 0;
   const currentUsers = usersCount[0]?.value ?? 0;
   const currentTotalRewardUSD = totalRewardUSD[0]?.value ?? 0;
@@ -210,11 +224,7 @@ function BarPage() {
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI
-                title="APY (24h)"
-                value={currentApy * 100}
-                format="percent"
-              />
+              <KPI title="APY" value={currentApy * 100} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <KPI title="APY (Avg)" value={averageApy} format="percent" />
@@ -388,4 +398,4 @@ export async function getStaticProps() {
   };
 }
 
-export default BarPage;
+export default DividendPage;

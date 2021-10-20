@@ -236,7 +236,7 @@ function DividendPage() {
             </Typography>
           </Box>
           <Box display="flex" alignItems="center">
-            <Link href="https://apps.standard.tech/dividend">Participate</Link>
+            <Link href="https://apps.standard.tech/dividend">Claim</Link>
           </Box>
         </Box>
       </PageHeader>

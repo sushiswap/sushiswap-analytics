@@ -87,7 +87,7 @@ function DividendPairPage() {
     (previousValue, currentValue, i) => {
       const date = currentValue.date * 1000;
       // const dayData = dayDatas.find((d) => d.date === currentValue.date);
-      const totalSupplyDecimals = parseFloat(currentValue.totalSupply) / 1e18;
+      // const totalSupplyDecimals = parseFloat(currentValue.totalSupply) / 1e18;
 
       previousValue["claimedReward"].push({
         date,
@@ -163,26 +163,22 @@ function DividendPairPage() {
       </Head>
 
       <PageHeader mb={3}>
-        <Grid
-          container
-          direction="row"
-          justify="space-between"
-          alignItems="center"
-          // className={classes.top}
-        >
-          <Grid item xs={12} sm="auto" className={classes.title}>
-            <Box display="flex" alignItems="center">
-              <PairIcon
-                base={bondedStrategyPair.pair.token0.id}
-                quote={bondedStrategyPair.pair.token1.id}
-              />
-              <Typography variant="h5" component="h1">
-                {bondedStrategyPair.pair.token0.symbol}-
-                {bondedStrategyPair.pair.token1.symbol} PAIR DIVIDEND
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
+        <Box display="flex" alignItems="center" flex={1} flexWrap="nowrap">
+          <Box display="flex" alignItems="center" flex={1}>
+            <PairIcon
+              base={bondedStrategyPair.pair.token0.id}
+              quote={bondedStrategyPair.pair.token1.id}
+            />
+            <Typography variant="h5" component="h1">
+              {bondedStrategyPair.pair.token0.symbol}-
+              {bondedStrategyPair.pair.token1.symbol} PAIR DIVIDEND
+            </Typography>
+          </Box>
+
+          <Box display="flex" alignItems="center">
+            <Link href="https://apps.standard.tech/dividend">Claim</Link>
+          </Box>
+        </Box>
       </PageHeader>
 
       <Grid item xs={12} sm="auto">
@@ -197,7 +193,7 @@ function DividendPairPage() {
             <KPI
               title="Claimed Rewards (USD)"
               value={currentClaimedRewardUSD}
-              format="currency"
+              format="integer"
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>

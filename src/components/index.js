@@ -31,3 +31,4 @@ export { default as TokenIcon } from "./TokenIcon";
 export { default as TokenTable } from "./TokenTable";
 export { default as Transactions } from "./Transactions";
 export { default as Loading } from "./Loading";
+export { default as DividendPairTable } from "./DividendPairTable";

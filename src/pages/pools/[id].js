@@ -8,14 +8,7 @@ import {
   PageHeader,
   PairIcon,
 } from "app/components";
-import {
-  Box,
-  Grid,
-  Paper,
-  Typography,
-  makeStyles,
-  useTheme,
-} from "@material-ui/core";
+import { Box, Grid, Paper, Typography, makeStyles } from "@material-ui/core";
 import {
   // currencyFormatter,
   ethPriceQuery,
@@ -28,18 +21,15 @@ import {
   getSushiToken,
   poolHistoryQuery,
   poolQuery,
-  tokenQuery,
 } from "app/core";
 
 import Head from "next/head";
 // import { POOL_DENY } from "app/core/constants";
 import { ParentSize } from "@visx/responsive";
 import { useNetwork } from "state/network/hooks";
-import { STND_ADDRESS } from "app/core/constants";
 import { useRouter } from "next/router";
 // import { deepPurple } from "@material-ui/core/colors";
 import { useQuery } from "@apollo/client";
-import { getNetwork } from "core/state";
 import { BigNumber } from "bignumber.js";
 // import { useRouter } from "next/router";
 
@@ -59,8 +49,6 @@ function PoolPage() {
   }
 
   const classes = useStyles();
-  const chainId = useNetwork();
-
   // const theme = useTheme();
 
   const { id } = router.query;
@@ -87,11 +75,11 @@ function PoolPage() {
     },
   });
 
-  const {
-    data: { bundles },
-  } = useQuery(ethPriceQuery, {
-    pollInterval: 60000,
-  });
+  // const {
+  //   data: { bundles },
+  // } = useQuery(ethPriceQuery, {
+  //   pollInterval: 60000,
+  // });
 
   // console.log(STND_ADDRESS[chainId]);
   // const {

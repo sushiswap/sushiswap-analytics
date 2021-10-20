@@ -3,6 +3,8 @@ import {
   bondedStrategyQuery,
   bondedStrategyUserQuery,
   bondedStrategyPairsQuery,
+  bondedStrategyPairQuery,
+  bondedStrategyPairHistoriesQuery,
 } from "../queries/bondedStrategy";
 
 import { getApollo } from "../apollo";
@@ -73,7 +75,7 @@ export async function getBondedStrategyUser(id, client = getApollo()) {
   });
 }
 
-export async function getBondedStrategyPairsQuery(client = getApollo()) {
+export async function getBondedStrategyPairs(client = getApollo()) {
   const { data } = await client.query({
     query: bondedStrategyPairsQuery,
   });
@@ -85,5 +87,53 @@ export async function getBondedStrategyPairsQuery(client = getApollo()) {
 
   return await client.cache.readQuery({
     query: bondedStrategyPairsQuery,
+  });
+}
+
+export async function getBondedStrategyPair(id, client = getApollo()) {
+  const { data } = await client.query({
+    query: bondedStrategyPairQuery,
+    variables: {
+      id,
+    },
+  });
+
+  await client.cache.writeQuery({
+    query: bondedStrategyPairQuery,
+    data,
+    variables: {
+      id,
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: bondedStrategyPairQuery,
+    variables: {
+      id,
+    },
+  });
+}
+
+export async function getBondedStrategyPairsHistory(id, client = getApollo()) {
+  const { data } = await client.query({
+    query: bondedStrategyPairHistoriesQuery,
+    variables: {
+      id,
+    },
+  });
+
+  await client.cache.writeQuery({
+    query: bondedStrategyPairHistoriesQuery,
+    data,
+    variables: {
+      id,
+    },
+  });
+
+  return await client.cache.readQuery({
+    query: bondedStrategyPairHistoriesQuery,
+    variables: {
+      id,
+    },
   });
 }

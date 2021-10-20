@@ -1,15 +1,21 @@
-import { AppShell, Curves, KPI } from "app/components";
-import { Grid, Paper } from "@material-ui/core";
+import {
+  AppShell,
+  Curves,
+  DividendPairTable,
+  KPI,
+  Link,
+  PageHeader,
+} from "app/components";
+import { Box, Grid, Paper, Typography } from "@material-ui/core";
 import {
   bondedStrategyHistoriesQuery,
   bondedStrategyPairsQuery,
   bondedStrategyQuery,
-  dayDatasQuery,
   ethPriceQuery,
-  factoryQuery,
   getApollo,
   getBondedStrategy,
   getBondedStrategyHistories,
+  getBondedStrategyPairs,
   getDayData,
   getEthPrice,
   getFactory,
@@ -24,7 +30,7 @@ import { ParentSize } from "@visx/responsive";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from "@apollo/client";
-import { FACTORY_ADDRESS, STND_ADDRESS } from "app/core/constants";
+import { DIVIDEND_POOL_ADDRESS, STND_ADDRESS } from "app/core/constants";
 import { useNetwork } from "state/network/hooks";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,18 +53,22 @@ function DividendPage() {
 
   const {
     data: { bondedStrategy },
-  } = useQuery(bondedStrategyQuery);
+  } = useQuery(bondedStrategyQuery, {
+    variables: {
+      id: DIVIDEND_POOL_ADDRESS[chainId],
+    },
+  });
 
   const {
     data: { bondedStrategyHistories: histories },
   } = useQuery(bondedStrategyHistoriesQuery);
 
-  const { data: bondedStrategyPairsQueryResult } = useQuery(
-    bondedStrategyPairsQuery
-  );
+  const {
+    data: { bondedStrategyPairs },
+  } = useQuery(bondedStrategyPairsQuery);
 
-  const bondedStrategyPairs =
-    bondedStrategyPairsQueryResult?.bondedStrategyPairs ?? [];
+  // const bondedStrategyPairs =
+  //   bondedStrategyPairsQueryResult?.bondedStrategyPairs ?? [];
 
   const {
     data: { token },
@@ -72,27 +82,32 @@ function DividendPage() {
     data: { bundles },
   } = useQuery(ethPriceQuery);
 
-  const sushiPrice =
-    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
+  const ethPrice = parseFloat(bundles[0]?.ethPrice ?? "0");
 
-  // const pairs = bondedStrategyPairs?.map((pair) => {
-  //   const claimedRewardUSD = parseFloat(pair?.claimedRewardUSD ?? "0");
-  //   const remainingRewardUSD =
-  //     parseFloat(pair?.remainingRewardETH) *
-  //     parseFloat(bundles[0]?.ethPrice ?? "0");
-  //   const claimedReward = parseFloat(pair?.claimedReward ?? "0") / 1e18;
+  // const sushiPrice = parseFloat(token?.derivedETH ?? "0") * ethPrice;
 
-  //   const totalRewardShare =
-  //     claimedRewardUSD / parseFloat(bondedStrategy.totalRewardUSD);
+  const bondedStrategyTotalReward =
+    parseFloat(bondedStrategy.remainingRewardETH) * ethPrice +
+    parseFloat(bondedStrategy.totalClaimedUSD);
 
-  //   return {
-  //     ...pair,
-  //     claimedRewardUSD,
-  //     remainingRewardUSD,
-  //     claimedReward,
-  //     totalRewardShare,
-  //   };
-  // });
+  const pairs = bondedStrategyPairs?.map((pair) => {
+    const claimedRewardUSD = parseFloat(pair?.claimedRewardUSD);
+    const remainingRewardUSD = parseFloat(pair?.remainingRewardETH) * ethPrice;
+    const claimedReward = parseFloat(pair?.claimedReward) / 1e18;
+    const remainingReward = parseFloat(pair?.remainingReward) / 1e18;
+
+    const totalRewardShare =
+      (claimedRewardUSD + remainingRewardUSD) / bondedStrategyTotalReward;
+
+    return {
+      ...pair,
+      claimedRewardUSD,
+      remainingRewardUSD,
+      remainingReward,
+      claimedReward,
+      totalRewardShare,
+    };
+  });
 
   useInterval(async () => {
     await Promise.all([
@@ -184,7 +199,6 @@ function DividendPage() {
       usersCount: [],
       totalClaimedUSD: [],
       remainingRewardUSD: [],
-      remainingRewardETH: [],
       totalRewardUSD: [],
       apr: [],
       apy: [],
@@ -214,6 +228,18 @@ function DividendPage() {
         <title>Dividend | Standard Protocol Analytics</title>
       </Head>
       {/* <pre>{JSON.stringify(bar, null, 2)}</pre> */}
+      <PageHeader>
+        <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" flex={1} flexWrap="nowrap">
+            <Typography variant="h5" component="h1" noWrap>
+              DIVIDEND
+            </Typography>
+          </Box>
+          <Box display="flex" alignItems="center">
+            <Link href="https://apps.standard.tech/dividend">Participate</Link>
+          </Box>
+        </Box>
+      </PageHeader>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Grid container spacing={3}>
@@ -317,7 +343,7 @@ function DividendPage() {
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[totalSupply]}
-                  labels={["STND Staked (#)"]}
+                  title={"STND Staked (#)"}
                 />
               )}
             </ParentSize>
@@ -335,7 +361,7 @@ function DividendPage() {
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[totalClaimedUSD]}
-                  labels={["Claimed Reward (USD)"]}
+                  title={"Claimed Reward (USD)"}
                 />
               )}
             </ParentSize>
@@ -353,7 +379,7 @@ function DividendPage() {
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[remainingRewardUSD]}
-                  labels={["Remaining Reward (USD)"]}
+                  title={"Remaining Reward (USD)"}
                 />
               )}
             </ParentSize>
@@ -371,13 +397,19 @@ function DividendPage() {
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[usersCount]}
-                  labels={["Users"]}
+                  title={"Users"}
                 />
               )}
             </ParentSize>
           </Paper>
         </Grid>
       </Grid>
+      <DividendPairTable
+        pairs={pairs}
+        orderBy="totalRewardShare"
+        order="desc"
+        rowsPerPage={100}
+      />
     </AppShell>
   );
 }
@@ -386,6 +418,7 @@ export async function getStaticProps() {
   const client = getApollo();
   await getBondedStrategy(client);
   await getBondedStrategyHistories(client);
+  await getBondedStrategyPairs(client);
   await getFactory(client);
   await getDayData(client);
   await getSushiToken(client);

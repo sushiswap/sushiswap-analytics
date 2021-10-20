@@ -64,10 +64,91 @@ export const bondedStrategyPairsQuery = gql`
   query bondedStrategyPairsQuery($first: Int! = 1000) {
     bondedStrategyPairs(first: $first) {
       id
+      pair {
+        name
+        token0 {
+          id
+          name
+          symbol
+        }
+        token1 {
+          id
+          name
+          symbol
+        }
+      }
       claimedReward
       claimedRewardUSD
       remainingReward
       remainingRewardETH
+      block
+      timestamp
+    }
+  }
+`;
+
+export const bondedStrategyPairQuery = gql`
+  query bondedStrategyPairQuery($id: String!) {
+    bondedStrategyPair(id: $id) {
+      id
+      pair {
+        name
+        token0 {
+          id
+          name
+          symbol
+        }
+        token1 {
+          id
+          name
+          symbol
+        }
+      }
+      claimedReward
+      claimedRewardUSD
+      remainingReward
+      remainingRewardETH
+      block
+      timestamp
+    }
+  }
+`;
+
+export const bondedStrategyPairHistoriesQuery = gql`
+  query bondedStrategyPairHistoriesQuery(
+    $id: String!
+    $first: Int! = 1000
+    $skip: Int! = 0
+    $orderBy: String! = "timestamp"
+    $orderDirection: String! = "desc"
+  ) {
+    bondedStrategyPairHistories(
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: { pair: $id }
+    ) {
+      id
+      date
+      timeframe
+      # pair {
+      #   token0 {
+      #     id
+      #     name
+      #     symbol
+      #   }
+      #   token1 {
+      #     id
+      #     name
+      #     symbol
+      #   }
+      # }
+      claimedReward
+      claimedRewardUSD
+      remainingReward
+      remainingRewardETH
+      remainingRewardUSD
       block
       timestamp
     }

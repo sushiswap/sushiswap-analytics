@@ -11,6 +11,8 @@ import TokenIcon from "./TokenIcon";
 import { useRouter } from "next/router";
 import { Box } from '@material-ui/core';
 
+import { TOKEN_DENY, PAIR_DENY } from 'app/core/constants'
+
 const LISTBOX_PADDING = 8; // px
 
 function renderRow(props) {
@@ -85,6 +87,13 @@ const renderGroup = (params) => [
 
 export default function Search({ pairs, tokens }) {
   const router = useRouter();
+
+  tokens = tokens.filter(({ id }) => {
+    return !TOKEN_DENY.includes(id);
+  })
+  pairs = pairs.filter(({ id }) => {
+    return !PAIR_DENY.includes(id);
+  })
 
   const options = [
     // ...pairs.slice(offset, limit),

@@ -20,7 +20,8 @@ export const TOKEN_DENY = [
   "0x6a3aca82e78f20b11aa55a706c0266bfc5f7ff35",
   "0xfe40be28b837883647e14d9cc7dbb5456ea55bec",
   "0xc399f9311072fca138ac748ba960aadb356fb217",
-  "0xa71b42ea89e0d735b59b9099ae8983eb903764c6"
+  "0xa71b42ea89e0d735b59b9099ae8983eb903764c6",
+  "0xeb935614447185eeea0abc756ff2ddc99fbb9047"
 ];
 
 export const PAIR_DENY = [
@@ -34,7 +35,8 @@ export const PAIR_DENY = [
   "0xdab3462495e3bd7e1477329016928979fe9e4bb8",
   "0xc6b1844ffc43ed250a5416ea451d6dc7ca9517cf",
   "0xa5808ed5ddd49d78dfec75ce2298d6f0339b7ca1",
-  "0x5740c9e23631cb65c3a38d4e9f8bf7e86778ac36"
+  "0x5740c9e23631cb65c3a38d4e9f8bf7e86778ac36",
+  "0x431c01f435007c28657293e47e4ddd402c4aeb68"
 ];
 
 export const EXCHANGE_CREATED_TIMESTAMP = 1599214239;

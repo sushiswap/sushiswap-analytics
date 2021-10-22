@@ -28,10 +28,7 @@ export default function PairTable({ pairs: rows, ethPrice, title, ...rest }) {
               const name = `${row.pair?.token0?.symbol}-${row.pair?.token1?.symbol}`;
               return (
                 <Box display="flex" alignItems="center">
-                  <PairIcon
-                    base={row.pair?.token0?.id}
-                    quote={row.pair?.token1?.id}
-                  />
+                  <PairIcon base={row.pair?.token0} quote={row.pair?.token1} />
                   <Link href={`/dividend/${row.id}`} variant="body2" noWrap>
                     {name}
                   </Link>

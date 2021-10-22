@@ -30,7 +30,7 @@ export default function GainersList({ pairs }) {
             label: "Name",
             render: (row, index) => (
               <Box display="flex" alignItems="center">
-                <PairIcon base={row.token0.id} quote={row.token1.id} />
+                <PairIcon base={row.token0} quote={row.token1} />
                 <Link href={`/pairs/${row.id}`} variant="body2" noWrap>
                   {`${row.token0.symbol.replace(
                     "WETH",

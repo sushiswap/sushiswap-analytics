@@ -166,8 +166,8 @@ function DividendPairPage() {
         <Box display="flex" alignItems="center" flex={1} flexWrap="nowrap">
           <Box display="flex" alignItems="center" flex={1}>
             <PairIcon
-              base={bondedStrategyPair.pair.token0.id}
-              quote={bondedStrategyPair.pair.token1.id}
+              base={bondedStrategyPair.pair.token0}
+              quote={bondedStrategyPair.pair.token1}
             />
             <Typography variant="h5" component="h1">
               {bondedStrategyPair.pair.token0.symbol}-

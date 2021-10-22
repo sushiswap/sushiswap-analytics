@@ -102,7 +102,10 @@ export default function AppBar({
 
   const page =
     router.pathname === "/" ? "Dashboard" : router.pathname.split("/")[1];
+  //
+  // console.log("bjhl",(open && isDesktop), (mobileOpen && !matches);
   const { isDesktop } = useDetect();
+  const isDt = isDesktop();
   return (
     <MuiAppBar
       position="fixed"
@@ -119,7 +122,7 @@ export default function AppBar({
           onClick={onToggleSidebar}
           className={classes.menuButton}
         >
-          {(open && isDesktop) || (mobileOpen && !matches) ? (
+          {(open && isDt) || (mobileOpen && !matches) ? (
             <CloseOutlined />
           ) : (
             <Menu />
@@ -138,7 +141,11 @@ export default function AppBar({
               justifyContent="space-around"
             >
               <IconButton edge={false} onClick={() => router.push("/")}>
-                <img src='/icons/stnd/stnd.svg' alt='stnd logo' style={{width: 50}} />
+                <img
+                  src="/icons/stnd/stnd.svg"
+                  alt="stnd logo"
+                  style={{ width: 50 }}
+                />
               </IconButton>
               <Typography variant="subtitle1" color="textPrimary" noWrap>
                 Analytics

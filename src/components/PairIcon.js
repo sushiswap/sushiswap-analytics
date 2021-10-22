@@ -19,8 +19,13 @@ export default function PairIcon({ base, quote }) {
   const classes = useStyles();
   return (
     <AvatarGroup className={classes.tokens}>
-      {[base, quote].map((id) => (
-        <TokenIcon key={id} id={id} className={classes.token} />
+      {[base, quote].map((token) => (
+        <TokenIcon
+          key={token.id}
+          id={token.id}
+          symbol={token.symbol}
+          className={classes.token}
+        />
       ))}
     </AvatarGroup>
   );

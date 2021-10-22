@@ -32,8 +32,8 @@ import { useQuery } from "@apollo/client";
 const useStyles = makeStyles((theme) => ({
   chartContainer: {
     borderRadius: 20,
-    background: 'rgba(255,255,255,.04)'
-  }
+    background: "rgba(255,255,255,.04)",
+  },
 }));
 
 function IndexPage() {
@@ -100,10 +100,7 @@ function IndexPage() {
 
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={6}>
-          <Paper 
-            style={{ height: 300 }} 
-            className={classes.chartContainer}
-          >
+          <Paper style={{ height: 300 }} className={classes.chartContainer}>
             <ParentSize>
               {({ width, height }) => (
                 <AreaChart
@@ -158,8 +155,8 @@ function IndexPage() {
           />
         </Grid>
       </Grid>
-      <div className={'gradient1'}></div>
-      <div className={'gradient2'}></div>
+      <div className={"gradient1"}></div>
+      <div className={"gradient2"}></div>
     </AppShell>
   );
 }

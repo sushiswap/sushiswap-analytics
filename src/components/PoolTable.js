@@ -39,8 +39,8 @@ export default function PoolTable({ pools, ...rest }) {
               return (
                 <Box display="flex" alignItems="center">
                   <PairIcon
-                    base={row.liquidityPair?.token0?.id}
-                    quote={row.liquidityPair?.token1?.id}
+                    base={row.liquidityPair?.token0}
+                    quote={row.liquidityPair?.token1}
                   />
                   <Link href={`/pools/${row.id}`} variant="body2" noWrap>
                     {name}

@@ -22,18 +22,21 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   tableContainer: {
-    background: 'rgba(255,255,255,.04)',
-    borderRadius: 20
+    background: "rgba(255,255,255,.04)",
+    borderRadius: 20,
   },
   table: {
-    borderSpacing: '0 8px',
-    borderCollapse: 'separate',
+    borderSpacing: "0 8px",
+    borderCollapse: "separate",
   },
-  tableRow:{
-    background: 'rgba(222,199,239,.05)'
+  tableRow: {
+    background:
+      theme.palette.type === "dark"
+        ? "rgba(222,199,239,.05)"
+        : "rgba(222,199,239,.2)",
   },
   tableCell: {
-    border: 'none'
+    border: "none",
   },
   avatar: {
     marginLeft: theme.spacing(2),
@@ -125,9 +128,7 @@ export default function SortableTable({
           {title}
         </Typography>
       )}
-      <TableContainer
-        className={classes.tableContainer}
-      >
+      <TableContainer className={classes.tableContainer}>
         <Table className={classes.table} aria-label={`${title} table`}>
           <SortableTableHead
             columns={columns}
@@ -145,10 +146,7 @@ export default function SortableTable({
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 return (
-                  <TableRow 
-                    key={row.id}
-                    className={classes.tableRow}
-                  >
+                  <TableRow key={row.id} className={classes.tableRow}>
                     {columns.map((column, i) => {
                       return (
                         <TableCell

@@ -5,12 +5,16 @@ import {
   Brightness4Outlined,
   Brightness7,
   CloseOutlined,
+  MoodOutlined,
   DashboardOutlined,
+  CopyrightOutlined,
   DetailsOutlined,
   ExpandLess,
   ExpandMore,
   FastfoodOutlined,
   FiberNewOutlined,
+  FiberSmartRecordOutlined,
+  Texture,
   HistoryOutlined,
   LinkOutlined,
   ListAltOutlined,
@@ -25,6 +29,7 @@ import {
   ViewStreamOutlined,
   WavesOutlined,
 } from "@material-ui/icons";
+
 import {
   Box,
   Button,
@@ -122,11 +127,7 @@ export default function AppNavigation() {
           onClick={() => router.push("/")}
         >
           <ListItemIcon>
-            <img
-              src="/icons/stnd/dashboard.svg"
-              alt="stnd dashboard"
-              style={{ width: 20 }}
-            />
+            <ReorderOutlined />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItem>
@@ -138,11 +139,7 @@ export default function AppNavigation() {
           onClick={() => router.push("/dividend")}
         >
           <ListItemIcon>
-            <img
-              src="/icons/stnd/dividend.svg"
-              alt="stnd dividend"
-              style={{ width: 20 }}
-            />
+            <MoodOutlined />
           </ListItemIcon>
           <ListItemText primary="Dividend" />
           {/* {open ? <ExpandLess /> : <ExpandMore />}*/}
@@ -179,11 +176,7 @@ export default function AppNavigation() {
           }}
         >
           <ListItemIcon>
-            <img
-              src="/icons/stnd/farm.svg"
-              alt="stnd farm"
-              style={{ width: 20 }}
-            />
+            <Texture />
           </ListItemIcon>
           <ListItemText primary="Farm" />
           {farmOpen ? <ExpandLess /> : <ExpandMore />}
@@ -245,7 +238,7 @@ export default function AppNavigation() {
           }}
         >
           <ListItemIcon>
-            <LinkOutlined />
+            <FiberSmartRecordOutlined />
           </ListItemIcon>
           <ListItemText primary="Pairs" />
           {pairsOpen ? <ExpandLess /> : <ExpandMore />}
@@ -306,7 +299,7 @@ export default function AppNavigation() {
           onClick={() => router.push("/tokens")}
         >
           <ListItemIcon>
-            <MoneyOutlined />
+            <CopyrightOutlined />
           </ListItemIcon>
           <ListItemText primary="Tokens" />
         </ListItem>

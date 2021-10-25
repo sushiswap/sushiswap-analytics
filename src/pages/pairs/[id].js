@@ -197,7 +197,9 @@ function PairPage(props) {
     <AppShell>
       <Head>
         <title>
-          {pair.token0.symbol}-{pair.token1.symbol} | Analytics
+          {pair
+            ? `${pair.token0.symbol}-${pair.token1.symbol} | Analytics`
+            : "Pair | Analytics"}
         </title>
       </Head>
       <PageHeader>

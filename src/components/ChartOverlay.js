@@ -13,7 +13,7 @@ const formatDate = timeFormat("%b %d, '%y");
 const useStyles = makeStyles((theme) => ({
   filter: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     [theme.breakpoints.up("md")]: {
       flexDirection: "row",
     },

@@ -24,6 +24,7 @@ import { darkModeVar } from "app/core";
 import useDetect from "../core/hooks/useDetect";
 import { useReactiveVar } from "@apollo/client";
 import { useRouter } from "next/router";
+import { useSizeSmUp } from "./Responsive";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -106,6 +107,7 @@ export default function AppBar({
   // console.log("bjhl",(open && isDesktop), (mobileOpen && !matches);
   const { isDesktop } = useDetect();
   const isDt = isDesktop();
+  const isViewportSmUp = useSizeSmUp()
   return (
     <MuiAppBar
       position="fixed"
@@ -122,7 +124,7 @@ export default function AppBar({
           onClick={onToggleSidebar}
           className={classes.menuButton}
         >
-          {(open && isDt) || (mobileOpen && !matches) ? (
+          {(open && isViewportSmUp && isDt) || (mobileOpen && !matches) ? (
             <CloseOutlined />
           ) : (
             <Menu />

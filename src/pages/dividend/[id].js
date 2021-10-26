@@ -43,7 +43,7 @@ function DividendPairPage() {
     );
   }
 
-  const classes = useStyles();
+  // const classes = useStyles();
   const { id } = router.query;
 
   const {

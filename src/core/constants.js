@@ -48,18 +48,21 @@ export const SCANNERS = {
 export const FACTORY_ADDRESS = {
   [ChainId.RINKEBY]: "0xf659492744608b595670c1508aa0f5b92b84b94d",
   [ChainId.SHIBUYA]: "0x0e60c35fcf3184dce5cf04d4b736e56f2de7caf7",
-  [ChainId.SHIDEN]: "0x1e3f3d16d8087752d8254906125b7fc39cb1bf59",
+  [ChainId.SHIDEN]: "0x284c9540f6c3f9eba711bf3dea2bfdbfa495d647",
 };
 
 export const MASTERPOOL_ADDRESS = {
   [ChainId.RINKEBY]: "0x22079b36af1ab814350fff725cd8f67f3c70b753",
+  [ChainId.SHIDEN]: "0xe78c60c7a36e7b948a5c6cff8d800f6a2727c93d",
 };
 
 export const STND_ADDRESS = {
   [ChainId.RINKEBY]: "0xc8aeedb09f4d90d59ee47fed8c70d10fd267b2ab",
   [ChainId.SHIBUYA]: "0xb0a1aa4cb76c0e35d9ac9eba422bf76534bf155a",
+  [ChainId.SHIDEN]: "0x722377a047e89ca735f09eb7cccab780943c4cb4",
 };
 
 export const DIVIDEND_POOL_ADDRESS = {
   [ChainId.RINKEBY]: "0x45fa9f11b06dff3f4b04746629523c21fb2cadb9",
+  [ChainId.SHIDEN]: "0x4633c1f0f633cc42fd0ba394762283606c88ae52",
 };

@@ -4,7 +4,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import { ChainId } from 'app/core/constants';
 
 export const initialState = {
-  network: ChainId.RINKEBY
+  network: ChainId.SHIDEN
 };
 
 export default createReducer(initialState, (builder) =>

@@ -84,11 +84,11 @@ export default function TokenTable({ tokens, title }) {
             render: (row, index) => (
               <Box display="flex" alignItems="center">
                 <TokenIcon id={row.id} symbol={row.symbol} />
-                <Link href={`/tokens/${row.id}`}>
-                  <Typography variant="body2" noWrap>
-                    {row.name}
-                  </Typography>
-                </Link>
+                {/*<Link href={`/tokens/${row.id}`}>*/}
+                <Typography variant="body2" noWrap>
+                  {row.name}
+                </Typography>
+                {/*</Link>*/}
               </Box>
             ),
           },

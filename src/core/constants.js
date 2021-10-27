@@ -53,7 +53,7 @@ export const FACTORY_ADDRESS = {
 
 export const MASTERPOOL_ADDRESS = {
   [ChainId.RINKEBY]: "0x22079b36af1ab814350fff725cd8f67f3c70b753",
-  [ChainId.SHIDEN]: "0x266d0C38E0B8784D738A46aA1fbd8054Ff73cE4B",
+  [ChainId.SHIDEN]: "0x375eC65e75083Ee8545fA9168257Ac2a456DDAbb",
 };
 
 export const STND_ADDRESS = {
@@ -64,5 +64,5 @@ export const STND_ADDRESS = {
 
 export const DIVIDEND_POOL_ADDRESS = {
   [ChainId.RINKEBY]: "0x45fa9f11b06dff3f4b04746629523c21fb2cadb9",
-  [ChainId.SHIDEN]: "0x52C26847130EC1D8e25Dec3d77262365e58a6f5C",
+  [ChainId.SHIDEN]: "0x670cf2628816d95b36b1a4db2dfba80eaebd7b78",
 };

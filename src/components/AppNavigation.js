@@ -131,7 +131,6 @@ export default function AppNavigation() {
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItem>
-
         <ListItem
           key="/dividend"
           button

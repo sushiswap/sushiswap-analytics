@@ -4,8 +4,7 @@ import PairIcon from "./PairIcon";
 import Percent from "./Percent";
 import React from "react";
 import SortableTable from "./SortableTable";
-import { currencyFormatter, decimalFormatter } from "app/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { currencyFormatter } from "app/core";
 
 // const useStyles = makeStyles((theme) => ({
 //   root: {},

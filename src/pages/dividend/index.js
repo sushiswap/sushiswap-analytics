@@ -16,11 +16,7 @@ import {
   getBondedStrategy,
   getBondedStrategyHistories,
   getBondedStrategyPairs,
-  getDayData,
   getEthPrice,
-  getFactory,
-  getSushiToken,
-  tokenQuery,
   useInterval,
 } from "app/core";
 
@@ -70,13 +66,13 @@ function DividendPage() {
   // const bondedStrategyPairs =
   //   bondedStrategyPairsQueryResult?.bondedStrategyPairs ?? [];
 
-  const {
-    data: { token },
-  } = useQuery(tokenQuery, {
-    variables: {
-      id: STND_ADDRESS[chainId],
-    },
-  });
+  // const {
+  //   data: { token },
+  // } = useQuery(tokenQuery, {
+  //   variables: {
+  //     id: STND_ADDRESS[chainId],
+  //   },
+  // });
 
   const {
     data: { bundles },
@@ -113,9 +109,7 @@ function DividendPage() {
     await Promise.all([
       getBondedStrategy,
       getBondedStrategyHistories,
-      getDayData,
-      getFactory,
-      getSushiToken,
+      getBondedStrategyPairs,
       getEthPrice,
     ]);
   }, 60000);
@@ -168,7 +162,8 @@ function DividendPage() {
 
       const dateFromInception = currentValue.date / 86400 - inception;
       const r = totalRewardUSD / parseFloat(currentValue.totalSupplyUSD);
-      const apr = (Math.pow(r + 1, 1 / (dateFromInception + 1)) - 1) * 365;
+      const apr =
+        (Math.pow(r + 1, 1 / (dateFromInception + 1)) - 1) * 365 * 100;
 
       // if (i > 0) {
       //   const previousTotalRewardUSD = previousValue.totalRewardUSD[i - 1];
@@ -188,7 +183,7 @@ function DividendPage() {
       });
       previousValue["apy"].push({
         date,
-        value: parseFloat((Math.pow(1 + apr / 365, 365) - 1) * 100),
+        value: parseFloat((Math.pow(1 + apr / 100 / 365, 365) - 1) * 100),
       });
 
       return previousValue;
@@ -250,7 +245,7 @@ function DividendPage() {
               />
             </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
-              <KPI title="APY" value={currentApy * 100} format="percent" />
+              <KPI title="APY" value={currentApy} format="percent" />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <KPI title="APY (Avg)" value={averageApy} format="percent" />
@@ -419,9 +414,6 @@ export async function getStaticProps() {
   await getBondedStrategy(client);
   await getBondedStrategyHistories(client);
   await getBondedStrategyPairs(client);
-  await getFactory(client);
-  await getDayData(client);
-  await getSushiToken(client);
   await getEthPrice(client);
   return {
     props: {

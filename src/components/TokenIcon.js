@@ -33,10 +33,10 @@ const getTokenUrls = (chainId, id, symbol) => {
 
 export default function TokenIcon({ id, symbol, ...rest }) {
   const [, refresh] = useState(0);
+  const chainId = useNetwork();
   const srcs = getTokenUrls(chainId, id, symbol);
   const src = srcs.find((src) => !BAD_SRCS[src]);
   const classes = useStyles();
-  const chainId = useNetwork();
 
   const errorHandler = () => {
     if (src) BAD_SRCS[src] = true;

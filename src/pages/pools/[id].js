@@ -11,7 +11,6 @@ import {
 import { Box, Grid, Paper, Typography, makeStyles } from "@material-ui/core";
 import {
   // currencyFormatter,
-  ethPriceQuery,
   getApollo,
   getEthPrice,
   getPool,

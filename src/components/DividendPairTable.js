@@ -4,8 +4,7 @@ import PairIcon from "./PairIcon";
 import Percent from "./Percent";
 import React from "react";
 import SortableTable from "./SortableTable";
-import { currencyFormatter } from "app/core";
-
+import { currencyFormatter, formatDecimal } from "app/core";
 // const useStyles = makeStyles((theme) => ({
 //   root: {},
 // }));
@@ -40,7 +39,7 @@ export default function PairTable({ pairs: rows, ethPrice, title, ...rest }) {
             key: "remainingReward",
             render: (row) =>
               !Number.isNaN(row.remainingReward)
-                ? parseFloat(row.remainingReward).toFixed(2)
+                ? formatDecimal(parseFloat(row.remainingReward))
                 : 0,
             align: "right",
             label: "Remaining Reward (LTR)",
@@ -55,7 +54,7 @@ export default function PairTable({ pairs: rows, ethPrice, title, ...rest }) {
             key: "claimedReward",
             render: (row) =>
               !Number.isNaN(row.claimedReward)
-                ? parseFloat(row.claimedReward).toFixed(2)
+                ? formatDecimal(parseFloat(row.claimedReward))
                 : 0,
             align: "right",
             label: "Claimed Reward (LTR)",

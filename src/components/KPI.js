@@ -3,15 +3,15 @@ import { Box, Card, CardContent, Grid, Typography } from "@material-ui/core";
 import Percent from "./Percent";
 import React from "react";
 import clsx from "clsx";
-import { formatCurrency } from "app/core";
+import { formatCurrency, formatDecimal } from "app/core";
 import { makeStyles } from "@material-ui/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100%",
-    border: 'none',
+    border: "none",
     borderRadius: 20,
-    background: 'rgba(255,255,255,.04);'
+    background: "rgba(255,255,255,.04);",
   },
 
   cardContent: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 const formatters = {
   none: (value) => value,
   percent: (value) => (!Number.isNaN(value) ? `${value.toFixed(2)}%` : `0%`),
-  integer: (value) => (!Number.isNaN(value) ? parseInt(value) : 0),
+  integer: (value) => (!Number.isNaN(value) ? formatDecimal(value) : 0),
   currency: (value) => (!Number.isNaN(value) ? formatCurrency(value) : `$0`),
 };
 

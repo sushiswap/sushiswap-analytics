@@ -153,6 +153,8 @@ export async function getPools(client = getApollo(), chainId = getNetwork()) {
   // const averageBlockTime = (await getAverageBlockTime()) / 100;
 
   const averageBlockTime = await getAverageBlockTime();
+  const _averageBlockTime =
+    averageBlockTime.difference == 0 ? 13 : averageBlockTime.difference;
   // const averageBlockTime = 13;
 
   const { bundles } = await getEthPrice();
@@ -189,7 +191,7 @@ export async function getPools(client = getApollo(), chainId = getNetwork()) {
 
           const balance = Number(pool.slpBalance / 1e18);
 
-          const blocksPerHour = 3600 / averageBlockTime;
+          const blocksPerHour = 3600 / _averageBlockTime;
 
           // const rewardPerBlock =
           //   100 - 100 * (pool45.allocPoint / pool45.owner.totalAllocPoint);

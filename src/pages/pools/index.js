@@ -13,7 +13,6 @@ function PoolsPage() {
       clientName: "masterchef",
     },
   });
-
   useInterval(getPools, 60000);
 
   return (

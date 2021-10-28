@@ -1,7 +1,7 @@
-import store from '../../state'
+import store from "../../state";
 
 export function getNetwork() {
-    const state = store.getState();
+  const state = store.getState();
 
-    return state.network.network
+  return 336 || state.network.network;
 }

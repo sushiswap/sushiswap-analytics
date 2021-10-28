@@ -13,7 +13,7 @@ export const POOL_DENY = ["14", "29", "45", "30"];
 
 export const SUSHI_TOKEN = "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2";
 
-export const DEFAULT_CHAIN_ID = 4;
+export const DEFAULT_CHAIN_ID = 336;
 
 export const ChainId = {
   RINKEBY: 4,
@@ -40,6 +40,16 @@ export const SCANNERS = {
     },
     getTxUrl: (id) => {
       return `https://shibuya.subscan.io/tx/${id}`;
+    },
+  },
+  [ChainId.SHIDEN]: {
+    name: "Subscan",
+    url: "https://shiden.subscan.io/",
+    getUrl: (id) => {
+      return `https://shiden.subscan.io/account/${id}`;
+    },
+    getTxUrl: (id) => {
+      return `https://shiden.subscan.io/tx/${id}`;
     },
   },
 };

@@ -107,7 +107,7 @@ export default function AppBar({
   // console.log("bjhl",(open && isDesktop), (mobileOpen && !matches);
   const { isDesktop } = useDetect();
   const isDt = isDesktop();
-  const isViewportSmUp = useSizeSmUp()
+  const isViewportSmUp = useSizeSmUp();
   return (
     <MuiAppBar
       position="fixed"

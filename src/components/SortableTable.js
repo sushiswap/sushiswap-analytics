@@ -53,6 +53,10 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  pagination: {},
+  select: {
+    background: theme.palette.type === "light" ? "white" : "black",
+  },
 }));
 
 function descendingComparator(a, b, orderBy) {
@@ -176,6 +180,8 @@ export default function SortableTable({
         </Table>
       </TableContainer>
       <TablePagination
+        // className={classes.pagination}
+        // SelectProps={{ className: classes.select }}
         rowsPerPageOptions={[5, 10, 25, , { label: "All", value: -1 }]}
         component="div"
         count={rows.length}

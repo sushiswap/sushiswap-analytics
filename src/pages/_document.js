@@ -28,14 +28,14 @@ export default class MyDocument extends Document {
 
           <meta
             name="description"
-            content="Analytics for Standard Protocol, building the next multichain money"
+            content="Analytics for Standard Protocol, building the next multichain defi standard"
           />
           <meta
             name="keywords"
-            content="Standard Protocols, STND, ETH, Swap, Farm, Dividend, Analytics, Shiden, EVM, Polkadot"
+            content="Standard Protocol, STND, ETH, Swap, Farm, Dividend, Analytics, Shiden, EVM, Polkadot"
           />
           <link
-            href="https://fonts.googleapis.com/css2?family=Poppins&display=optional"
+            href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
             rel="preload"
           />
           <meta name="format-detection" content="telephone=no" />

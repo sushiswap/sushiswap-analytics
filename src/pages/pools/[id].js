@@ -231,7 +231,7 @@ function PoolPage() {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
           <KPI
-            title="~ SLP Age"
+            title="~ LTR Age"
             value={`${(
               parseFloat(pool.slpAge) / parseFloat(pool.slpBalance / 1e18)
             ).toFixed(2)} Days`}
@@ -243,7 +243,7 @@ function PoolPage() {
         <Grid item xs={12} sm={4}>
           <KPI
             title="Staked"
-            value={`${(pool.slpBalance / 1e18).toFixed(4)} SLP`}
+            value={`${(pool.slpBalance / 1e18).toFixed(4)} LTR`}
           />
         </Grid>
         {/* <Grid item xs={12} sm={4}>
@@ -296,7 +296,7 @@ function PoolPage() {
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[slpAge, slpAgeRemoved]}
-                  labels={["SLP Age", "SLP Age Removed"]}
+                  labels={["LTR Age", "LTR Age Removed"]}
                 />
               )}
             </ParentSize>
@@ -319,7 +319,7 @@ function PoolPage() {
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[slpDeposited, slpWithdrawn]}
-                  labels={["SLP Deposited", "SLP Age Withdrawn"]}
+                  labels={["LTR Deposited", "LTR Age Withdrawn"]}
                 />
               )}
             </ParentSize>
@@ -339,7 +339,7 @@ function PoolPage() {
             <ParentSize>
               {({ width, height }) => (
                 <Curves
-                  title="~ SLP Age (Days)"
+                  title="~ LTR Age (Days)"
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
@@ -387,7 +387,7 @@ function PoolPage() {
             <ParentSize>
               {({ width, height }) => (
                 <Curves
-                  title="SLP Balance"
+                  title="LTR Balance"
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}

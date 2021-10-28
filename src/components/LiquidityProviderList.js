@@ -66,7 +66,7 @@ export default function LiquidityProviderList({
             label: "Liquidity Tokens Staked",
             align: "right",
             render: (row) =>
-              `${decimalFormatter.format(row.amount / 1e18)} SLP`,
+              `${decimalFormatter.format(row.amount / 1e18)} LTR`,
           },
           {
             key: "value",

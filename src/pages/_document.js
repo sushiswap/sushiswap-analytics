@@ -35,8 +35,8 @@ export default class MyDocument extends Document {
             content="Standard Protocol, STND, ETH, Swap, Farm, Dividend, Analytics, Shiden, EVM, Polkadot"
           />
           <link
-            href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
-            rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Poppins"
+            rel="stylesheet"
           />
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />

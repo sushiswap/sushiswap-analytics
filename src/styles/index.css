@@ -6,6 +6,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 
 body {
   overflow-x: hidden;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif, monospace;
 }
 
 /* DARK */
@@ -79,7 +80,7 @@ body {
   color: #fff;
 }
 
-.MuiSelect-select.MuiSelect-select {
+.dark-theme .MuiSelect-select.MuiSelect-select {
   background: #1c1631;
 }
 

@@ -3,17 +3,14 @@ import {
   AreaChart,
   BarChart,
   BasicTable,
-  Chart,
-  IntoTheBlock,
   KPI,
   Link,
   PageHeader,
   PairIcon,
-  Percent,
   TokenIcon,
   Transactions,
 } from "app/components";
-import { Avatar, Box, Chip, Grid, Paper, Typography } from "@material-ui/core";
+import { Box, Grid, Paper, Typography } from "@material-ui/core";
 import {
   ethPriceQuery,
   formatCurrency,
@@ -21,7 +18,6 @@ import {
   getApollo,
   getPair,
   pairDayDatasQuery,
-  pairIdsQuery,
   pairQuery,
   transactionsQuery,
   useInterval,
@@ -31,9 +27,11 @@ import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { toChecksumAddress } from "web3-utils";
+// import { toChecksumAddress } from "web3-utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import { useNetwork } from "state/network/hooks";
+import { SCANNERS } from "app/core/constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
+    borderRadius: 20,
+    background: "rgba(255,255,255,.04)",
+    border: "none",
   },
   reserve: {
     marginRight: theme.spacing(1),
@@ -68,16 +69,26 @@ const useStyles = makeStyles((theme) => ({
       margin: 0,
     },
   },
+  chartContainer: {
+    borderRadius: 20,
+    background: "rgba(255,255,255,.04)",
+    border: "none",
+  },
 }));
 
 function PairPage(props) {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <AppShell />;
+    return (
+      <AppShell>
+        <div />
+      </AppShell>
+    );
   }
 
   const classes = useStyles();
+  const chainId = useNetwork();
 
   const id = router.query.id.toLowerCase();
 
@@ -182,26 +193,34 @@ function PairPage(props) {
     { liquidity: [], volume: [] }
   );
 
-  // console.log(pair);
-
   return (
     <AppShell>
       <Head>
         <title>
-          {pair.token0.symbol}-{pair.token1.symbol} | SushiSwap Analytics
+          {pair
+            ? `${pair.token0.symbol}-${pair.token1.symbol} | Analytics`
+            : "Pair | Analytics"}
         </title>
       </Head>
       <PageHeader>
         <Box display="flex" alignItems="center" className={classes.pageHeader}>
           <Box display="flex" alignItems="center" flex={1} flexWrap="nowrap">
-            <PairIcon base={pair.token0.id} quote={pair.token1.id} />
+            <PairIcon base={pair.token0} quote={pair.token1} />
             <Typography variant="h5" component="h1" noWrap>
               {pair.token0.symbol}-{pair.token1.symbol}
             </Typography>
           </Box>
           <Box display="flex" alignItems="center" className={classes.links}>
             <Link
-              href={`https://exchange.sushiswapclassic.org/#/add/${pair.token0.id}/${pair.token1.id}`}
+              href={`https://apps.standard.tech/add/${
+                pair.token0.symbol === "WETH" || pair.token0.symbol === "ETH"
+                  ? "ETH"
+                  : pair.token0.id
+              }/${
+                pair.token1.symbol === "WETH" || pair.token1.symbol === "ETH"
+                  ? "ETH"
+                  : pair.token1.id
+              }`}
               target="_blank"
               variant="body1"
               className={classes.firstLink}
@@ -209,7 +228,15 @@ function PairPage(props) {
               Add Liquidity
             </Link>
             <Link
-              href={`https://exchange.sushiswapclassic.org/#/swap?inputCurrency=${pair.token0.id}&outputCurrency=${pair.token1.id}`}
+              href={`https://apps.standard.tech/swap?inputCurrency=${
+                pair.token0.symbol === "WETH" || pair.token0.symbol === "ETH"
+                  ? "ETH"
+                  : pair.token0.id
+              }&outputCurrency=${
+                pair.token1.symbol === "WETH" || pair.token1.symbol === "ETH"
+                  ? "ETH"
+                  : pair.token1.id
+              }`}
               target="_blank"
               variant="body1"
             >
@@ -276,6 +303,7 @@ function PairPage(props) {
             <Paper
               variant="outlined"
               style={{ height: 300, position: "relative" }}
+              className={classes.chartContainer}
             >
               <ParentSize>
                 {({ width, height }) => (
@@ -298,6 +326,7 @@ function PairPage(props) {
             <Paper
               variant="outlined"
               style={{ height: 300, position: "relative" }}
+              className={classes.chartContainer}
             >
               <ParentSize>
                 {({ width, height }) => (
@@ -392,7 +421,11 @@ function PairPage(props) {
               label: `${pair.token1.symbol} Address`,
               maxWidth: "250px",
             },
-            { key: "etherscan", label: "Etherscan", align: "right" },
+            {
+              key: "etherscan",
+              label: SCANNERS[chainId].name,
+              align: "right",
+            },
           ]}
           bodyCells={[
             <Typography variant="body2" noWrap>
@@ -404,13 +437,13 @@ function PairPage(props) {
             <Typography variant="body2" noWrap>
               {pair.token1.id}
             </Typography>,
-            <Link href={`https://etherscan.io/address/${pair.id}`}>View</Link>,
+            <Link href={SCANNERS[chainId].getUrl(pair.id)}>View</Link>,
           ]}
         />
       </Box>
-      <Box my={4}>
+      {/*<Box my={4}>
         <IntoTheBlock pairAddress={pair.id} />
-      </Box>
+        </Box>*/}
       <Box my={4}>
         <Transactions transactions={transactions} txCount={pair.txCount} />
       </Box>
@@ -421,7 +454,7 @@ function PairPage(props) {
 export async function getStaticProps({ params }) {
   const client = getApollo();
 
-  const id = params.id.toLowerCase()
+  const id = params.id.toLowerCase();
 
   // EthPrice
   await client.query({

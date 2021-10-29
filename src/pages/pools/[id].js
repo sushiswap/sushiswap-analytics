@@ -1,6 +1,6 @@
 import {
   AppShell,
-  Chart,
+  // Chart,
   Curves,
   KPI,
   Link,
@@ -8,35 +8,29 @@ import {
   PageHeader,
   PairIcon,
 } from "app/components";
+import { Box, Grid, Paper, Typography, makeStyles } from "@material-ui/core";
 import {
-  Box,
-  Grid,
-  Paper,
-  Typography,
-  makeStyles,
-  useTheme,
-} from "@material-ui/core";
-import {
-  currencyFormatter,
-  ethPriceQuery,
+  // currencyFormatter,
   getApollo,
   getEthPrice,
   getPool,
   getPoolHistories,
-  getPoolIds,
-  getPools,
+  // getPoolIds,
+  // getPools,
   getSushiToken,
   poolHistoryQuery,
   poolQuery,
-  tokenQuery,
 } from "app/core";
 
 import Head from "next/head";
-import { POOL_DENY } from "app/core/constants";
+// import { POOL_DENY } from "app/core/constants";
 import { ParentSize } from "@visx/responsive";
-import { deepPurple } from "@material-ui/core/colors";
-import { useQuery } from "@apollo/client";
+import { useNetwork } from "state/network/hooks";
 import { useRouter } from "next/router";
+// import { deepPurple } from "@material-ui/core/colors";
+import { useQuery } from "@apollo/client";
+import { BigNumber } from "bignumber.js";
+// import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -46,12 +40,15 @@ function PoolPage() {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <AppShell />;
+    return (
+      <AppShell>
+        <div />
+      </AppShell>
+    );
   }
 
   const classes = useStyles();
-
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const { id } = router.query;
 
@@ -77,23 +74,23 @@ function PoolPage() {
     },
   });
 
-  const {
-    data: { bundles },
-  } = useQuery(ethPriceQuery, {
-    pollInterval: 60000,
-  });
+  // const {
+  //   data: { bundles },
+  // } = useQuery(ethPriceQuery, {
+  //   pollInterval: 60000,
+  // });
 
-  const {
-    data: { token },
-  } = useQuery(tokenQuery, {
-    variables: {
-      id: "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
-    },
-  });
+  // console.log(STND_ADDRESS[chainId]);
+  // const {
+  //   data: { token },
+  // } = useQuery(tokenQuery, {
+  //   variables: {
+  //     id: STND_ADDRESS[chainId],
+  //   },
+  // });
 
-  const sushiPrice =
-    parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
-
+  // const sushiPrice =
+  //   parseFloat(token?.derivedETH) * parseFloat(bundles[0].ethPrice);
   const {
     slpAge,
     slpAgeRemoved,
@@ -113,7 +110,8 @@ function PoolPage() {
       });
 
       const slpAgeAverage =
-        parseFloat(currentValue.slpAge) / parseFloat(currentValue.slpBalance);
+        parseFloat(currentValue.slpAge) /
+        parseFloat(currentValue.slpBalanceDecimal);
 
       previousValue.slpAgeAverage.push({
         date,
@@ -127,7 +125,7 @@ function PoolPage() {
 
       previousValue.slpBalance.push({
         date,
-        value: parseFloat(currentValue.slpBalance),
+        value: parseFloat(currentValue.slpBalanceDecimal),
       });
 
       previousValue.slpDeposited.push({
@@ -142,10 +140,12 @@ function PoolPage() {
 
       previousValue.tvl.push({
         date,
-        value:
-          (parseFloat(pool.liquidityPair.reserveUSD) /
-            parseFloat(pool.liquidityPair.totalSupply)) *
-          parseFloat(currentValue.slpBalance),
+        value: parseFloat(
+          BigNumber(pool.liquidityPair.reserveUSD)
+            .dividedBy(BigNumber(pool.liquidityPair.totalSupply))
+            .multipliedBy(BigNumber(currentValue.slpBalanceDecimal))
+            .toFixed(6)
+        ),
       });
 
       previousValue.userCount.push({
@@ -172,7 +172,7 @@ function PoolPage() {
   return (
     <AppShell>
       <Head>
-        <title>Pool {id} | SushiSwap Analytics</title>
+        <title>Pool {id} | Analytics</title>
       </Head>
 
       <PageHeader mb={3}>
@@ -186,8 +186,8 @@ function PoolPage() {
           <Grid item xs={12} sm="auto" className={classes.title}>
             <Box display="flex" alignItems="center">
               <PairIcon
-                base={pool.liquidityPair.token0.id}
-                quote={pool.liquidityPair.token1.id}
+                base={pool.liquidityPair.token0}
+                quote={pool.liquidityPair.token1}
               />
               <Typography variant="h5" component="h1">
                 {pool.liquidityPair.token0.symbol}-
@@ -197,16 +197,21 @@ function PoolPage() {
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href={`https://sushiswapclassic.org/farms/${
-                pool.liquidityPair.token0.symbol
-              }-${pool.liquidityPair.token1.symbol.replace(
-                "WETH",
-                "ETH"
-              )}%20SLP`}
+              href={`https://apps.standard.tech/add/${
+                pool.liquidityPair.token0.symbol === "WETH" ||
+                pool.liquidityPair.token0.symbol === "ETH"
+                  ? "ETH"
+                  : pool.liquidityPair.token0.id
+              }/${
+                pool.liquidityPair.token1.symbol === "WETH" ||
+                pool.liquidityPair.token1.symbol === "ETH"
+                  ? "ETH"
+                  : pool.liquidityPair.token1.id
+              }`}
               target="_blank"
               variant="body1"
             >
-              Stake SLP
+              Stake LTR
             </Link>
           </Grid>
         </Grid>
@@ -226,9 +231,9 @@ function PoolPage() {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
           <KPI
-            title="~ SLP Age"
+            title="~ LTR Age"
             value={`${(
-              parseFloat(pool.slpAge) / parseFloat(pool.balance / 1e18)
+              parseFloat(pool.slpAge) / parseFloat(pool.slpBalance / 1e18)
             ).toFixed(2)} Days`}
           />
         </Grid>
@@ -238,7 +243,7 @@ function PoolPage() {
         <Grid item xs={12} sm={4}>
           <KPI
             title="Staked"
-            value={`${(pool.balance / 1e18).toFixed(4)} SLP`}
+            value={`${(pool.slpBalance / 1e18).toFixed(4)} LTR`}
           />
         </Grid>
         {/* <Grid item xs={12} sm={4}>
@@ -291,7 +296,7 @@ function PoolPage() {
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[slpAge, slpAgeRemoved]}
-                  labels={["SLP Age", "SLP Age Removed"]}
+                  labels={["LTR Age", "LTR Age Removed"]}
                 />
               )}
             </ParentSize>
@@ -314,7 +319,7 @@ function PoolPage() {
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
                   data={[slpDeposited, slpWithdrawn]}
-                  labels={["SLP Deposited", "SLP Age Withdrawn"]}
+                  labels={["LTR Deposited", "LTR Age Withdrawn"]}
                 />
               )}
             </ParentSize>
@@ -334,7 +339,7 @@ function PoolPage() {
             <ParentSize>
               {({ width, height }) => (
                 <Curves
-                  title="~ SLP Age (Days)"
+                  title="~ LTR Age (Days)"
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}
@@ -382,7 +387,7 @@ function PoolPage() {
             <ParentSize>
               {({ width, height }) => (
                 <Curves
-                  title="SLP Balance"
+                  title="LTR Balance"
                   width={width}
                   height={height}
                   margin={{ top: 64, right: 32, bottom: 0, left: 64 }}

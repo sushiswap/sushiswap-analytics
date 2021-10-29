@@ -21,9 +21,23 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     marginBottom: theme.spacing(2),
   },
-  // table: {
-  //   minWidth: 750,
-  // },
+  tableContainer: {
+    background: "rgba(255,255,255,.04)",
+    borderRadius: 20,
+  },
+  table: {
+    borderSpacing: "0 8px",
+    borderCollapse: "separate",
+  },
+  tableRow: {
+    background:
+      theme.palette.type === "dark"
+        ? "rgba(222,199,239,.05)"
+        : "rgba(222,199,239,.2)",
+  },
+  tableCell: {
+    border: "none",
+  },
   avatar: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
@@ -38,6 +52,10 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     top: 20,
     width: 1,
+  },
+  pagination: {},
+  select: {
+    background: theme.palette.type === "light" ? "white" : "black",
   },
 }));
 
@@ -114,7 +132,7 @@ export default function SortableTable({
           {title}
         </Typography>
       )}
-      <TableContainer>
+      <TableContainer className={classes.tableContainer}>
         <Table className={classes.table} aria-label={`${title} table`}>
           <SortableTableHead
             columns={columns}
@@ -132,7 +150,7 @@ export default function SortableTable({
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 return (
-                  <TableRow key={row.id}>
+                  <TableRow key={row.id} className={classes.tableRow}>
                     {columns.map((column, i) => {
                       return (
                         <TableCell
@@ -142,6 +160,7 @@ export default function SortableTable({
                             : {})}
                           align={column.align || "left"}
                           // variant="body"
+                          className={classes.tableCell}
                         >
                           {typeof column.render === "function"
                             ? column.render(row, index)
@@ -161,6 +180,8 @@ export default function SortableTable({
         </Table>
       </TableContainer>
       <TablePagination
+        // className={classes.pagination}
+        // SelectProps={{ className: classes.select }}
         rowsPerPageOptions={[5, 10, 25, , { label: "All", value: -1 }]}
         component="div"
         count={rows.length}

@@ -12,7 +12,7 @@ import { scaleLinear, scaleTime } from "@visx/scale";
 import { useCallback, useMemo, useState } from "react";
 
 import ChartOverlay from "./ChartOverlay";
-import { GradientTealBlue } from "@visx/gradient";
+import { GradientPinkBlue } from "@visx/gradient";
 import { Group } from "@visx/group";
 import { bisector } from "d3-array";
 import { deepPurple } from "@material-ui/core/colors";
@@ -148,8 +148,8 @@ function AreaChart({
       {overlayEnabled && (
         <ChartOverlay overlay={overlay} onTimespanChange={onTimespanChange} />
       )}
-      <svg width={width} height={height}>
-        <GradientTealBlue id="teal" fromOffset={0.5} />
+      <svg width={width} height={height} style={{borderRadius: 20}}>
+        <GradientPinkBlue id="teal" fromOffset={0.5} />
         <rect x={0} y={0} width={width} height={height} fill="transparent" />
 
         <Group top={margin.top} left={margin.left}>

@@ -13,10 +13,13 @@ const formatDate = timeFormat("%b %d, '%y");
 const useStyles = makeStyles((theme) => ({
   filter: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     [theme.breakpoints.up("md")]: {
       flexDirection: "row",
     },
+  },
+  title: {
+    fontWeight: 700,
   },
 }));
 export default function ChartOverlay({ overlay, onTimespanChange }) {
@@ -26,18 +29,27 @@ export default function ChartOverlay({ overlay, onTimespanChange }) {
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   return (
     <>
-      <div style={{ position: "absolute", top: 24, left: 24 }}>
-        <Typography variant="subtitle2" color="textSecondary">
+      <div style={{ position: "absolute", top: 14, left: 14 }}>
+        <Typography variant="h5" color="textPrimary" className={classes.title}>
           {title}
         </Typography>
-        <Typography variant="h5" color="textPrimary">
+        <Typography variant="subtitle1" color="textSecondary">
           {value}
         </Typography>
+      </div>
+      <div style={{ position: "absolute", top: 14, right: 14 }}>
         <Typography variant="subtitle1" color="textSecondary">
           {formatDate(date * 1e3)}
         </Typography>
       </div>
-      <div style={{ position: "absolute", top: 20, right: 12 }}>
+      <div
+        style={{
+          position: "absolute",
+          top: 70,
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
+      >
         <div className={classes.filter}>
           <Button
             type="button"

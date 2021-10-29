@@ -24,6 +24,7 @@ import { Text } from "@visx/text";
 import { curveNatural } from "@visx/curve";
 import { extent } from "d3-array";
 import millify from "millify";
+import { filter } from "next-pwa/cache";
 
 const brushMargin = { top: 10, bottom: 15, left: 50, right: 20 };
 const chartSeparation = 30;
@@ -81,6 +82,38 @@ const Curves = ({
   const [filteredData, setFilteredData] = useState(
     data.map((curve) => curve.slice(curve.length - 30, curve.length - 1))
   );
+
+  const overflown =
+    allData.filter(
+      ({ value }) =>
+        typeof value === "number" && !Number.isSafeInteger(Math.floor(value))
+    ).length > 0;
+
+  const overflownTickValues = useMemo(
+    () =>
+      Array.from({ length: 5 }, (_, i) => i + 1).map(
+        (val) => (val / 5) * Number.MAX_SAFE_INTEGER
+      ),
+    []
+  );
+
+  // const overflowSafeFilteredData = useMemo(() => {
+  //   return filteredData.map((curve) =>
+  //     curve.map((date) => {
+  //       if (
+  //         typeof date.value === "number" &&
+  //         !Number.isSafeInteger(Math.floor(date.value))
+  //       ) {
+  //         console.log("overflown", date.value);
+  //         return {
+  //           ...date,
+  //           value: Number.MAX_SAFE_INTEGER - 1,
+  //         };
+  //       }
+  //       return date;
+  //     })
+  //   );
+  // }, [filteredData]);
 
   const onBrushChange = (domain) => {
     if (!domain) return;
@@ -153,6 +186,35 @@ const Curves = ({
       }),
     [yMax, filteredData]
   );
+
+  // const overflowSafeYScale = useMemo(
+  //   () =>
+  //     scaleLinear({
+  //       range: [yMax, 0],
+  //       domain: [
+  //         Math.min(
+  //           ...overflowSafeFilteredData
+  //             .reduce(
+  //               (previousValue, currentValue) =>
+  //                 previousValue.concat(currentValue),
+  //               []
+  //             )
+  //             .map((d) => getY(d))
+  //         ),
+  //         Math.max(
+  //           ...overflowSafeFilteredData
+  //             .reduce(
+  //               (previousValue, currentValue) =>
+  //                 previousValue.concat(currentValue),
+  //               []
+  //             )
+  //             .map((d) => getY(d))
+  //         ),
+  //       ],
+  //       nice: true,
+  //     }),
+  //   [yMax, overflowSafeFilteredData]
+  // );
 
   const xBrushMax = Math.max(width - brushMargin.left - brushMargin.right, 0);
   const yBrushMax = Math.max(
@@ -336,6 +398,7 @@ const Curves = ({
             scale={yScale}
             numTicks={5}
             tickFormat={millify}
+            tickValues={overflown ? overflownTickValues : undefined}
             stroke={axisColor}
             tickStroke={axisColor}
             tickLabelProps={() => axisLeftTickLabelProps}
@@ -355,6 +418,7 @@ const Curves = ({
               : "url(#marker-arrow-odd)";
             return (
               <Curve
+                key={`curve-${i}`}
                 curve={curveNatural}
                 stroke={colors[i]}
                 strokeWidth={2}

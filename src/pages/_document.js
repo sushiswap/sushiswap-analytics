@@ -1,6 +1,6 @@
 import Document, { Head, Html, Main, NextScript } from "next/document";
 
-import { GA_TRACKING_ID } from '../core/analytics'
+import { GA_TRACKING_ID } from "../core/analytics";
 import React from "react";
 import { ServerStyleSheets } from "@material-ui/core/styles";
 //
@@ -15,7 +15,7 @@ export default class MyDocument extends Document {
 
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
-          <meta name="application-name" content={process.env.APP_NAME} />
+          <meta name="application-name" content="Standard Analytics" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta
             name="apple-mobile-web-app-status-bar-style"
@@ -23,90 +23,89 @@ export default class MyDocument extends Document {
           />
           <meta
             name="apple-mobile-web-app-title"
-            content={process.env.APP_NAME}
+            content="Standard Analytics"
           />
 
           <meta
             name="description"
-            content={process.env.NEXT_PUBLIC_APP_DESCRIPTION}
+            content="Analytics for Standard Protocol, building the next multichain defi standard"
           />
           <meta
             name="keywords"
-            content={process.env.NEXT_PUBLIC_APP_KEYWORDS}
+            content="Standard Protocol, STND, ETH, Swap, Farm, Dividend, Analytics, Shiden, EVM, Polkadot"
           />
-
           <link
-            rel="preload"
-            href="/fonts/inter-var-latin.woff2"
-            as="font"
-            type="font/woff2"
-            crossOrigin="anonymous"
+            href="https://fonts.googleapis.com/css2?family=Poppins"
+            rel="stylesheet"
           />
-
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
 
-          <meta name="msapplication-config" content="/browserconfig.xml" />
-          <meta name="msapplication-TileColor" content={palette.primary.main} />
-          <meta name="msapplication-tap-highlight" content="no" />
-
-          <meta name="theme-color" content={palette.primary.main} />
-
-          {/* <link rel="apple-touch-icon" href="/apple-icon.png"></link> */}
-
+          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+          <link
+            rel="apple-touch-icon"
+            sizes="57x57"
+            href="/apple-touch-icon-57x57.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            sizes="72x72"
+            href="/apple-touch-icon-72x72.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            sizes="76x76"
+            href="/apple-touch-icon-76x76.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            sizes="114x114"
+            href="/apple-touch-icon-114x114.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            sizes="120x120"
+            href="/apple-touch-icon-120x120.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            sizes="144x144"
+            href="/apple-touch-icon-144x144.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            sizes="152x152"
+            href="/apple-touch-icon-152x152.png"
+          />
           <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href="/apple-touch-icon.png"
+            href="/apple-touch-icon-180x180.png"
           />
-
           <link
-            href="/favicon-16x16.png"
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-          />
-
-          <link
-            href="/favicon-32x32.png"
             rel="icon"
             type="image/png"
             sizes="32x32"
+            href="/favicon-32x32.png"
           />
-
-          <link rel="manifest" href="/manifest.json" />
-
-          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
-
-          <link rel="shortcut icon" href="/favicon.ico" />
-
-          {/* TWITTER */}
-          <meta name="twitter:card" content="summary" />
-          <meta name="twitter:url" content={process.env.APP_URL} />
-          <meta name="twitter:title" content={process.env.APP_NAME} />
-          <meta
-            name="twitter:description"
-            content={process.env.APP_DESCRIPTION}
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
           />
-          <meta name="twitter:image" content="/android-chrome-192x192.png" />
-          <meta name="twitter:creator" content="@MatthewLilley" />
+          <link rel="manifest" href="/site.webmanifest" />
+          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#f365bd" />
+          <meta name="msapplication-TileColor" content="#da532c" />
+          <meta name="theme-color" content="#ffffff" />
 
-          {/* FACEBOOK */}
-          <meta property="og:type" content="website" />
-          <meta property="og:title" content={process.env.APP_NAME} />
-          <meta
-            property="og:description"
-            content={process.env.APP_DESCRIPTION}
-          />
-          <meta property="og:site_name" content={process.env.APP_NAME} />
-          <meta property="og:url" content={process.env.APP_URL} />
-          <meta property="og:image" content="/apple-touch-icon.png" />
           <script
             type="text/javascript"
             src="https://app.intotheblock.com/widget.js"
           />
-                   {/* Global Site Tag (gtag.js) - Google Analytics */}
-                   <script
+          {/* Global Site Tag (gtag.js) - Google Analytics */}
+          <script
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           />

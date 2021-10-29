@@ -5,12 +5,16 @@ import {
   Brightness4Outlined,
   Brightness7,
   CloseOutlined,
+  MoodOutlined,
   DashboardOutlined,
+  CopyrightOutlined,
   DetailsOutlined,
   ExpandLess,
   ExpandMore,
   FastfoodOutlined,
   FiberNewOutlined,
+  FiberSmartRecordOutlined,
+  Texture,
   HistoryOutlined,
   LinkOutlined,
   ListAltOutlined,
@@ -25,6 +29,7 @@ import {
   ViewStreamOutlined,
   WavesOutlined,
 } from "@material-ui/icons";
+
 import {
   Box,
   Button,
@@ -54,14 +59,13 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Sushi from "./Sushi";
 import { useRouter } from "next/router";
 
-const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
   root: {},
   list: {
     // "& > *": {
     //   paddingLeft: theme.spacing(3),
     // },
+    paddingTop: theme.spacing(3),
   },
   nested: {
     paddingLeft: theme.spacing(3),
@@ -74,7 +78,8 @@ export default function AppNavigation() {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
-  const [open, setOpen] = useState(true);
+  const [pairsOpen, setPairsOpen] = useState(false);
+  const [farmOpen, setFarmOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const [address, setAddress] = React.useState("");
@@ -93,10 +98,14 @@ export default function AppNavigation() {
         <Hidden smUp implementation="css">
           <Box display="flex" alignItems="center" py={0.5}>
             <IconButton edge={false} onClick={() => router.push("/")}>
-              <Sushi />
+              <img
+                src="/icons/stnd/stnd.svg"
+                alt="stnd logo"
+                style={{ width: 30 }}
+              />
             </IconButton>
             <Typography variant="subtitle1" color="textPrimary" noWrap>
-              Sushi Analytics
+              Analytics
             </Typography>
           </Box>
         </Hidden>
@@ -118,22 +127,21 @@ export default function AppNavigation() {
           onClick={() => router.push("/")}
         >
           <ListItemIcon>
-            <DashboardOutlined />
+            <ReorderOutlined />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItem>
-
         <ListItem
-          key="/bar"
+          key="/dividend"
           button
-          selected={router.pathname === "/bar"}
-          onClick={() => router.push("/bar")}
+          selected={router.pathname === "/dividend"}
+          onClick={() => router.push("/dividend")}
         >
           <ListItemIcon>
-            <FastfoodOutlined />
+            <MoodOutlined />
           </ListItemIcon>
-          <ListItemText primary="Bar" />
-          {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+          <ListItemText primary="Dividend" />
+          {/* {open ? <ExpandLess /> : <ExpandMore />}*/}
         </ListItem>
 
         {/* <Collapse in={open} timeout="auto" unmountOnExit>
@@ -160,14 +168,19 @@ export default function AppNavigation() {
           </List>
         </Collapse> */}
 
-        <ListItem button>
+        <ListItem
+          button
+          onClick={() => {
+            setFarmOpen(!farmOpen);
+          }}
+        >
           <ListItemIcon>
-            <WavesOutlined />
+            <Texture />
           </ListItemIcon>
-          <ListItemText primary="Pools" />
-          {open ? <ExpandLess /> : <ExpandMore />}
+          <ListItemText primary="Farm" />
+          {farmOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={farmOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItem
               button
@@ -217,14 +230,19 @@ export default function AppNavigation() {
           </List>
         </Collapse>
 
-        <ListItem button>
+        <ListItem
+          button
+          onClick={() => {
+            setPairsOpen(!pairsOpen);
+          }}
+        >
           <ListItemIcon>
-            <LinkOutlined />
+            <FiberSmartRecordOutlined />
           </ListItemIcon>
           <ListItemText primary="Pairs" />
-          {open ? <ExpandLess /> : <ExpandMore />}
+          {pairsOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={pairsOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItem
               button
@@ -280,11 +298,11 @@ export default function AppNavigation() {
           onClick={() => router.push("/tokens")}
         >
           <ListItemIcon>
-            <MoneyOutlined />
+            <CopyrightOutlined />
           </ListItemIcon>
           <ListItemText primary="Tokens" />
         </ListItem>
-        <ListItem
+        {/*<ListItem
           button
           key="/portfolio"
           selected={router.pathname.includes("/portfolio")}
@@ -301,7 +319,7 @@ export default function AppNavigation() {
             <AccountTreeOutlined />
           </ListItemIcon>
           <ListItemText primary="Portfolio" />
-        </ListItem>
+        </ListItem>*/}
       </List>
       <Dialog
         maxWidth="sm"

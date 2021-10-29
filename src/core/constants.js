@@ -12,3 +12,67 @@ export const EXCHANGE_CREATED_TIMESTAMP = 1599214239;
 export const POOL_DENY = ["14", "29", "45", "30"];
 
 export const SUSHI_TOKEN = "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2";
+
+export const DEFAULT_CHAIN_ID = 336;
+
+export const ChainId = {
+  RINKEBY: 4,
+  SHIBUYA: 81,
+  SHIDEN: 336,
+};
+
+export const SCANNERS = {
+  [ChainId.RINKEBY]: {
+    name: "Etherscan",
+    url: "https://rinkeby.etherscan.io/",
+    getUrl: (id) => {
+      return `https://rinkeby.etherscan.io/address/${id}`;
+    },
+    getTxUrl: (id) => {
+      return `https://rinkeby.etherscan.io/address/${id}`;
+    },
+  },
+  [ChainId.SHIBUYA]: {
+    name: "Subscan",
+    url: "https://shibuya.subscan.io/",
+    getUrl: (id) => {
+      return `https://shibuya.subscan.io/account/${id}`;
+    },
+    getTxUrl: (id) => {
+      return `https://shibuya.subscan.io/tx/${id}`;
+    },
+  },
+  [ChainId.SHIDEN]: {
+    name: "Subscan",
+    url: "https://shiden.subscan.io/",
+    getUrl: (id) => {
+      return `https://shiden.subscan.io/account/${id}`;
+    },
+    getTxUrl: (id) => {
+      return `https://shiden.subscan.io/tx/${id}`;
+    },
+  },
+};
+
+// all addrs should be lowercase
+export const FACTORY_ADDRESS = {
+  [ChainId.RINKEBY]: "0xf659492744608b595670c1508aa0f5b92b84b94d",
+  [ChainId.SHIBUYA]: "0x0e60c35fcf3184dce5cf04d4b736e56f2de7caf7",
+  [ChainId.SHIDEN]: "0x073386AE3292299a5814B00bC1ceB8f2bfC92c51",
+};
+
+export const MASTERPOOL_ADDRESS = {
+  [ChainId.RINKEBY]: "0x22079b36af1ab814350fff725cd8f67f3c70b753",
+  [ChainId.SHIDEN]: "0x375eC65e75083Ee8545fA9168257Ac2a456DDAbb",
+};
+
+export const STND_ADDRESS = {
+  [ChainId.RINKEBY]: "0xc8aeedb09f4d90d59ee47fed8c70d10fd267b2ab",
+  [ChainId.SHIBUYA]: "0xb0a1aa4cb76c0e35d9ac9eba422bf76534bf155a",
+  [ChainId.SHIDEN]: "0x722377a047e89ca735f09eb7cccab780943c4cb4",
+};
+
+export const DIVIDEND_POOL_ADDRESS = {
+  [ChainId.RINKEBY]: "0x45fa9f11b06dff3f4b04746629523c21fb2cadb9",
+  [ChainId.SHIDEN]: "0x670cf2628816d95b36b1a4db2dfba80eaebd7b78",
+};

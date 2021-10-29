@@ -1,15 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import { FixedSizeList } from 'react-window';
+import React from "react";
+import PropTypes from "prop-types";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import { FixedSizeList } from "react-window";
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 import PairIcon from "./PairIcon";
 import TokenIcon from "./TokenIcon";
 import { useRouter } from "next/router";
-import { Box } from '@material-ui/core';
+import { Box } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
 const LISTBOX_PADDING = 8; // px
 
@@ -31,7 +32,10 @@ const OuterElementType = React.forwardRef((props, ref) => {
 });
 
 // Adapter for react-window
-const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) {
+const ListboxComponent = React.forwardRef(function ListboxComponent(
+  props,
+  ref
+) {
   const { children, ...other } = props;
   const itemData = React.Children.toArray(children);
   const itemCount = itemData.length;
@@ -83,25 +87,33 @@ const renderGroup = (params) => [
   params.children,
 ];
 
+const useStyles = makeStyles((theme) => ({
+  input: {
+    borderRadius: 20,
+    border: "none",
+  },
+}));
+
 export default function Search({ pairs, tokens }) {
   const router = useRouter();
-
+  const classes = useStyles();
   const options = [
     // ...pairs.slice(offset, limit),
     // ...tokens.slice(offset, limit),
     ...pairs,
-    ...tokens
+    ...tokens,
   ].map((option) => {
     return {
       __typename: option.__typename,
       id: option.id,
-      token0: option.token0 ? option.token0.id : "",
-      token1: option.token1 ? option.token1.id : "",
+      symbol: option.symbol,
+      token0: option.token0,
+      token1: option.token1,
       text: option.name
         ? ` ${option.symbol} ${option.name}`
         : `${option.token0?.symbol}-${option.token1?.symbol}`,
     };
-  })
+  });
 
   return (
     <Autocomplete
@@ -133,16 +145,23 @@ export default function Search({ pairs, tokens }) {
         const parts = parse(option.text, matches);
         return (
           <Box display="flex" alignItems="center">
-            {option.__typename === "Token" ? <TokenIcon id={option.id} /> : <PairIcon base={option.token0} quote={option.token1} />}
+            {option.__typename === "Token" ? (
+              <TokenIcon id={option.id} symbol={option.symbol} />
+            ) : (
+              <PairIcon base={option.token0} quote={option.token1} />
+            )}
             {parts.map((part, index) => {
               return (
                 <span
                   key={index}
-                  style={{ fontWeight: part.highlight ? 700 : 400, whiteSpace: "pre-wrap" }}
+                  style={{
+                    fontWeight: part.highlight ? 700 : 400,
+                    whiteSpace: "pre-wrap",
+                  }}
                 >
                   {part.text}
                 </span>
-              )
+              );
             })}
           </Box>
         );

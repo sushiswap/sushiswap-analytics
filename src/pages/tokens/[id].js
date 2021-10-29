@@ -35,6 +35,8 @@ import { ParentSize } from "@visx/responsive";
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import { useNetwork } from "state/network/hooks";
+import { SCANNERS } from "app/core/constants";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -73,10 +75,15 @@ function TokenPage() {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <AppShell />;
+    return (
+      <AppShell>
+        <div />
+      </AppShell>
+    );
   }
 
   const classes = useStyles();
+  const chainId = useNetwork();
 
   const id = router.query.id.toLowerCase();
 
@@ -91,8 +98,6 @@ function TokenPage() {
   } = useQuery(ethPriceQuery, {
     pollInterval: 60000,
   });
-
-  console.log({ token })
 
   const { data: oneDayEthPriceData } = useQuery(oneDayEthPriceQuery);
 
@@ -198,14 +203,14 @@ function TokenPage() {
           </Grid>
           <Grid item xs={12} sm="auto" className={classes.links}>
             <Link
-              href={`https://exchange.sushiswapclassic.org/#/add/${token.id}/ETH`}
+              href={`https://apps.standard.tech/add/ETH/${token.id}`}
               target="_blank"
               variant="body1"
             >
               Add Liquidity
             </Link>
             <Link
-              href={`https://exchange.sushiswapclassic.org/#/swap?inputCurrency=${token.id}`}
+              href={`https://apps.standard.tech/swap?inputCurrency=${token.id}`}
               target="_blank"
               variant="body1"
             >
@@ -297,7 +302,7 @@ function TokenPage() {
             token.name,
             token.symbol,
             token.id,
-            <Link href={`https://etherscan.io/address/${token.id}`}>View</Link>,
+            <Link href={SCANNERS[chainId].getUrl(token.id)}>View</Link>,
           ]}
         />
       </Box>

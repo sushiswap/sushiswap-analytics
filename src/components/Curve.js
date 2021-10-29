@@ -1,5 +1,5 @@
 import { AxisBottom, AxisLeft, AxisScale } from "@visx/axis";
-import { GradientTealBlue, LinearGradient } from "@visx/gradient";
+import { GradientPinkBlue, LinearGradient } from "@visx/gradient";
 
 import { Group } from "@visx/group";
 import { LinePath } from "@visx/shape";

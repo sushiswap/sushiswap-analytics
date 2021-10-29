@@ -83,7 +83,7 @@ export default function TokenTable({ tokens, title }) {
             label: "Name",
             render: (row, index) => (
               <Box display="flex" alignItems="center">
-                <TokenIcon id={row.id} />
+                <TokenIcon id={row.id} symbol={row.symbol} />
                 <Link href={`/tokens/${row.id}`}>
                   <Typography variant="body2" noWrap>
                     {row.name}

@@ -6,6 +6,8 @@ import SortableTable from "./SortableTable";
 import { Typography } from "@material-ui/core";
 import formatDistance from "date-fns/formatDistance";
 import { makeStyles } from "@material-ui/core/styles";
+import { useNetwork } from "state/network/hooks";
+import { SCANNERS } from "app/core/constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Transactions({ transactions, txCount }) {
   const classes = useStyles();
+  const chainId = useNetwork();
+
   const rows = [
     ...transactions.swaps,
     ...transactions.mints,
@@ -39,8 +43,6 @@ export default function Transactions({ transactions, txCount }) {
 
   const now = new Date();
 
- 
-
   return (
     <div className={classes.root}>
       <SortableTable
@@ -50,20 +52,22 @@ export default function Transactions({ transactions, txCount }) {
           {
             key: "__typename",
             label: "Type",
-            render: (row) => { 
-              console.log(row)
+            render: (row) => {
               return (
-              <Typography variant="body2" noWrap>
-                {row.__typename}{" "}
-                {row.amount0In === "0" || row.__typename === 'Mint' && !row.amount0In
-                  ? row.pair.token1.symbol
-                  : row.pair.token0.symbol}{" "}
-                for{" "}
-                {row.amount1Out === "0" || row.__typename === 'Mint' && !row.amount1Out
-                  ? row.pair.token0.symbol
-                  : row.pair.token1.symbol}
-              </Typography>
-            ) },
+                <Typography variant="body2" noWrap>
+                  {row.__typename}{" "}
+                  {row.amount0In === "0" ||
+                  (row.__typename === "Mint" && !row.amount0In)
+                    ? row.pair.token1.symbol
+                    : row.pair.token0.symbol}{" "}
+                  for{" "}
+                  {row.amount1Out === "0" ||
+                  (row.__typename === "Mint" && !row.amount1Out)
+                    ? row.pair.token0.symbol
+                    : row.pair.token1.symbol}
+                </Typography>
+              );
+            },
           },
           {
             key: "amountUSD",
@@ -101,9 +105,7 @@ export default function Transactions({ transactions, txCount }) {
             key: "to",
             label: "To",
             render: (row) => (
-              <Link href={`https://etherscan.io/address/${row.to}`}>
-                {row.to}
-              </Link>
+              <Link href={SCANNERS[chainId].getUrl(row.to)}>{row.to}</Link>
             ),
           },
           {

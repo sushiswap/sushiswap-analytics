@@ -403,7 +403,7 @@ function PairPage(props) {
             <Typography variant="body2" noWrap>
               {pair.token1.id}
             </Typography>,
-            <Link href={`https://explorer.celo.org/address/${pair.id}`}>
+            <Link href={`https://moonriver.moonscan.io/address/${pair.id}`}>
               View
             </Link>,
           ]}

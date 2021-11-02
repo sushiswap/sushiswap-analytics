@@ -298,7 +298,7 @@ function TokenPage() {
             token.symbol,
             token.id,
             <Link
-              href={`https://explorer.celo.org/address/${token.id}`}
+              href={`https://moonriver.moonscan.io/address/${token.id}`}
             >
               View
             </Link>,

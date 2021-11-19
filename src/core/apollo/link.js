@@ -13,7 +13,7 @@ export const uniswap = from([
 export const exchange = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/moonriver-exchange",
+    uri: "https://api.thegraph.com/subgraphs/name/jiro-ono/moonriver-exchange-staging",
     shouldBatch: true,
   }),
 ]);

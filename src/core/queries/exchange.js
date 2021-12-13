@@ -257,7 +257,7 @@ export const pairSubsetQuery = gql`
 export const pairsQuery = gql`
   query pairsQuery(
     $first: Int! = 1000
-    $orderBy: String! = "trackedReserveETH"
+    $orderBy: String! = "reserveUSD"
     $orderDirection: String! = "desc"
   ) {
     pairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection) {

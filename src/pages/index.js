@@ -26,6 +26,8 @@ import Head from "next/head";
 import { ParentSize } from "@visx/responsive";
 import { useQuery } from "@apollo/client";
 
+import { TOKEN_DENY, PAIR_DENY } from 'app/core/constants'
+
 function IndexPage() {
   const {
     data: { tokens },
@@ -53,6 +55,7 @@ function IndexPage() {
 
   const [liquidity, volume] = dayDatas
     .filter((d) => d.liquidityUSD !== "0")
+    .filter((d) => !PAIR_DENY.includes(d.id))
     .reduce(
       (previousValue, currentValue) => {
         previousValue[0].unshift({

@@ -15,9 +15,9 @@ export default function TokenIcon({ id, ...rest }) {
   const classes = useStyles();
   const src = useMemo(
     () =>
-      `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/${toChecksumAddress(
+      `https://raw.githubusercontent.com/sushiswap/logos/master/networks/fuse/${toChecksumAddress(
         id
-      )}/logo.png`,
+      )}.jpg`,
     [id]
   );
   return <Avatar classes={{ root: classes.root }} src={src} {...rest} />;

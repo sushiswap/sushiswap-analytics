@@ -403,7 +403,9 @@ function PairPage(props) {
             <Typography variant="body2" noWrap>
               {pair.token1.id}
             </Typography>,
-            <Link href={`https://etherscan.io/address/${pair.id}`}>View</Link>,
+            <Link href={`https://explorer.fuse.io//address/${pair.id}`}>
+              View
+            </Link>,
           ]}
         />
       </Box>
@@ -417,7 +419,7 @@ function PairPage(props) {
 export async function getStaticProps({ params }) {
   const client = getApollo();
 
-  const id = params.id.toLowerCase()
+  const id = params.id.toLowerCase();
 
   // EthPrice
   await client.query({

@@ -13,7 +13,7 @@ export const uniswap = from([
 export const exchange = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/xdai-exchange",
+    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/fuse-exchange",
     shouldBatch: true,
   }),
 ]);
@@ -21,7 +21,7 @@ export const exchange = from([
 export const blocklytics = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/xdai-blocks",
+    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/fuse-blocks",
     shouldBatch: true,
   }),
 ]);

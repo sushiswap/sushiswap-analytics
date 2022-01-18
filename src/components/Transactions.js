@@ -39,8 +39,6 @@ export default function Transactions({ transactions, txCount }) {
 
   const now = new Date();
 
- 
-
   return (
     <div className={classes.root}>
       <SortableTable
@@ -50,20 +48,23 @@ export default function Transactions({ transactions, txCount }) {
           {
             key: "__typename",
             label: "Type",
-            render: (row) => { 
-              console.log(row)
+            render: (row) => {
+              console.log(row);
               return (
-              <Typography variant="body2" noWrap>
-                {row.__typename}{" "}
-                {row.amount0In === "0" || row.__typename === 'Mint' && !row.amount0In
-                  ? row.pair.token1.symbol
-                  : row.pair.token0.symbol}{" "}
-                for{" "}
-                {row.amount1Out === "0" || row.__typename === 'Mint' && !row.amount1Out
-                  ? row.pair.token0.symbol
-                  : row.pair.token1.symbol}
-              </Typography>
-            ) },
+                <Typography variant="body2" noWrap>
+                  {row.__typename}{" "}
+                  {row.amount0In === "0" ||
+                  (row.__typename === "Mint" && !row.amount0In)
+                    ? row.pair.token1.symbol
+                    : row.pair.token0.symbol}{" "}
+                  for{" "}
+                  {row.amount1Out === "0" ||
+                  (row.__typename === "Mint" && !row.amount1Out)
+                    ? row.pair.token0.symbol
+                    : row.pair.token1.symbol}
+                </Typography>
+              );
+            },
           },
           {
             key: "amountUSD",
@@ -101,7 +102,7 @@ export default function Transactions({ transactions, txCount }) {
             key: "to",
             label: "To",
             render: (row) => (
-              <Link href={`https://etherscan.io/address/${row.to}`}>
+              <Link href={`https://explorer.fuse.io//address/${row.to}`}>
                 {row.to}
               </Link>
             ),

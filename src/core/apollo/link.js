@@ -13,7 +13,7 @@ export const uniswap = from([
 export const bar = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/bar",
+    uri: `https://gateway.thegraph.com/api/${process.env.NEXT_PUBLIC_THE_GRAPH_API_KEY}/subgraphs/id/8Nwbz7YUtjf1NsD2mJUnuq5vWNbm2Gyag4nraLWyVJGi`,
     shouldBatch: true,
   }),
 ]);
@@ -37,7 +37,7 @@ export const exchange = from([
 export const blocklytics = from([
   new RetryLink(),
   new HttpLink({
-    uri: `https://gateway.thegraph.com/api/${process.env.NEXT_PUBLIC_THE_GRAPH_API_KEY}/subgraphs/id/3WFXNz46rk4iuVgsBybcGtxMa4cbHkBLfuSjUvvqs2MD`,
+    uri: "https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks",
     shouldBatch: true,
   }),
 ]);

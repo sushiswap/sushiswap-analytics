@@ -13,7 +13,7 @@ export const uniswap = from([
 export const bar = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/bar",
+    uri: `https://gateway.thegraph.com/api/${process.env.NEXT_PUBLIC_THE_GRAPH_API_KEY}/subgraphs/id/8Nwbz7YUtjf1NsD2mJUnuq5vWNbm2Gyag4nraLWyVJGi`,
     shouldBatch: true,
   }),
 ]);
@@ -21,7 +21,7 @@ export const bar = from([
 export const masterchef = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/master-chef",
+    uri: `https://gateway.thegraph.com/api/${process.env.NEXT_PUBLIC_THE_GRAPH_API_KEY}/subgraphs/id/5mqK2me3PVLTUhMNESgAqq3SX26eGsMFwo8BLLZwNM4u`,
     shouldBatch: true,
   }),
 ]);

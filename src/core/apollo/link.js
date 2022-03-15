@@ -13,7 +13,7 @@ export const uniswap = from([
 export const bar = from([
   new RetryLink(),
   new HttpLink({
-    uri: `https://api.thegraph.com/subgraphs/name/matthewlilley/bar`,
+    uri: "https://api.thegraph.com/subgraphs/name/matthewlilley/bar",
     shouldBatch: true,
   }),
 ]);
@@ -21,7 +21,7 @@ export const bar = from([
 export const masterchef = from([
   new RetryLink(),
   new HttpLink({
-    uri: `https://api.thegraph.com/subgraphs/name/sushiswap/master-chef`,
+    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/master-chef",
     shouldBatch: true,
   }),
 ]);

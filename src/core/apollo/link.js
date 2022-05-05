@@ -13,7 +13,7 @@ export const uniswap = from([
 export const exchange = from([
   new RetryLink(),
   new HttpLink({
-    uri: "https://api.thegraph.com/subgraphs/name/lutter/matic-exchange",
+    uri: "https://api.thegraph.com/subgraphs/name/sushiswap/matic-exchange",
     shouldBatch: true,
   }),
 ]);
